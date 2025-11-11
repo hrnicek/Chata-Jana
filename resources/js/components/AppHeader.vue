@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <header class="container mx-auto px-6 py-1 mt-4 glassmorphism p-3 rounded-xl  backdrop-blur-md">
+  <header class="container mx-auto px-6 py-1 mt-4 glassmorphism p-3 rounded-4xl">
     <nav class="flex items-center justify-between text-white">
       <Link href="/" class="text-xl font-bold">
         <img
