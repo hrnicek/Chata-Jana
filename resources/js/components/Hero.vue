@@ -1,3 +1,26 @@
+<script setup>
+import AppHeader from './AppHeader.vue'
+import HeroContent from './HeroContent.vue'
+</script>
+
+
 <template>
-    hero
+  <div class="bg-gray-900 text-white hero-font">
+    <div class="relative w-full min-h-screen overflow-hidden">
+      <div class="absolute inset-0 z-0">
+        <img
+          alt="Luxusní horská chata s wellness za západu slunce"
+          class="w-full h-full object-cover"
+          src="/img/hero3.jpg"
+        />
+        <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/30 to-black/10"></div>
+        <div class="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-black/20"></div>
+      </div>
+
+      <div class="relative z-10 flex flex-col min-h-screen">
+        <AppHeader />
+        <HeroContent />
+      </div>
+    </div>
+  </div>
 </template>

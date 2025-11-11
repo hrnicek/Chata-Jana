@@ -8,7 +8,6 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-import WebLayout from './layouts/WebLayout.vue';    
 import { Link } from '@inertiajs/vue3';
 
 createInertiaApp({
@@ -18,7 +17,6 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .component('WebLayout', WebLayout)
             .component('Link', Link)
             .mount(el);
     },
