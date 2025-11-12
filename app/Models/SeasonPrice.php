@@ -13,17 +13,13 @@ class SeasonPrice extends Model
 
     protected $fillable = [
         'season_id',
-        'price_per_night',
-        'price_per_week',
-        'min_nights',
-        'max_nights',
+        'price',
     ];
 
     protected function casts(): array
     {
         return [
-            'price_per_night' => 'decimal:2',
-            'price_per_week' => 'decimal:2',
+            'price' => 'decimal:2',
         ];
     }
 

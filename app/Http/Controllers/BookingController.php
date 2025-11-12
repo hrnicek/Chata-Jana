@@ -8,6 +8,6 @@ class BookingController extends Controller
     {
         seo()->title('Rezervace');
 
-        return inertia('booking/Calendar');
+        return inertia('booking/Index');
     }
 }

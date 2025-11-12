@@ -21,7 +21,6 @@ class Booking extends Model
 
     protected $fillable = [
         'season_id',
-        'user_id',
         'start_date',
         'end_date',
         'total_price',
@@ -41,11 +40,6 @@ class Booking extends Model
     public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 
     public function bookingPayment(): HasOne

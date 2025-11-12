@@ -20,10 +20,7 @@ class SeasonSeeder extends Seeder
                 'end_date' => now()->year.'-08-31',
                 'is_fixed_range' => false,
                 'prices' => [
-                    'price_per_night' => 5500,
-                    'price_per_week' => 35000,
-                    'min_nights' => 1,
-                    'max_nights' => 30,
+                    'price' => 5500,
                 ],
             ],
             [
@@ -32,10 +29,7 @@ class SeasonSeeder extends Seeder
                 'end_date' => (now()->year + 1).'-02-28',
                 'is_fixed_range' => false,
                 'prices' => [
-                    'price_per_night' => 4500,
-                    'price_per_week' => 28000,
-                    'min_nights' => 1,
-                    'max_nights' => 30,
+                    'price' => 4500,
                 ],
             ],
             [
@@ -44,10 +38,7 @@ class SeasonSeeder extends Seeder
                 'end_date' => now()->year.'-05-31',
                 'is_fixed_range' => false,
                 'prices' => [
-                    'price_per_night' => 3500,
-                    'price_per_week' => 21000,
-                    'min_nights' => 1,
-                    'max_nights' => 30,
+                    'price' => 3500,
                 ],
             ],
             [
@@ -56,10 +47,7 @@ class SeasonSeeder extends Seeder
                 'end_date' => (now()->year + 1).'-01-01',
                 'is_fixed_range' => true,
                 'prices' => [
-                    'price_per_night' => 8000,
-                    'price_per_week' => null,
-                    'min_nights' => 1,
-                    'max_nights' => 1,
+                    'price' => 8000,
                 ],
             ],
         ];
