@@ -10,7 +10,7 @@ import HeroContent from "./HeroContent.vue";
         <img
           alt="Luxusní horská chata s wellness za západu slunce"
           class="h-full w-full object-cover"
-          src="/img/hero3.jpg"
+          src="/img/hero4.png"
         />
         <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/30 to-black/10"></div>
         <div

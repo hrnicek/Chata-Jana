@@ -8,7 +8,9 @@
       </Link>
       <div class="hidden items-center space-x-8 text-sm font-medium lg:flex">
         <Link class="transition-colors hover:text-gray-300" href="#">Úvod</Link>
+        <Link class="transition-colors hover:text-gray-300" href="#">Ceník</Link>
         <Link class="transition-colors hover:text-gray-300" href="#">Aktivity & okolí</Link>
+        <Link class="transition-colors hover:text-gray-300" href="#">Fotogalerie</Link>
 
         <Link class="transition-colors hover:text-gray-300" href="#">Kontakt</Link>
       </div>
