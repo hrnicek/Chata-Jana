@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(SeasonSeeder::class);
+        $this->call(ExtraSeeder::class);
         $this->call(BookingSeeder::class);
         $this->call(BlackoutDateSeeder::class);
     }

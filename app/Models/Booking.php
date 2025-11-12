@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 enum BookingStatus: string
@@ -50,5 +51,12 @@ class Booking extends Model
     public function bookingPayment(): HasOne
     {
         return $this->hasOne(BookingPayment::class);
+    }
+
+    public function extras(): BelongsToMany
+    {
+        return $this->belongsToMany(Extra::class, 'booking_extras')
+            ->withPivot(['quantity', 'price_total'])
+            ->withTimestamps();
     }
 }

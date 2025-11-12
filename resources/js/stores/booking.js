@@ -11,8 +11,8 @@ export const useBookingStore = defineStore('booking', {
     },
     startDate: null,
     endDate: null,
-    dogPerDayPrice: 300,
-    dogCount: 0,
+    extras: [],
+    extraSelection: {},
   }),
   getters: {
     isFormFilled: (state) => {
@@ -41,13 +41,17 @@ export const useBookingStore = defineStore('booking', {
       this.startDate = null
       this.endDate = null
     },
-    setDogCount(n) {
-      const num = Number(n)
-      this.dogCount = Number.isNaN(num) || num < 0 ? 0 : num
+    setExtras(list) {
+      this.extras = Array.isArray(list) ? list : []
     },
-    setDogPerDayPrice(price) {
-      const num = Number(price)
-      this.dogPerDayPrice = Number.isNaN(num) || num < 0 ? 0 : num
+    setExtraQuantity(id, qty) {
+      const num = Number(qty)
+      const clean = Number.isNaN(num) || num < 0 ? 0 : Math.floor(num)
+      this.extraSelection = { ...this.extraSelection, [id]: clean }
+    },
+    resetExtras() {
+      this.extras = []
+      this.extraSelection = {}
     },
   },
 })

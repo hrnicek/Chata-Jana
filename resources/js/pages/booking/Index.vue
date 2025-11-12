@@ -196,17 +196,21 @@
       <div class="flex-1 overflow-auto px-4 py-6">
         <div class="min-h-full grid place-items-center">
           <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6">
-            <div class="mb-4 text-sm text-gray-700">Pokud cestujete se psem, uveďte jejich počet. Cena za psa se počítá za každý den pobytu.</div>
-            <div class="space-y-1 mb-4 text-xs text-gray-600">
-              <div>Počet psů můžete kdykoli upravit; částka se ihned přepočítá.</div>
-              <div>Necestujete se psem? Ponechte hodnotu 0.</div>
-            </div>
-            <div class="space-y-4">
-              <div class="font-medium">Pobyt se psem</div>
-              <div class="text-sm text-gray-700">{{ currency(dogPerDayPrice) }} /den za psa</div>
-              <div class="mt-2 flex items-center gap-2">
-                <label class="text-sm text-gray-700">Počet psů</label>
-                <input v-model.number="dogCount" type="number" min="0" class="w-24 rounded border px-3 py-2" />
+            <div class="mb-4 text-sm text-gray-700">Vyberte si z doplňkových služeb. Cena se počítá dle typu služby (za den nebo za pobyt).</div>
+            <div v-if="extrasLoading" class="text-sm text-gray-700 flex items-center gap-2"><Loader2 class="w-4 h-4 animate-spin" /> Načítám služby…</div>
+            <div v-else-if="extrasError" class="text-sm text-red-700">{{ extrasError }}</div>
+            <div v-else class="space-y-4">
+              <div v-for="ex in validExtras" :key="ex.id" class="border rounded-2xl p-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="font-medium">{{ ex.name }}</div>
+                    <div class="text-sm text-gray-700">{{ currency(ex.price) }}<span v-if="ex.price_type === 'per_day'"> /den</span><span v-else> /pobyt</span></div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <label class="text-sm text-gray-700">Množství</label>
+                    <input :value="extraSelection[ex.id] || 0" @input="booking.setExtraQuantity(ex.id, $event.target.value)" type="number" min="0" :max="ex.max_quantity" class="w-24 rounded border px-3 py-2" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -218,7 +222,7 @@
         <div class="text-sm text-gray-700">Služby: <strong>{{ currency(addonsTotalPrice) }}</strong></div>
         <div class="text-sm text-gray-700">Celkem k úhradě: <strong>{{ currency(grandTotalPrice) }}</strong></div>
         <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 2">Zpět</button>
-        <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canSubmit" @click="step = 4">Pokračovat</button>
+        <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canSubmit" @click="checkExtrasAvailability">Pokračovat</button>
       </div>
     </div>
 
@@ -255,11 +259,20 @@
                   <span>Cena ubytování:</span>
                   <strong>{{ currency(selectedTotalPrice) }}</strong>
                 </div>
-                <div class="flex items-center gap-2 text-sm text-gray-700">
-                  <PawPrint class="w-4 h-4" />
-                  <span>Pes:</span>
-                  <strong>{{ dogCount }}</strong>
-                  <span>× {{ currency(dogPerDayPrice) }} /den</span>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 text-sm text-gray-700">
+                    <PawPrint class="w-4 h-4" />
+                    <span>Doplňkové služby:</span>
+                  </div>
+                  <div class="text-sm text-gray-700" v-if="selectedExtras.length === 0">—</div>
+                  <div v-else class="space-y-1">
+                    <div v-for="ex in selectedExtras" :key="ex.id" class="flex items-center gap-2 text-sm text-gray-700">
+                      <strong>{{ ex.name }}</strong>
+                      <span>× {{ extraSelection[ex.id] }}</span>
+                      <span v-if="ex.price_type === 'per_day'">× {{ selectedNights }} nocí</span>
+                      <span>= {{ currency(ex.price_type === 'per_day' ? (extraSelection[ex.id] * selectedNights * ex.price) : (extraSelection[ex.id] * ex.price)) }}</span>
+                    </div>
+                  </div>
                 </div>
                 <div class="flex items-center gap-2 text-sm text-gray-700">
                   <BarChart3 class="w-4 h-4" />
@@ -370,16 +383,17 @@ const customer = computed({
   get: () => booking.customer,
   set: (val) => booking.updateCustomer(val),
 })
-const dogPerDayPrice = computed(() => booking.dogPerDayPrice)
-const dogCount = computed({
-  get: () => booking.dogCount,
-  set: (val) => booking.setDogCount(val),
-})
+const extras = computed(() => booking.extras)
+const extraSelection = computed(() => booking.extraSelection)
+const validExtras = computed(() => (extras.value || []).filter((ex) => ex && typeof ex === 'object' && 'id' in ex))
+const selectedExtras = computed(() => validExtras.value.filter((ex) => Number(extraSelection.value[ex.id] || 0) > 0))
 const submitted = ref(false)
 const submitting = ref(false)
 const submitError = ref('')
 const verifying = ref(false)
 const verifyError = ref('')
+const extrasLoading = ref(false)
+const extrasError = ref('')
 
 const monthLabel = computed(() => new Date(year.value, month.value - 1, 1).toLocaleString('cs-CZ', { month: 'long' }))
 const weekDays = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
@@ -650,8 +664,13 @@ const formReady = computed(() => {
 })
 
 const addonsTotalPrice = computed(() => {
-  if (dogCount.value <= 0 || selectedNights.value <= 0) return 0
-  return dogCount.value * selectedNights.value * dogPerDayPrice.value
+  if (selectedNights.value <= 0 || selectedExtras.value.length === 0) return 0
+  return selectedExtras.value.reduce((sum, ex) => {
+    const qty = Number(extraSelection.value[ex.id] || 0)
+    const unit = Number(ex.price || 0)
+    const line = ex.price_type === 'per_day' ? qty * selectedNights.value * unit : qty * unit
+    return sum + line
+  }, 0)
 })
 
 const grandTotalPrice = computed(() => selectedTotalPrice.value + addonsTotalPrice.value)
@@ -673,8 +692,7 @@ async function submit() {
         phone: customer.value.phone,
         note: customer.value.note || '',
       },
-      dog_count: dogCount.value,
-      dog_per_day_price: dogPerDayPrice.value,
+      addons: selectedExtras.value.map((ex) => ({ extra_id: ex.id, quantity: Number(extraSelection.value[ex.id] || 0) })),
       accommodation_total: selectedTotalPrice.value,
       addons_total: addonsTotalPrice.value,
       grand_total: grandTotalPrice.value,
@@ -715,4 +733,43 @@ async function verifyAndProceed() {
     verifying.value = false
   }
 }
+
+async function loadExtras() {
+  extrasLoading.value = true
+  extrasError.value = ''
+  try {
+    const res = await axios.get('/api/extras')
+    booking.setExtras(res.data.extras || [])
+  } catch (e) {
+    extrasError.value = 'Příplatkové služby se nepodařilo načíst.'
+  } finally {
+    extrasLoading.value = false
+  }
+}
+
+async function checkExtrasAvailability() {
+  try {
+    const selections = selectedExtras.value.map((ex) => ({ extra_id: ex.id, quantity: Number(extraSelection.value[ex.id] || 0) }))
+    if (selections.length === 0) {
+      step.value = 4
+      return
+    }
+    const res = await axios.post('/api/extras/availability', {
+      start_date: startDate.value,
+      end_date: endDate.value,
+      selections,
+    })
+    if (!res.data.available) {
+      toast.error('Některé služby nejsou v požadovaném množství dostupné.')
+      return
+    }
+    step.value = 4
+  } catch (e) {
+    toast.error('Ověření dostupnosti služeb se nezdařilo.')
+  }
+}
+
+onMounted(() => {
+  loadExtras()
+})
 </script>

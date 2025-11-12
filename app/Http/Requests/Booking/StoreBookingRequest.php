@@ -29,11 +29,12 @@ class StoreBookingRequest extends FormRequest
             'customer.email' => ['required', 'email', 'max:255'],
             'customer.phone' => ['required', 'string', 'max:50'],
             'customer.note' => ['nullable', 'string', 'max:2000'],
-            'dog_count' => ['nullable', 'integer', 'min:0'],
-            'dog_per_day_price' => ['nullable', 'numeric', 'min:0'],
             'accommodation_total' => ['nullable', 'numeric', 'min:0'],
-            'addons_total' => ['nullable', 'numeric', 'min:0'],
             'grand_total' => ['nullable', 'numeric', 'min:0'],
+            'addons_total' => ['nullable', 'numeric', 'min:0'],
+            'addons' => ['nullable', 'array'],
+            'addons.*.extra_id' => ['required_with:addons', 'integer', 'exists:extras,id'],
+            'addons.*.quantity' => ['required_with:addons', 'integer', 'min:0'],
         ];
     }
 }
