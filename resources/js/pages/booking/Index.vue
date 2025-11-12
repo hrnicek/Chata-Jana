@@ -1,68 +1,39 @@
 <template>
   <div class="w-full h-screen">
     <div class="grid grid-cols-1 md:grid-cols-12 rounded-4xl h-full">
-      <aside class="md:col-span-3 border-r shadow-inner bg-neutral-50">
+      <aside class="md:col-span-3 bg-neutral-50 border-r h-full md:sticky md:top-0 overflow-auto">
         <div class="p-4">
-          <div class="flex items-center gap-2 mb-4">
-            <Calendar class="w-5 h-5 text-emerald-600" />
-            <div class="font-medium">Průběh rezervace</div>
+          <div class="flex items-center gap-2 mb-3">
+            <Calendar class="w-5 h-5 text-primary" />
+            <div class="font-semibold">Průběh rezervace</div>
           </div>
-          <div class="space-y-4">
-            <div class="flex items-start gap-3">
-              <div class="mt-0.5">
-                <CheckCircle v-if="step > 1" class="w-4 h-4 text-emerald-600" />
-                <Calendar v-else class="w-4 h-4 text-gray-900" />
-              </div>
-              <div>
-                <div :class="step === 1 ? 'font-medium text-gray-900' : step > 1 ? 'text-gray-700' : 'text-gray-500'">Krok 1</div>
-                <div class="text-xs text-gray-700">Termín pobytu</div>
-                <div :class="step > 1 ? 'text-xs text-emerald-600' : step === 1 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 1 ? 'Dokončeno' : step === 1 ? 'Probíhá' : 'Čeká' }}</div>
-              </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="mt-0.5">
-                <CheckCircle v-if="step > 2" class="w-4 h-4 text-emerald-600" />
-                <User v-else class="w-4 h-4 text-gray-900" />
-              </div>
-              <div>
-                <div :class="step === 2 ? 'font-medium text-gray-900' : step > 2 ? 'text-gray-700' : 'text-gray-500'">Krok 2</div>
-                <div class="text-xs text-gray-700">Vaše údaje</div>
-                <div :class="step > 2 ? 'text-xs text-emerald-600' : step === 2 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 2 ? 'Dokončeno' : step === 2 ? 'Probíhá' : 'Čeká' }}</div>
-              </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="mt-0.5">
-                <CheckCircle v-if="step > 3" class="w-4 h-4 text-emerald-600" />
-                <PawPrint v-else class="w-4 h-4 text-gray-900" />
-              </div>
-              <div>
-                <div :class="step === 3 ? 'font-medium text-gray-900' : step > 3 ? 'text-gray-700' : 'text-gray-500'">Krok 3</div>
-                <div class="text-xs text-gray-700">Doplňkové služby</div>
-                <div :class="step > 3 ? 'text-xs text-emerald-600' : step === 3 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 3 ? 'Dokončeno' : step === 3 ? 'Probíhá' : 'Čeká' }}</div>
-              </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="mt-0.5">
-                <CheckCircle v-if="step > 4" class="w-4 h-4 text-emerald-600" />
-                <CreditCard v-else class="w-4 h-4 text-gray-900" />
-              </div>
-              <div>
-                <div :class="step === 4 ? 'font-medium text-gray-900' : step > 4 ? 'text-gray-700' : 'text-gray-500'">Krok 4</div>
-                <div class="text-xs text-gray-700">Kontrola</div>
-                <div :class="step > 4 ? 'text-xs text-emerald-600' : step === 4 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 4 ? 'Dokončeno' : step === 4 ? 'Probíhá' : 'Čeká' }}</div>
-              </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="mt-0.5">
-                <CheckCircle class="w-4 h-4 text-emerald-600" />
-              </div>
-              <div>
-                <div :class="step === 5 ? 'font-medium text-gray-900' : step > 5 ? 'text-gray-700' : 'text-gray-500'">Krok 5</div>
-                <div class="text-xs text-gray-700">Potvrzení</div>
-                <div :class="step >= 5 ? 'text-xs text-emerald-600' : 'text-xs text-gray-500'">{{ step >= 5 ? 'Dokončeno' : 'Čeká' }}</div>
-              </div>
-            </div>
+          <div class="h-2 rounded-full bg-gray-200 mb-4">
+            <div class="h-2 rounded-full bg-primary" :style="{ width: progressPercent + '%' }"></div>
           </div>
+          <nav aria-label="Průběh" class="space-y-2">
+            <button
+              v-for="item in stepItems"
+              :key="item.id"
+              class="w-full flex items-start gap-3 rounded-2xl p-3 transition-colors"
+              :class="[
+                canNavigateTo(item.id) ? 'hover:bg-honey focus:bg-honey' : 'opacity-60 cursor-not-allowed',
+                step === item.id ? 'bg-white border shadow-sm' : 'border'
+              ]"
+              :aria-current="step === item.id ? 'step' : undefined"
+              :disabled="!canNavigateTo(item.id)"
+              @click="navigateTo(item.id)"
+            >
+              <div class="mt-0.5">
+                <CheckCircle v-if="step > item.id" class="w-4 h-4 text-emerald-600" />
+                <component v-else :is="item.icon" class="w-4 h-4 text-gray-900" />
+              </div>
+              <div class="text-left">
+                <div :class="step === item.id ? 'font-medium text-gray-900' : step > item.id ? 'text-gray-700' : 'text-gray-500'">{{ item.label }}</div>
+                <div class="text-xs text-gray-700">{{ item.desc }}</div>
+                <div :class="step > item.id ? 'text-xs text-emerald-600' : step === item.id ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > item.id ? 'Dokončeno' : step === item.id ? 'Probíhá' : 'Čeká' }}</div>
+              </div>
+            </button>
+          </nav>
         </div>
       </aside>
       <section class="md:col-span-9 h-full bg-white">
@@ -153,36 +124,36 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
-                  <User class="w-4 h-4" />
+                <label class="block text-sm text-gray-800 mb-1 flex items-center gap-1">
+                  <User class="w-4 h-4 text-primary" />
                   Jméno
                 </label>
-                <input v-model="customer.firstName" type="text" class="w-full rounded border px-3 py-2" placeholder="Jméno" />
+                <input v-model="customer.firstName" type="text" class="w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Jméno" />
               </div>
               <div>
-                <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
-                  <User class="w-4 h-4" />
+                <label class="block text-sm text-gray-800 mb-1 flex items-center gap-1">
+                  <User class="w-4 h-4 text-primary" />
                   Příjmení
                 </label>
-                <input v-model="customer.lastName" type="text" class="w-full rounded border px-3 py-2" placeholder="Příjmení" />
+                <input v-model="customer.lastName" type="text" class="w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Příjmení" />
               </div>
               <div>
-                <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
-                  <Mail class="w-4 h-4" />
+                <label class="block text-sm text-gray-800 mb-1 flex items-center gap-1">
+                  <Mail class="w-4 h-4 text-primary" />
                   E‑mail
                 </label>
-                <input v-model="customer.email" type="email" class="w-full rounded border px-3 py-2" placeholder="např. jana@domena.cz" />
+                <input v-model="customer.email" type="email" class="w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="např. jana@domena.cz" />
               </div>
               <div>
-                <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
-                  <Phone class="w-4 h-4" />
+                <label class="block text-sm text-gray-800 mb-1 flex items-center gap-1">
+                  <Phone class="w-4 h-4 text-primary" />
                   Telefon
                 </label>
-                <input v-model="customer.phone" type="tel" class="w-full rounded border px-3 py-2" placeholder="např. +420 777 000 000" />
+                <input v-model="customer.phone" type="tel" class="w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="např. +420 777 000 000" />
               </div>
               <div class="md:col-span-2">
-                <label class="block text-sm text-gray-700 mb-1">Poznámka (nepovinné)</label>
-                <textarea v-model="customer.note" rows="4" class="w-full rounded border px-3 py-2" placeholder="Např. speciální požadavky"></textarea>
+                <label class="block text-sm text-gray-800 mb-1">Poznámka (nepovinné)</label>
+                <textarea v-model="customer.note" rows="4" class="w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Např. speciální požadavky"></textarea>
               </div>
             </div>
           </div>
@@ -234,7 +205,7 @@
     <div v-if="step === 4" class="h-full flex flex-col">
       <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
         <div class="flex items-center gap-2">
-          <Calendar class="w-5 h-5 text-gray-900" />
+          <Calendar class="w-5 h-5 text-primary" />
           <div class="text-2xl font-semibold">Zkontrolujte rezervaci</div>
         </div>
         <div class="text-sm text-gray-700">Krok 4</div>
@@ -276,9 +247,9 @@
                   <strong>{{ currency(addonsTotalPrice) }}</strong>
                 </div>
                 <div class="border-t pt-3 mt-2 flex items-center gap-2 text-gray-900">
-                  <CreditCard class="w-5 h-5" />
+                  <CreditCard class="w-5 h-5 text-primary" />
                   <div class="text-base">Celkem k úhradě:</div>
-                  <div class="text-xl font-semibold ml-auto">{{ currency(grandTotalPrice) }}</div>
+                  <div class="text-xl font-semibold ml-auto text-primary">{{ currency(grandTotalPrice) }}</div>
                 </div>
               </div>
               <div class="space-y-3">
@@ -392,6 +363,26 @@ const verifyError = ref('')
 
 const monthLabel = computed(() => new Date(year.value, month.value - 1, 1).toLocaleString('cs-CZ', { month: 'long' }))
 const weekDays = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
+
+const stepItems = [
+  { id: 1, label: 'Krok 1', desc: 'Termín pobytu', icon: Calendar },
+  { id: 2, label: 'Krok 2', desc: 'Vaše údaje', icon: User },
+  { id: 3, label: 'Krok 3', desc: 'Doplňkové služby', icon: PawPrint },
+  { id: 4, label: 'Krok 4', desc: 'Kontrola', icon: CreditCard },
+  { id: 5, label: 'Krok 5', desc: 'Potvrzení', icon: CheckCircle },
+]
+
+const progressPercent = computed(() => Math.round((Math.min(step.value, 5) / 5) * 100))
+
+function canNavigateTo(id) {
+  return id <= step.value
+}
+
+function navigateTo(id) {
+  if (canNavigateTo(id)) {
+    step.value = id
+  }
+}
 
 const daysInMonth = computed(() => new Date(year.value, month.value, 0).getDate())
 const firstDayIndex = computed(() => {
