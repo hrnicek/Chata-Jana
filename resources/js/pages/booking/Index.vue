@@ -36,7 +36,7 @@
       >
         <div class="flex items-center justify-between">
           <div class="font-semibold">{{ cell.day }}</div>
-          <div v-if="infoByDate(cell.date)?.season" class="text-xs text-gray-600">{{ infoByDate(cell.date)?.season }}</div>
+          <div v-if="infoByDate(cell.date)?.season" class="text-[10px] text-gray-600 pointer-none">{{ infoByDate(cell.date)?.season }}</div>
         </div>
         <div :class="infoByDate(cell.date)?.available ? 'text-green-700' : 'text-red-700'" class="text-sm mt-1">
           {{ infoByDate(cell.date)?.available ? 'Volné' : 'Obsazené' }}
@@ -134,8 +134,9 @@
       </div>
       <div class="flex items-center gap-3">
         <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 3">Zpět</button>
-        <button class="px-3 py-2 rounded bg-gray-900 text-white disabled:opacity-50" :disabled="!canSubmit" @click="submit">Odeslat</button>
+        <button class="px-3 py-2 rounded bg-gray-900 text-white disabled:opacity-50" :disabled="!canSubmit || submitting" @click="submit">Odeslat</button>
       </div>
+      <div v-if="submitError" class="text-sm text-red-700">{{ submitError }}</div>
     </div>
 
     <div v-if="step === 5" class="mt-2 space-y-4">
@@ -185,6 +186,8 @@ const dogCount = computed({
   set: (val) => booking.setDogCount(val),
 })
 const submitted = ref(false)
+const submitting = ref(false)
+const submitError = ref('')
 const verifying = ref(false)
 const verifyError = ref('')
 
@@ -410,9 +413,35 @@ const grandTotalPrice = computed(() => selectedTotalPrice.value + addonsTotalPri
 
 const canSubmit = computed(() => formReady.value)
 
-function submit() {
-  submitted.value = true
-  step.value = 5
+async function submit() {
+  if (!canSubmit.value || submitting.value) return
+  submitting.value = true
+  submitError.value = ''
+  try {
+    const payload = {
+      start_date: startDate.value,
+      end_date: endDate.value,
+      customer: {
+        first_name: customer.value.firstName,
+        last_name: customer.value.lastName,
+        email: customer.value.email,
+        phone: customer.value.phone,
+        note: customer.value.note || '',
+      },
+      dog_count: dogCount.value,
+      dog_per_day_price: dogPerDayPrice.value,
+      accommodation_total: selectedTotalPrice.value,
+      addons_total: addonsTotalPrice.value,
+      grand_total: grandTotalPrice.value,
+    }
+    await axios.post('/api/bookings', payload)
+    submitted.value = true
+    step.value = 5
+  } catch (e) {
+    submitError.value = 'Nepodařilo se odeslat rezervaci'
+  } finally {
+    submitting.value = false
+  }
 }
 
 async function verifyAndProceed() {
