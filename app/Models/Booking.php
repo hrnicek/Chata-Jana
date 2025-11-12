@@ -42,6 +42,11 @@ class Booking extends Model
         return $this->belongsTo(Season::class);
     }
 
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
     public function bookingPayment(): HasOne
     {
         return $this->hasOne(BookingPayment::class);

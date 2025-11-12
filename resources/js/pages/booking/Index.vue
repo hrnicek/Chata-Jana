@@ -46,14 +46,16 @@
     </div>
 
     <div v-if="step === 1" class="mt-4 flex items-center gap-3">
-      <div class="text-sm text-gray-700">Od: <strong>{{ selectedStart || '-' }}</strong></div>
-      <div class="text-sm text-gray-700">Do: <strong>{{ selectedEnd || '-' }}</strong></div>
+      <div class="text-sm text-gray-700">Od: <strong>{{ startDate || '-' }}</strong></div>
+      <div class="text-sm text-gray-700">Do: <strong>{{ endDate || '-' }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Cena celkem: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
       <div v-if="rangeHasUnavailable" class="text-sm text-red-700">Výběr obsahuje obsazené dny</div>
       <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Vymazat výběr</button>
-      <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canProceed" @click="step = 2">Pokračovat</button>
+      <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canProceed || verifying" @click="verifyAndProceed">Pokračovat</button>
     </div>
+    <div v-if="verifyError" class="mt-2 text-sm text-red-700">{{ verifyError }}</div>
+    <div v-if="verifying" class="mt-2 text-sm text-gray-700">Ověřování dostupnosti…</div>
 
     <div v-if="step === 2" class="mt-2 space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -79,7 +81,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <div class="text-sm text-gray-700">Termín: <strong>{{ selectedStart }} – {{ selectedEnd }}</strong></div>
+        <div class="text-sm text-gray-700">Termín: <strong>{{ startDate }} – {{ endDate }}</strong></div>
         <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
         <div class="text-sm text-gray-700">Cena: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
         <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět</button>
@@ -99,7 +101,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <div class="text-sm text-gray-700">Termín: <strong>{{ selectedStart }} – {{ selectedEnd }}</strong></div>
+        <div class="text-sm text-gray-700">Termín: <strong>{{ startDate }} – {{ endDate }}</strong></div>
         <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
         <div class="text-sm text-gray-700">Služby: <strong>{{ currency(addonsTotalPrice) }}</strong></div>
         <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
@@ -113,8 +115,8 @@
         <div class="text-lg font-semibold">Shrnutí rezervace</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <div class="text-sm text-gray-700">Od: <strong>{{ selectedStart }}</strong></div>
-            <div class="text-sm text-gray-700">Do: <strong>{{ selectedEnd }}</strong></div>
+            <div class="text-sm text-gray-700">Od: <strong>{{ startDate }}</strong></div>
+            <div class="text-sm text-gray-700">Do: <strong>{{ endDate }}</strong></div>
             <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
             <div class="text-sm text-gray-700">Cena ubytování: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
             <div class="text-sm text-gray-700">Pes: <strong>{{ dogCount }}</strong> × {{ currency(dogPerDayPrice) }} /den</div>
@@ -140,7 +142,7 @@
       <div class="border rounded p-6 text-center">
         <div class="text-2xl font-semibold mb-2">Dokončeno</div>
         <div class="text-gray-700">Děkujeme, vaše rezervace byla odeslána.</div>
-        <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ selectedStart }} – {{ selectedEnd }}</strong></div>
+        <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ startDate }} – {{ endDate }}</strong></div>
         <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
       </div>
       <div class="flex items-center gap-3">
@@ -153,6 +155,7 @@
 <script setup>
 import axios from 'axios'
 import { ref, computed, onMounted } from 'vue'
+import { useBookingStore } from '../../stores/booking'
 
 const now = new Date()
 const month = ref(now.getMonth() + 1)
@@ -162,13 +165,28 @@ const todayYear = now.getFullYear()
 const daysData = ref([])
 const loading = ref(false)
 const error = ref('')
-const selectedStart = ref(null)
-const selectedEnd = ref(null)
+const startDate = computed({
+  get: () => booking.startDate,
+  set: (val) => booking.setStartDate(val),
+})
+const endDate = computed({
+  get: () => booking.endDate,
+  set: (val) => booking.setEndDate(val),
+})
 const step = ref(1)
-const customer = ref({ firstName: '', lastName: '', email: '', phone: '', note: '' })
-const dogPerDayPrice = 300
-const dogCount = ref(0)
+const booking = useBookingStore()
+const customer = computed({
+  get: () => booking.customer,
+  set: (val) => booking.updateCustomer(val),
+})
+const dogPerDayPrice = computed(() => booking.dogPerDayPrice)
+const dogCount = computed({
+  get: () => booking.dogCount,
+  set: (val) => booking.setDogCount(val),
+})
 const submitted = ref(false)
+const verifying = ref(false)
+const verifyError = ref('')
 
 const monthLabel = computed(() => new Date(year.value, month.value - 1, 1).toLocaleString('cs-CZ', { month: 'long' }))
 const weekDays = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
@@ -268,8 +286,8 @@ function parseISO(s) {
   return new Date(Y, M - 1, D)
 }
 
-const rangeStart = computed(() => (selectedStart.value ? parseISO(selectedStart.value) : null))
-const rangeEnd = computed(() => (selectedEnd.value ? parseISO(selectedEnd.value) : null))
+const rangeStart = computed(() => (startDate.value ? parseISO(startDate.value) : null))
+const rangeEnd = computed(() => (endDate.value ? parseISO(endDate.value) : null))
 
 function isSameDate(a, b) {
   if (!a || !b) return false
@@ -307,19 +325,18 @@ function isAvailable(dateStr) {
 function selectDate(cell) {
   if (!isAvailable(cell.date)) return
   const date = cell.date
-  if (!selectedStart.value || (selectedStart.value && selectedEnd.value)) {
-    selectedStart.value = date
-    selectedEnd.value = null
+  if (!startDate.value || (startDate.value && endDate.value)) {
+    startDate.value = date
+    endDate.value = null
     return
   }
-  if (!selectedEnd.value) {
-    selectedEnd.value = date
+  if (!endDate.value) {
+    endDate.value = date
   }
 }
 
 function clearSelection() {
-  selectedStart.value = null
-  selectedEnd.value = null
+  booking.resetDates()
 }
 
 const selectedNights = computed(() => {
@@ -349,6 +366,16 @@ const rangeDates = computed(() => {
   return out
 })
 
+const monthsForRange = computed(() => {
+  const m = new Map()
+  for (const iso of rangeDates.value) {
+    const d = parseISO(iso)
+    const key = `${d.getFullYear()}-${d.getMonth() + 1}`
+    if (!m.has(key)) m.set(key, { month: d.getMonth() + 1, year: d.getFullYear() })
+  }
+  return Array.from(m.values())
+})
+
 const selectedTotalPrice = computed(() => {
   if (rangeDates.value.length === 0) return 0
   return rangeDates.value.reduce((sum, iso) => {
@@ -367,22 +394,16 @@ const rangeHasUnavailable = computed(() => {
 })
 
 const canProceed = computed(() => {
-  return !!(selectedStart.value && selectedEnd.value) && !rangeHasUnavailable.value
+  return !!(startDate.value && endDate.value) && !rangeHasUnavailable.value
 })
 
 const formReady = computed(() => {
-  return (
-    canProceed.value &&
-    customer.value.firstName &&
-    customer.value.lastName &&
-    customer.value.email &&
-    customer.value.phone
-  )
+  return canProceed.value && booking.isFormFilled
 })
 
 const addonsTotalPrice = computed(() => {
   if (dogCount.value <= 0 || selectedNights.value <= 0) return 0
-  return dogCount.value * selectedNights.value * dogPerDayPrice
+  return dogCount.value * selectedNights.value * dogPerDayPrice.value
 })
 
 const grandTotalPrice = computed(() => selectedTotalPrice.value + addonsTotalPrice.value)
@@ -392,5 +413,32 @@ const canSubmit = computed(() => formReady.value)
 function submit() {
   submitted.value = true
   step.value = 5
+}
+
+async function verifyAndProceed() {
+  if (!canProceed.value) return
+  verifying.value = true
+  verifyError.value = ''
+  try {
+    const res = await axios.post('/api/bookings/verify', {
+      start_date: startDate.value,
+      end_date: endDate.value,
+    })
+    if (!res.data.available) {
+      verifyError.value = 'Vybraný termín již není dostupný'
+      return
+    }
+    const requests = monthsForRange.value.map(({ month, year }) => axios.get('/api/bookings/calendar', { params: { month, year } }))
+    const responses = await Promise.all(requests)
+    const freshDays = responses.flatMap(r => r.data.days)
+    const merged = new Map(daysData.value.map(d => [d.date, d]))
+    freshDays.forEach(d => merged.set(d.date, d))
+    daysData.value = Array.from(merged.values())
+    step.value = 2
+  } catch (e) {
+    verifyError.value = 'Nepodařilo se ověřit dostupnost'
+  } finally {
+    verifying.value = false
+  }
 }
 </script>
