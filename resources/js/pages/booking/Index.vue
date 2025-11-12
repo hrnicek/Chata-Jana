@@ -87,6 +87,7 @@
       <div v-if="error" class="text-red-600 mb-4">{{ error }}</div>
       <div v-if="loading" class="text-gray-600 mb-4">Načítáme kalendář…</div>
 
+      <div v-if="step === 1" class="mb-3 text-sm text-gray-700">Vyberte začátek a konec pobytu kliknutím v kalendáři. Dostupné dny jsou označeny „Volné“.</div>
       <div v-if="step === 1" class="grid grid-cols-7 gap-2">
       <div v-for="d in weekDays" :key="d" class="text-center font-medium text-gray-700">{{ d }}</div>
       <div
@@ -139,6 +140,7 @@
       <div class="flex-1 overflow-auto px-4 py-6">
         <div class="min-h-full grid place-items-center">
           <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6">
+            <div class="mb-4 text-sm text-gray-700">Vyplňte prosím kontaktní údaje, abychom vám mohli potvrdit rezervaci. E‑mail použijeme pro zaslání potvrzení a telefon jen v případě potřeby.</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
@@ -193,6 +195,7 @@
       <div class="flex-1 overflow-auto px-4 py-6">
         <div class="min-h-full grid place-items-center">
           <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6">
+            <div class="mb-4 text-sm text-gray-700">Pokud cestujete se psem, uveďte jejich počet. Cena za psa se počítá za každý den pobytu.</div>
             <div class="space-y-4">
               <div class="font-medium">Pobyt se psem</div>
               <div class="text-sm text-gray-700">{{ currency(dogPerDayPrice) }} /den za psa</div>
@@ -225,6 +228,7 @@
       <div class="flex-1 overflow-auto px-4 py-6">
         <div class="min-h-full grid place-items-center">
           <div class="w-full max-w-3xl rounded-2xl border bg-white shadow-sm p-6">
+            <div class="mb-4 text-sm text-gray-700">Zkontrolujte prosím všechny údaje níže. Pokud je vše v pořádku, klikněte na „Odeslat rezervaci“. V případě potřeby se vraťte a údaje upravte.</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="space-y-3">
                 <div class="flex items-center gap-2 text-sm text-gray-700">
@@ -313,6 +317,7 @@
           <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6 text-center">
             <div class="text-2xl font-semibold mb-2">Dokončeno</div>
             <div class="text-gray-700">Děkujeme, rezervace byla úspěšně odeslána. Potvrzení vám zašleme e‑mailem.</div>
+            <div class="mt-2 text-sm text-gray-700">V případě dotazů jsme vám k dispozici.</div>
             <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
             <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
           </div>
