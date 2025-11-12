@@ -64,6 +64,19 @@
         <div>Po výběru uvidíte počet nocí a celkovou cenu dole.</div>
         <div>Dny „Nedostupné“ nebo „Obsazené“ není možné zvolit.</div>
       </div>
+      <div v-if="step === 1 && verifying" role="status" aria-live="polite" class="mb-4 rounded-2xl border bg-honey text-primary px-3 py-2 flex items-center gap-2">
+        <Loader2 class="w-4 h-4 animate-spin" />
+        <div class="text-sm">Ověřujeme dostupnost…</div>
+      </div>
+      <div
+        v-if="step === 1 && rangeHasUnavailable"
+        role="alert"
+        aria-live="polite"
+        class="mb-4 rounded-2xl border border-red-200 bg-red-50 text-red-800 px-3 py-2 flex items-start gap-2"
+      >
+        <XCircle class="w-4 h-4 shrink-0" />
+        <div class="text-sm">Ve zvoleném období jsou některé dny obsazené. Zvolte prosím jiné datum.</div>
+      </div>
       <div v-if="step === 1" class="grid grid-cols-7 gap-2">
       <div v-for="d in weekDays" :key="d" class="text-center font-medium text-gray-700">{{ d }}</div>
       <div
@@ -100,11 +113,14 @@
       <div class="text-sm text-gray-700">Do: <strong>{{ formatDate(endDate) || '-' }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Cena celkem: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
-      <div v-if="rangeHasUnavailable" class="text-sm text-red-700">Ve zvoleném období jsou některé dny obsazené. Zvolte prosím jiné datum.</div>
       <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Zrušit výběr</button>
-      <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canProceed || verifying" @click="verifyAndProceed">Pokračovat</button>
+      <button type="button" class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50 flex items-center gap-2" :disabled="!canProceed || verifying" @click="verifyAndProceed">
+        <Loader2 v-if="verifying" class="w-4 h-4 animate-spin" />
+        <span v-if="!verifying">Pokračovat</span>
+        <span v-else>Ověřujeme…</span>
+      </button>
     </div>
-    <div v-if="verifying" class="mt-2 text-sm text-gray-700">Ověřujeme dostupnost…</div>
+    
 
     </div>
 
@@ -326,7 +342,7 @@ import axios from 'axios'
 import { ref, computed, onMounted } from 'vue'
 import { toast } from 'vue-sonner'
 import { useBookingStore } from '../../stores/booking'
-import { ChevronLeft, ChevronRight, CheckCircle, Ban, XCircle, Calendar, Moon, Home, BarChart3, CreditCard, User, Mail, Phone, StickyNote, Send, PawPrint } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, CheckCircle, Ban, XCircle, Calendar, Moon, Home, BarChart3, CreditCard, User, Mail, Phone, StickyNote, Send, PawPrint, Loader2 } from 'lucide-vue-next'
 
 const now = new Date()
 const month = ref(now.getMonth() + 1)
