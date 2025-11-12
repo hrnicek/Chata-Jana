@@ -19,6 +19,7 @@
         class="border rounded p-2 cursor-pointer"
         :class="[
           cell.inCurrent ? '' : 'opacity-60',
+          !isAvailable(cell.date) ? 'bg-red-50 border-red-400' : '',
           isInRange(cell.date) ? 'bg-emerald-50 border-emerald-400' : '',
           isStart(cell.date) || isEnd(cell.date) ? 'ring-2 ring-emerald-500' : ''
         ]"
@@ -39,6 +40,8 @@
       <div class="text-sm text-gray-700">Od: <strong>{{ selectedStart || '-' }}</strong></div>
       <div class="text-sm text-gray-700">Do: <strong>{{ selectedEnd || '-' }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
+      <div v-if="selectedNights > 0" class="text-sm text-gray-700">Cena celkem: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
+      <div v-if="rangeHasUnavailable" class="text-sm text-red-700">Výběr obsahuje obsazené dny</div>
       <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Vymazat výběr</button>
     </div>
   </div>
@@ -179,6 +182,12 @@ function isEnd(dateStr) {
   return !!(rangeEnd.value && isSameDate(parseISO(dateStr), rangeEnd.value))
 }
 
+function isAvailable(dateStr) {
+  const info = infoByDate(dateStr)
+  if (!info) return true
+  return !!info.available
+}
+
 function selectDate(cell) {
   const date = cell.date
   if (!selectedStart.value || (selectedStart.value && selectedEnd.value)) {
@@ -197,8 +206,46 @@ function clearSelection() {
 }
 
 const selectedNights = computed(() => {
-  if (!(rangeStart.value && rangeEnd.value)) return 0
-  const ms = Math.abs(rangeEnd.value - rangeStart.value)
-  return Math.max(1, Math.round(ms / (1000 * 60 * 60 * 24)))
+  return rangeDates.value.length
+})
+
+function addDays(date, days) {
+  const d = new Date(date)
+  d.setDate(d.getDate() + days)
+  return d
+}
+
+function toISO(d) {
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}
+
+const rangeDates = computed(() => {
+  if (!(rangeStart.value && rangeEnd.value)) return []
+  const a = rangeStart.value <= rangeEnd.value ? rangeStart.value : rangeEnd.value
+  const b = rangeStart.value <= rangeEnd.value ? rangeEnd.value : rangeStart.value
+  const out = []
+  let cur = new Date(a)
+  while (cur <= b) {
+    out.push(toISO(cur))
+    cur = addDays(cur, 1)
+  }
+  return out
+})
+
+const selectedTotalPrice = computed(() => {
+  if (rangeDates.value.length === 0) return 0
+  return rangeDates.value.reduce((sum, iso) => {
+    const info = infoByDate(iso)
+    const price = info?.price ? Number(info.price) : 0
+    return sum + price
+  }, 0)
+})
+
+const rangeHasUnavailable = computed(() => {
+  if (rangeDates.value.length === 0) return false
+  return rangeDates.value.some((iso) => {
+    const info = infoByDate(iso)
+    return info && info.available === false
+  })
 })
 </script>
