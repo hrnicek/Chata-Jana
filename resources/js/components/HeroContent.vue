@@ -1,5 +1,5 @@
 <script setup>
-import { Phone, Mail, LogIn, LogOut } from "lucide-vue-next";
+import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucide-vue-next";
 </script>
 
 <template>
@@ -7,10 +7,40 @@ import { Phone, Mail, LogIn, LogOut } from "lucide-vue-next";
     <div class="container mx-auto grid grid-cols-1 items-center gap-8 px-6 lg:grid-cols-2">
       <div class="text-left text-white">
         <div class="max-w-xl">
-          <h1 class="mb-4 text-5xl leading-tight font-bold md:text-7xl">Chata Jana Ostružná</h1>
-          <p class="max-w-3xl text-lg text-white/80 md:text-xl">
+          <h1
+            class="mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-5xl leading-tight font-bold text-transparent md:text-7xl"
+          >
+            Chata Jana Ostružná
+          </h1>
+          <div class="mt-2 flex items-center text-sm text-white/80">
+            <Star class="mr-1 h-4 w-4 text-yellow-400" />
+            <span class="font-semibold">4.9</span>
+            <span class="mx-2">•</span>
+            <span>z 200+ pobytů</span>
+          </div>
+          <p class="mt-3 max-w-3xl text-lg text-white/80 md:text-xl">
             Soukromé wellness uprostřed Jeseníků. Ideální pro rodiny, přátele i malé oslavy.
           </p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <div
+              class="flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs text-white/80 backdrop-blur-sm"
+            >
+              <Sparkles class="h-3 w-3" />
+              <span>Soukromé wellness</span>
+            </div>
+            <div
+              class="flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs text-white/80 backdrop-blur-sm"
+            >
+              <MapPin class="h-3 w-3" />
+              <span>Ostružná, Jeseníky</span>
+            </div>
+            <div
+              class="flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs text-white/80 backdrop-blur-sm"
+            >
+              <Users class="h-3 w-3" />
+              <span>Až 12 osob</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="flex justify-center lg:justify-end">
