@@ -8,10 +8,18 @@
       <button class="px-4 py-2 rounded" :class="step === 5 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 5" :disabled="!submitted">5. Dokončeno</button>
     </div>
     <div v-if="step === 1" class="flex items-center justify-between mb-6">
-      <div class="text-2xl font-semibold">{{ monthLabel }} {{ year }}</div>
+      <div class="text-2xl font-semibold flex items-center gap-2">
+        {{ monthLabel }} {{ year }}
+      </div>
       <div class="flex items-center gap-2">
-        <button v-if="canGoPrev" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="prevMonth">Předchozí</button>
-        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="nextMonth">Další</button>
+        <button v-if="canGoPrev" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="prevMonth">
+          <ChevronLeft class="w-4 h-4" />
+          Předchozí
+        </button>
+        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="nextMonth">
+          Další
+          <ChevronRight class="w-4 h-4" />
+        </button>
       </div>
     </div>
 
@@ -38,7 +46,10 @@
           <div class="font-semibold">{{ cell.day }}</div>
           <div v-if="infoByDate(cell.date)?.season" class="text-[10px] text-gray-600 pointer-none">{{ infoByDate(cell.date)?.season }}</div>
         </div>
-        <div :class="statusClass(cell.date)" class="text-sm mt-1">
+        <div :class="statusClass(cell.date)" class="text-sm mt-1 flex items-center gap-1">
+          <CheckCircle v-if="infoByDate(cell.date)?.available" class="w-4 h-4" />
+          <Ban v-else-if="isBlackout(cell.date)" class="w-4 h-4" />
+          <XCircle v-else class="w-4 h-4" />
           {{ statusText(cell.date) }}
         </div>
         <div v-if="infoByDate(cell.date)?.price" class="text-sm text-gray-800 mt-1">{{ currency(infoByDate(cell.date)?.price) }}/noc</div>
@@ -60,19 +71,31 @@
     <div v-if="step === 2" class="mt-2 space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm text-gray-700 mb-1">Jméno</label>
+          <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
+            <User class="w-4 h-4" />
+            Jméno
+          </label>
           <input v-model="customer.firstName" type="text" class="w-full rounded border px-3 py-2" placeholder="Jméno" />
         </div>
         <div>
-          <label class="block text-sm text-gray-700 mb-1">Příjmení</label>
+          <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
+            <User class="w-4 h-4" />
+            Příjmení
+          </label>
           <input v-model="customer.lastName" type="text" class="w-full rounded border px-3 py-2" placeholder="Příjmení" />
         </div>
         <div>
-          <label class="block text-sm text-gray-700 mb-1">Email</label>
+          <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
+            <Mail class="w-4 h-4" />
+            Email
+          </label>
           <input v-model="customer.email" type="email" class="w-full rounded border px-3 py-2" placeholder="email@domena.cz" />
         </div>
         <div>
-          <label class="block text-sm text-gray-700 mb-1">Telefon</label>
+          <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
+            <Phone class="w-4 h-4" />
+            Telefon
+          </label>
           <input v-model="customer.phone" type="tel" class="w-full rounded border px-3 py-2" placeholder="+420" />
         </div>
         <div class="md:col-span-2">
@@ -111,30 +134,83 @@
     </div>
 
     <div v-if="step === 4" class="mt-2 space-y-4">
-      <div class="border rounded p-4 space-y-2">
-        <div class="text-lg font-semibold">Shrnutí rezervace</div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <div class="text-sm text-gray-700">Od: <strong>{{ formatDate(startDate) }}</strong></div>
-            <div class="text-sm text-gray-700">Do: <strong>{{ formatDate(endDate) }}</strong></div>
-            <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
-            <div class="text-sm text-gray-700">Cena ubytování: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
-            <div class="text-sm text-gray-700">Pes: <strong>{{ dogCount }}</strong> × {{ currency(dogPerDayPrice) }} /den</div>
-            <div class="text-sm text-gray-700">Cena služeb: <strong>{{ currency(addonsTotalPrice) }}</strong></div>
-            <div class="text-sm text-gray-900">Celkem k úhradě: <strong>{{ currency(grandTotalPrice) }}</strong></div>
+      <div class="border rounded p-5 bg-gray-50">
+        <div class="flex items-center gap-2 mb-4">
+          <Calendar class="w-5 h-5 text-gray-900" />
+          <div class="text-lg font-semibold">Shrnutí rezervace</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <Calendar class="w-4 h-4" />
+              <span>Termín:</span>
+              <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <Moon class="w-4 h-4" />
+              <span>Nocí:</span>
+              <strong>{{ selectedNights }}</strong>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <Home class="w-4 h-4" />
+              <span>Cena ubytování:</span>
+              <strong>{{ currency(selectedTotalPrice) }}</strong>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <PawPrint class="w-4 h-4" />
+              <span>Pes:</span>
+              <strong>{{ dogCount }}</strong>
+              <span>× {{ currency(dogPerDayPrice) }} /den</span>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <BarChart3 class="w-4 h-4" />
+              <span>Cena služeb:</span>
+              <strong>{{ currency(addonsTotalPrice) }}</strong>
+            </div>
+            <div class="border-t pt-3 mt-2 flex items-center gap-2 text-gray-900">
+              <CreditCard class="w-5 h-5" />
+              <div class="text-base">Celkem k úhradě:</div>
+              <div class="text-xl font-semibold ml-auto">{{ currency(grandTotalPrice) }}</div>
+            </div>
           </div>
-          <div>
-            <div class="text-sm text-gray-700">Jméno: <strong>{{ customer.firstName }}</strong></div>
-            <div class="text-sm text-gray-700">Příjmení: <strong>{{ customer.lastName }}</strong></div>
-            <div class="text-sm text-gray-700">Email: <strong>{{ customer.email }}</strong></div>
-            <div class="text-sm text-gray-700">Telefon: <strong>{{ customer.phone }}</strong></div>
-            <div class="text-sm text-gray-700">Poznámka: <strong>{{ customer.note || '-' }}</strong></div>
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <User class="w-4 h-4" />
+              <span>Jméno:</span>
+              <strong>{{ customer.firstName }}</strong>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <User class="w-4 h-4" />
+              <span>Příjmení:</span>
+              <strong>{{ customer.lastName }}</strong>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <Mail class="w-4 h-4" />
+              <span>Email:</span>
+              <strong>{{ customer.email }}</strong>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <Phone class="w-4 h-4" />
+              <span>Telefon:</span>
+              <strong>{{ customer.phone }}</strong>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-700">
+              <StickyNote class="w-4 h-4" />
+              <span>Poznámka:</span>
+              <strong>{{ customer.note || '-' }}</strong>
+            </div>
           </div>
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 3">Zpět</button>
-        <button class="px-3 py-2 rounded bg-gray-900 text-white disabled:opacity-50" :disabled="!canSubmit || submitting" @click="submit">Odeslat</button>
+        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="step = 3">
+          <ChevronLeft class="w-4 h-4" />
+          Zpět
+        </button>
+        <button class="px-3 py-2 rounded bg-gray-900 text-white disabled:opacity-50 flex items-center gap-1" :disabled="!canSubmit || submitting" @click="submit">
+          Odeslat
+          <Send class="w-4 h-4" />
+        </button>
       </div>
       <div v-if="submitError" class="text-sm text-red-700">{{ submitError }}</div>
     </div>
@@ -157,6 +233,7 @@
 import axios from 'axios'
 import { ref, computed, onMounted } from 'vue'
 import { useBookingStore } from '../../stores/booking'
+import { ChevronLeft, ChevronRight, CheckCircle, Ban, XCircle, Calendar, Moon, Home, BarChart3, CreditCard, User, Mail, Phone, StickyNote, Send, PawPrint } from 'lucide-vue-next'
 
 const now = new Date()
 const month = ref(now.getMonth() + 1)
