@@ -1,32 +1,93 @@
 <template>
-  <div class="p-6 max-w-5xl mx-auto">
-    <div class="flex items-center gap-2 mb-6">
-      <button class="px-4 py-2 rounded" :class="step === 1 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 1">1. Termín</button>
-      <button class="px-4 py-2 rounded" :class="step === 2 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 2" :disabled="!canProceed">2. Informace</button>
-      <button class="px-4 py-2 rounded" :class="step === 3 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 3" :disabled="!canProceed || !formReady">3. Služby</button>
-      <button class="px-4 py-2 rounded" :class="step === 4 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 4" :disabled="!canSubmit">4. Shrnutí</button>
-      <button class="px-4 py-2 rounded" :class="step === 5 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 5" :disabled="!submitted">5. Dokončeno</button>
-    </div>
-    <div v-if="step === 1" class="flex items-center justify-between mb-6">
-      <div class="text-2xl font-semibold flex items-center gap-2">
-        {{ monthLabel }} {{ year }}
+  <div class="w-full h-screen">
+    <div class="grid grid-cols-1 md:grid-cols-12 bg-neutral-50 rounded-4xl h-full">
+      <aside class="md:col-span-3 border-r shadow-inner">
+        <div class="p-4">
+          <div class="flex items-center gap-2 mb-4">
+            <Calendar class="w-5 h-5 text-emerald-600" />
+            <div class="font-medium">Kroky rezervace</div>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <div class="mt-0.5">
+                <CheckCircle v-if="step > 1" class="w-4 h-4 text-emerald-600" />
+                <Calendar v-else class="w-4 h-4 text-gray-900" />
+              </div>
+              <div>
+                <div :class="step === 1 ? 'font-medium text-gray-900' : step > 1 ? 'text-gray-700' : 'text-gray-500'">Krok 1</div>
+                <div class="text-xs text-gray-700">Termín</div>
+                <div :class="step > 1 ? 'text-xs text-emerald-600' : step === 1 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 1 ? 'Hotovo' : step === 1 ? 'Probíhá' : 'Čeká' }}</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="mt-0.5">
+                <CheckCircle v-if="step > 2" class="w-4 h-4 text-emerald-600" />
+                <User v-else class="w-4 h-4 text-gray-900" />
+              </div>
+              <div>
+                <div :class="step === 2 ? 'font-medium text-gray-900' : step > 2 ? 'text-gray-700' : 'text-gray-500'">Krok 2</div>
+                <div class="text-xs text-gray-700">Informace</div>
+                <div :class="step > 2 ? 'text-xs text-emerald-600' : step === 2 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 2 ? 'Hotovo' : step === 2 ? 'Probíhá' : 'Čeká' }}</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="mt-0.5">
+                <CheckCircle v-if="step > 3" class="w-4 h-4 text-emerald-600" />
+                <PawPrint v-else class="w-4 h-4 text-gray-900" />
+              </div>
+              <div>
+                <div :class="step === 3 ? 'font-medium text-gray-900' : step > 3 ? 'text-gray-700' : 'text-gray-500'">Krok 3</div>
+                <div class="text-xs text-gray-700">Služby</div>
+                <div :class="step > 3 ? 'text-xs text-emerald-600' : step === 3 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 3 ? 'Hotovo' : step === 3 ? 'Probíhá' : 'Čeká' }}</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="mt-0.5">
+                <CheckCircle v-if="step > 4" class="w-4 h-4 text-emerald-600" />
+                <CreditCard v-else class="w-4 h-4 text-gray-900" />
+              </div>
+              <div>
+                <div :class="step === 4 ? 'font-medium text-gray-900' : step > 4 ? 'text-gray-700' : 'text-gray-500'">Krok 4</div>
+                <div class="text-xs text-gray-700">Shrnutí</div>
+                <div :class="step > 4 ? 'text-xs text-emerald-600' : step === 4 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 4 ? 'Hotovo' : step === 4 ? 'Probíhá' : 'Čeká' }}</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="mt-0.5">
+                <CheckCircle class="w-4 h-4 text-emerald-600" />
+              </div>
+              <div>
+                <div :class="step === 5 ? 'font-medium text-gray-900' : step > 5 ? 'text-gray-700' : 'text-gray-500'">Krok 5</div>
+                <div class="text-xs text-gray-700">Dokončeno</div>
+                <div :class="step >= 5 ? 'text-xs text-emerald-600' : 'text-xs text-gray-500'">{{ step >= 5 ? 'Hotovo' : 'Čeká' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <section class="md:col-span-9 h-full">
+        <div v-if="step === 1" class="h-full flex flex-col">
+          <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
+            <div class="text-2xl font-semibold flex items-center gap-2">
+              {{ monthLabel }} {{ year }}
+            </div>
+        <div class="flex items-center gap-2">
+          <button v-if="canGoPrev" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="prevMonth">
+            <ChevronLeft class="w-4 h-4" />
+            Předchozí
+          </button>
+          <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="nextMonth">
+            Další
+            <ChevronRight class="w-4 h-4" />
+          </button>
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <button v-if="canGoPrev" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="prevMonth">
-          <ChevronLeft class="w-4 h-4" />
-          Předchozí
-        </button>
-        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="nextMonth">
-          Další
-          <ChevronRight class="w-4 h-4" />
-        </button>
-      </div>
-    </div>
 
-    <div v-if="error" class="text-red-600 mb-4">{{ error }}</div>
-    <div v-if="loading" class="text-gray-600 mb-4">Načítání…</div>
+    <div class="flex-1 overflow-auto px-4 py-3 bg-white">
+      <div v-if="error" class="text-red-600 mb-4">{{ error }}</div>
+      <div v-if="loading" class="text-gray-600 mb-4">Načítání…</div>
 
-    <div v-if="step === 1" class="grid grid-cols-7 gap-2">
+      <div v-if="step === 1" class="grid grid-cols-7 gap-2">
       <div v-for="d in weekDays" :key="d" class="text-center font-medium text-gray-700">{{ d }}</div>
       <div
         v-for="cell in cells"
@@ -54,19 +115,22 @@
         </div>
         <div v-if="infoByDate(cell.date)?.price" class="text-sm text-gray-800 mt-1">{{ currency(infoByDate(cell.date)?.price) }}/noc</div>
       </div>
+      </div>
     </div>
 
-    <div v-if="step === 1" class="mt-4 flex items-center gap-3">
+    <div v-if="step === 1" class="shrink-0 border-t bg-white px-4 py-3 flex items-center gap-3">
       <div class="text-sm text-gray-700">Od: <strong>{{ formatDate(startDate) || '-' }}</strong></div>
       <div class="text-sm text-gray-700">Do: <strong>{{ formatDate(endDate) || '-' }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Cena celkem: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
       <div v-if="rangeHasUnavailable" class="text-sm text-red-700">Výběr obsahuje obsazené dny</div>
-      <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Vymazat výběr</button>
+      <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Smazat výběr</button>
       <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canProceed || verifying" @click="verifyAndProceed">Pokračovat</button>
     </div>
     <div v-if="verifyError" class="mt-2 text-sm text-red-700">{{ verifyError }}</div>
     <div v-if="verifying" class="mt-2 text-sm text-gray-700">Ověřování dostupnosti…</div>
+
+    </div>
 
     <div v-if="step === 2" class="mt-2 space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -114,7 +178,7 @@
 
     <div v-if="step === 3" class="mt-2 space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="border rounded p-3">
+        <div class="rounded p-3">
           <div class="font-medium">Pes</div>
           <div class="text-sm text-gray-700">{{ currency(dogPerDayPrice) }} /den /pes</div>
           <div class="mt-2 flex items-center gap-2">
@@ -134,7 +198,7 @@
     </div>
 
     <div v-if="step === 4" class="mt-2 space-y-4">
-      <div class="border rounded p-5 bg-gray-50">
+      <div class="rounded p-5 bg-gray-50">
         <div class="flex items-center gap-2 mb-4">
           <Calendar class="w-5 h-5 text-gray-900" />
           <div class="text-lg font-semibold">Shrnutí rezervace</div>
@@ -216,7 +280,7 @@
     </div>
 
     <div v-if="step === 5" class="mt-2 space-y-4">
-      <div class="border rounded p-6 text-center">
+      <div class="rounded p-6 text-center">
         <div class="text-2xl font-semibold mb-2">Dokončeno</div>
         <div class="text-gray-700">Děkujeme, vaše rezervace byla odeslána.</div>
         <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
@@ -226,6 +290,8 @@
         <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět na začátek</button>
       </div>
     </div>
+    </section>
+  </div>
   </div>
 </template>
 
