@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-screen">
-    <div class="grid grid-cols-1 md:grid-cols-12 bg-neutral-50 rounded-4xl h-full">
-      <aside class="md:col-span-3 border-r shadow-inner">
+    <div class="grid grid-cols-1 md:grid-cols-12 rounded-4xl h-full">
+      <aside class="md:col-span-3 border-r shadow-inner bg-neutral-50">
         <div class="p-4">
           <div class="flex items-center gap-2 mb-4">
             <Calendar class="w-5 h-5 text-emerald-600" />
@@ -65,7 +65,7 @@
           </div>
         </div>
       </aside>
-      <section class="md:col-span-9 h-full">
+      <section class="md:col-span-9 h-full bg-white">
         <div v-if="step === 1" class="h-full flex flex-col">
           <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
             <div class="text-2xl font-semibold flex items-center gap-2">
@@ -127,47 +127,56 @@
       <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Smazat výběr</button>
       <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canProceed || verifying" @click="verifyAndProceed">Pokračovat</button>
     </div>
-    <div v-if="verifyError" class="mt-2 text-sm text-red-700">{{ verifyError }}</div>
     <div v-if="verifying" class="mt-2 text-sm text-gray-700">Ověřování dostupnosti…</div>
 
     </div>
 
-    <div v-if="step === 2" class="mt-2 space-y-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
-            <User class="w-4 h-4" />
-            Jméno
-          </label>
-          <input v-model="customer.firstName" type="text" class="w-full rounded border px-3 py-2" placeholder="Jméno" />
-        </div>
-        <div>
-          <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
-            <User class="w-4 h-4" />
-            Příjmení
-          </label>
-          <input v-model="customer.lastName" type="text" class="w-full rounded border px-3 py-2" placeholder="Příjmení" />
-        </div>
-        <div>
-          <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
-            <Mail class="w-4 h-4" />
-            Email
-          </label>
-          <input v-model="customer.email" type="email" class="w-full rounded border px-3 py-2" placeholder="email@domena.cz" />
-        </div>
-        <div>
-          <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
-            <Phone class="w-4 h-4" />
-            Telefon
-          </label>
-          <input v-model="customer.phone" type="tel" class="w-full rounded border px-3 py-2" placeholder="+420" />
-        </div>
-        <div class="md:col-span-2">
-          <label class="block text-sm text-gray-700 mb-1">Poznámka</label>
-          <textarea v-model="customer.note" rows="4" class="w-full rounded border px-3 py-2" placeholder="Poznámka"></textarea>
+    <div v-if="step === 2" class="h-full flex flex-col">
+      <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
+        <div class="text-2xl font-semibold">Informace</div>
+        <div class="text-sm text-gray-700">Krok 2</div>
+      </div>
+      <div class="flex-1 overflow-auto px-4 py-6">
+        <div class="min-h-full grid place-items-center">
+          <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
+                  <User class="w-4 h-4" />
+                  Jméno
+                </label>
+                <input v-model="customer.firstName" type="text" class="w-full rounded border px-3 py-2" placeholder="Jméno" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
+                  <User class="w-4 h-4" />
+                  Příjmení
+                </label>
+                <input v-model="customer.lastName" type="text" class="w-full rounded border px-3 py-2" placeholder="Příjmení" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
+                  <Mail class="w-4 h-4" />
+                  Email
+                </label>
+                <input v-model="customer.email" type="email" class="w-full rounded border px-3 py-2" placeholder="email@domena.cz" />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
+                  <Phone class="w-4 h-4" />
+                  Telefon
+                </label>
+                <input v-model="customer.phone" type="tel" class="w-full rounded border px-3 py-2" placeholder="+420" />
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm text-gray-700 mb-1">Poznámka</label>
+                <textarea v-model="customer.note" rows="4" class="w-full rounded border px-3 py-2" placeholder="Poznámka"></textarea>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="shrink-0 border-t bg-white px-4 py-3 flex items-center gap-3">
         <div class="text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
         <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
         <div class="text-sm text-gray-700">Cena: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
@@ -176,18 +185,26 @@
       </div>
     </div>
 
-    <div v-if="step === 3" class="mt-2 space-y-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="rounded p-3">
-          <div class="font-medium">Pes</div>
-          <div class="text-sm text-gray-700">{{ currency(dogPerDayPrice) }} /den /pes</div>
-          <div class="mt-2 flex items-center gap-2">
-            <label class="text-sm text-gray-700">Počet psů</label>
-            <input v-model.number="dogCount" type="number" min="0" class="w-24 rounded border px-3 py-2" />
+    <div v-if="step === 3" class="h-full flex flex-col">
+      <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
+        <div class="text-2xl font-semibold">Služby</div>
+        <div class="text-sm text-gray-700">Krok 3</div>
+      </div>
+      <div class="flex-1 overflow-auto px-4 py-6">
+        <div class="min-h-full grid place-items-center">
+          <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6">
+            <div class="space-y-4">
+              <div class="font-medium">Pes</div>
+              <div class="text-sm text-gray-700">{{ currency(dogPerDayPrice) }} /den /pes</div>
+              <div class="mt-2 flex items-center gap-2">
+                <label class="text-sm text-gray-700">Počet psů</label>
+                <input v-model.number="dogCount" type="number" min="0" class="w-24 rounded border px-3 py-2" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="shrink-0 border-t bg-white px-4 py-3 flex items-center gap-3">
         <div class="text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
         <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
         <div class="text-sm text-gray-700">Služby: <strong>{{ currency(addonsTotalPrice) }}</strong></div>
@@ -197,76 +214,83 @@
       </div>
     </div>
 
-    <div v-if="step === 4" class="mt-2 space-y-4">
-      <div class="rounded p-5 bg-gray-50">
-        <div class="flex items-center gap-2 mb-4">
+    <div v-if="step === 4" class="h-full flex flex-col">
+      <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
+        <div class="flex items-center gap-2">
           <Calendar class="w-5 h-5 text-gray-900" />
-          <div class="text-lg font-semibold">Shrnutí rezervace</div>
+          <div class="text-2xl font-semibold">Shrnutí rezervace</div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-3">
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <Calendar class="w-4 h-4" />
-              <span>Termín:</span>
-              <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong>
-            </div>
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <Moon class="w-4 h-4" />
-              <span>Nocí:</span>
-              <strong>{{ selectedNights }}</strong>
-            </div>
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <Home class="w-4 h-4" />
-              <span>Cena ubytování:</span>
-              <strong>{{ currency(selectedTotalPrice) }}</strong>
-            </div>
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <PawPrint class="w-4 h-4" />
-              <span>Pes:</span>
-              <strong>{{ dogCount }}</strong>
-              <span>× {{ currency(dogPerDayPrice) }} /den</span>
-            </div>
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <BarChart3 class="w-4 h-4" />
-              <span>Cena služeb:</span>
-              <strong>{{ currency(addonsTotalPrice) }}</strong>
-            </div>
-            <div class="border-t pt-3 mt-2 flex items-center gap-2 text-gray-900">
-              <CreditCard class="w-5 h-5" />
-              <div class="text-base">Celkem k úhradě:</div>
-              <div class="text-xl font-semibold ml-auto">{{ currency(grandTotalPrice) }}</div>
-            </div>
-          </div>
-          <div class="space-y-3">
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <User class="w-4 h-4" />
-              <span>Jméno:</span>
-              <strong>{{ customer.firstName }}</strong>
-            </div>
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <User class="w-4 h-4" />
-              <span>Příjmení:</span>
-              <strong>{{ customer.lastName }}</strong>
-            </div>
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <Mail class="w-4 h-4" />
-              <span>Email:</span>
-              <strong>{{ customer.email }}</strong>
-            </div>
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <Phone class="w-4 h-4" />
-              <span>Telefon:</span>
-              <strong>{{ customer.phone }}</strong>
-            </div>
-            <div class="flex items-center gap-2 text-sm text-gray-700">
-              <StickyNote class="w-4 h-4" />
-              <span>Poznámka:</span>
-              <strong>{{ customer.note || '-' }}</strong>
+        <div class="text-sm text-gray-700">Krok 4</div>
+      </div>
+      <div class="flex-1 overflow-auto px-4 py-6">
+        <div class="min-h-full grid place-items-center">
+          <div class="w-full max-w-3xl rounded-2xl border bg-white shadow-sm p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-3">
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <Calendar class="w-4 h-4" />
+                  <span>Termín:</span>
+                  <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <Moon class="w-4 h-4" />
+                  <span>Nocí:</span>
+                  <strong>{{ selectedNights }}</strong>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <Home class="w-4 h-4" />
+                  <span>Cena ubytování:</span>
+                  <strong>{{ currency(selectedTotalPrice) }}</strong>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <PawPrint class="w-4 h-4" />
+                  <span>Pes:</span>
+                  <strong>{{ dogCount }}</strong>
+                  <span>× {{ currency(dogPerDayPrice) }} /den</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <BarChart3 class="w-4 h-4" />
+                  <span>Cena služeb:</span>
+                  <strong>{{ currency(addonsTotalPrice) }}</strong>
+                </div>
+                <div class="border-t pt-3 mt-2 flex items-center gap-2 text-gray-900">
+                  <CreditCard class="w-5 h-5" />
+                  <div class="text-base">Celkem k úhradě:</div>
+                  <div class="text-xl font-semibold ml-auto">{{ currency(grandTotalPrice) }}</div>
+                </div>
+              </div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <User class="w-4 h-4" />
+                  <span>Jméno:</span>
+                  <strong>{{ customer.firstName }}</strong>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <User class="w-4 h-4" />
+                  <span>Příjmení:</span>
+                  <strong>{{ customer.lastName }}</strong>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <Mail class="w-4 h-4" />
+                  <span>Email:</span>
+                  <strong>{{ customer.email }}</strong>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <Phone class="w-4 h-4" />
+                  <span>Telefon:</span>
+                  <strong>{{ customer.phone }}</strong>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-700">
+                  <StickyNote class="w-4 h-4" />
+                  <span>Poznámka:</span>
+                  <strong>{{ customer.note || '-' }}</strong>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="shrink-0 border-t bg-white px-4 py-3 flex items-center gap-3">
         <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="step = 3">
           <ChevronLeft class="w-4 h-4" />
           Zpět
@@ -276,17 +300,25 @@
           <Send class="w-4 h-4" />
         </button>
       </div>
-      <div v-if="submitError" class="text-sm text-red-700">{{ submitError }}</div>
+      <div v-if="submitError" class="mt-2 text-sm text-red-700">{{ submitError }}</div>
     </div>
 
-    <div v-if="step === 5" class="mt-2 space-y-4">
-      <div class="rounded p-6 text-center">
-        <div class="text-2xl font-semibold mb-2">Dokončeno</div>
-        <div class="text-gray-700">Děkujeme, vaše rezervace byla odeslána.</div>
-        <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
-        <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
+    <div v-if="step === 5" class="h-full flex flex-col">
+      <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
+        <div class="text-2xl font-semibold">Dokončeno</div>
+        <div class="text-sm text-gray-700">Krok 5</div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex-1 overflow-auto px-4 py-6">
+        <div class="min-h-full grid place-items-center">
+          <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6 text-center">
+            <div class="text-2xl font-semibold mb-2">Dokončeno</div>
+            <div class="text-gray-700">Děkujeme, vaše rezervace byla odeslána.</div>
+            <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
+            <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="shrink-0 border-t bg-white px-4 py-3 flex items-center gap-3">
         <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět na začátek</button>
       </div>
     </div>
@@ -298,6 +330,7 @@
 <script setup>
 import axios from 'axios'
 import { ref, computed, onMounted } from 'vue'
+import { toast } from 'vue-sonner'
 import { useBookingStore } from '../../stores/booking'
 import { ChevronLeft, ChevronRight, CheckCircle, Ban, XCircle, Calendar, Moon, Home, BarChart3, CreditCard, User, Mail, Phone, StickyNote, Send, PawPrint } from 'lucide-vue-next'
 
@@ -632,7 +665,7 @@ async function verifyAndProceed() {
       end_date: endDate.value,
     })
     if (!res.data.available) {
-      verifyError.value = 'Vybraný termín již není dostupný'
+      toast.error('Vybraný termín již není dostupný')
       return
     }
     const requests = monthsForRange.value.map(({ month, year }) => axios.get('/api/bookings/calendar', { params: { month, year } }))
@@ -643,7 +676,7 @@ async function verifyAndProceed() {
     daysData.value = Array.from(merged.values())
     step.value = 2
   } catch (e) {
-    verifyError.value = 'Nepodařilo se ověřit dostupnost'
+    toast.error('Nepodařilo se ověřit dostupnost')
   } finally {
     verifying.value = false
   }
