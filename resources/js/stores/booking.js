@@ -1,13 +1,13 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useBookingStore = defineStore('booking', {
+export const useBookingStore = defineStore("booking", {
   state: () => ({
     customer: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      note: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      note: "",
     },
     startDate: null,
     endDate: null,
@@ -21,37 +21,37 @@ export const useBookingStore = defineStore('booking', {
         state.customer.lastName &&
         state.customer.email &&
         state.customer.phone
-      )
+      );
     },
   },
   actions: {
     updateCustomer(partial) {
-      this.customer = { ...this.customer, ...partial }
+      this.customer = { ...this.customer, ...partial };
     },
     resetCustomer() {
-      this.customer = { firstName: '', lastName: '', email: '', phone: '', note: '' }
+      this.customer = { firstName: "", lastName: "", email: "", phone: "", note: "" };
     },
     setStartDate(date) {
-      this.startDate = date || null
+      this.startDate = date || null;
     },
     setEndDate(date) {
-      this.endDate = date || null
+      this.endDate = date || null;
     },
     resetDates() {
-      this.startDate = null
-      this.endDate = null
+      this.startDate = null;
+      this.endDate = null;
     },
     setExtras(list) {
-      this.extras = Array.isArray(list) ? list : []
+      this.extras = Array.isArray(list) ? list : [];
     },
     setExtraQuantity(id, qty) {
-      const num = Number(qty)
-      const clean = Number.isNaN(num) || num < 0 ? 0 : Math.floor(num)
-      this.extraSelection = { ...this.extraSelection, [id]: clean }
+      const num = Number(qty);
+      const clean = Number.isNaN(num) || num < 0 ? 0 : Math.floor(num);
+      this.extraSelection = { ...this.extraSelection, [id]: clean };
     },
     resetExtras() {
-      this.extras = []
-      this.extraSelection = {}
+      this.extras = [];
+      this.extraSelection = {};
     },
   },
-})
+});
