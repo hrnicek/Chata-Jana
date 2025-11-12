@@ -6,6 +6,8 @@ class ContactController extends Controller
 {
     public function __invoke()
     {
+        seo()->title('Kontakt');
+
         return inertia('Contact');
     }
 }

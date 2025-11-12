@@ -19,6 +19,16 @@
     --color-honey: var(--color-honey)
 }
 
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
 .glassmorphism {
     background: rgba(26, 32, 44, 0.6);
     backdrop-filter: blur(15px);

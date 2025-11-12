@@ -17,9 +17,9 @@
 
         <Link class="hover:text-gray-300 transition-colors" href="#">Kontakt</Link>
       </div>
-      <a class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-colors text-sm" href="#">
-        REZERVACE
-      </a>
+      <Link :href="route('bookings.calendar')" class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-colors text-sm">
+        Rezervace
+      </Link>
     </nav>
   </header>
 </template>
