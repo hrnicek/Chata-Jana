@@ -63,6 +63,7 @@ class CalendarController extends Controller
             $days[] = [
                 'date' => $date->toDateString(),
                 'available' => ! ($isBlackout || $isBooked),
+                'blackout' => $isBlackout,
                 'season' => $season?->name,
                 'price' => $seasonPrice?->price,
             ];

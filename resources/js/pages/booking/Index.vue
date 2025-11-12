@@ -26,7 +26,7 @@
         class="border rounded p-2 cursor-pointer"
         :class="[
           cell.inCurrent ? '' : 'opacity-60',
-          !isAvailable(cell.date) ? 'bg-red-50 border-red-400' : '',
+          !isAvailable(cell.date) ? (isBlackout(cell.date) ? 'bg-orange-50 border-orange-400' : 'bg-red-50 border-red-400') : '',
           !isAvailable(cell.date) ? 'cursor-not-allowed pointer-events-none' : '',
           isInRange(cell.date) ? 'bg-emerald-50 border-emerald-400' : '',
           isStart(cell.date) || isEnd(cell.date) ? 'ring-2 ring-emerald-500' : ''
@@ -38,8 +38,8 @@
           <div class="font-semibold">{{ cell.day }}</div>
           <div v-if="infoByDate(cell.date)?.season" class="text-[10px] text-gray-600 pointer-none">{{ infoByDate(cell.date)?.season }}</div>
         </div>
-        <div :class="infoByDate(cell.date)?.available ? 'text-green-700' : 'text-red-700'" class="text-sm mt-1">
-          {{ infoByDate(cell.date)?.available ? 'Volné' : 'Obsazené' }}
+        <div :class="statusClass(cell.date)" class="text-sm mt-1">
+          {{ statusText(cell.date) }}
         </div>
         <div v-if="infoByDate(cell.date)?.price" class="text-sm text-gray-800 mt-1">{{ currency(infoByDate(cell.date)?.price) }}/noc</div>
       </div>
@@ -329,6 +329,28 @@ function isAvailable(dateStr) {
   const info = infoByDate(dateStr)
   if (!info) return true
   return !!info.available
+}
+
+function isBlackout(dateStr) {
+  const info = infoByDate(dateStr)
+  if (!info) return false
+  return !!info.blackout
+}
+
+function statusText(dateStr) {
+  const info = infoByDate(dateStr)
+  if (!info) return ''
+  if (info.available) return 'Volné'
+  if (info.blackout) return 'Nedostupné'
+  return 'Obsazené'
+}
+
+function statusClass(dateStr) {
+  const info = infoByDate(dateStr)
+  if (!info) return ''
+  if (info.available) return 'text-green-700'
+  if (info.blackout) return 'text-orange-700'
+  return 'text-red-700'
 }
 
 function selectDate(cell) {
