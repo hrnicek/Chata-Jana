@@ -334,7 +334,14 @@ function selectDate(cell) {
     return
   }
   if (!endDate.value) {
-    endDate.value = date
+    const a = parseISO(startDate.value)
+    const b = parseISO(date)
+    if (b < a) {
+      endDate.value = startDate.value
+      startDate.value = date
+    } else {
+      endDate.value = date
+    }
   }
 }
 
