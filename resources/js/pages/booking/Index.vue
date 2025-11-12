@@ -95,7 +95,11 @@
       >
         <div class="flex items-center justify-between">
           <div class="font-semibold">{{ cell.day }}</div>
-          <div v-if="infoByDate(cell.date)?.season" class="text-[10px] text-gray-600 pointer-none">{{ infoByDate(cell.date)?.season }}</div>
+          <div v-if="infoByDate(cell.date)?.season" class="text-[10px]">
+            <span :class="infoByDate(cell.date)?.season_is_default ? 'rounded px-1.5 py-0.5 bg-gray-100 text-gray-700' : 'rounded px-1.5 py-0.5 bg-amber-100 text-amber-700'">
+              {{ infoByDate(cell.date)?.season }}
+            </span>
+          </div>
         </div>
         <div :class="statusClass(cell.date)" class="text-sm mt-1 flex items-center gap-1">
           <CheckCircle v-if="infoByDate(cell.date)?.available" class="w-4 h-4" />

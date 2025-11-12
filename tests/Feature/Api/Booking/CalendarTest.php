@@ -42,4 +42,6 @@ it('returns availability for given month and year', function () {
     $day5 = collect($data)->firstWhere('date', '2025-11-05');
     expect($day5)->not->toBeNull();
     expect($day5['available'])->toBeTrue();
+    expect($day5['price'])->toBe(6000.0);
+    expect($day5['season_is_default'])->toBeTrue();
 });

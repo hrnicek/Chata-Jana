@@ -16,6 +16,7 @@ class Season extends Model
         'start_date',
         'end_date',
         'is_fixed_range',
+        'is_default',
     ];
 
     protected function casts(): array
@@ -24,7 +25,25 @@ class Season extends Model
             'start_date' => 'date',
             'end_date' => 'date',
             'is_fixed_range' => 'boolean',
+            'is_default' => 'boolean',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Season $season) {
+            if ($season->is_default) {
+                throw new \RuntimeException('Default season cannot be deleted.');
+            }
+        });
+
+        static::updating(function (Season $season) {
+            if ($season->is_default) {
+                if ($season->isDirty(['name', 'start_date', 'end_date', 'is_fixed_range'])) {
+                    throw new \RuntimeException('Default season metadata cannot be modified.');
+                }
+            }
+        });
     }
 
     public function seasonPrices(): HasMany

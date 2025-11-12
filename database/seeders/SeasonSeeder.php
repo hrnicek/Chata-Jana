@@ -15,6 +15,16 @@ class SeasonSeeder extends Seeder
     {
         $seasons = [
             [
+                'name' => 'ZÁKLADNÍ',
+                'start_date' => now()->year.'-01-01',
+                'end_date' => now()->year.'-12-31',
+                'is_fixed_range' => false,
+                'is_default' => true,
+                'prices' => [
+                    'price' => 6000,
+                ],
+            ],
+            [
                 'name' => 'LÉTO',
                 'start_date' => now()->year.'-06-01',
                 'end_date' => now()->year.'-08-31',

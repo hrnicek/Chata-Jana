@@ -23,6 +23,7 @@ class CalendarController extends Controller
         $seasons = Season::query()
             ->with('seasonPrices')
             ->get();
+        $defaultSeason = $seasons->firstWhere('is_default', true);
 
         $bookings = Booking::query()
             ->where('status', '!=', 'cancelled')
@@ -39,17 +40,17 @@ class CalendarController extends Controller
         $date = $periodStart->copy();
 
         while ($date->lte($periodEnd)) {
-            $season = $seasons->first(function (Season $s) use ($date) {
+            $customSeason = $seasons->first(function (Season $s) use ($date) {
                 $md = $date->format('m-d');
                 $startMd = $s->start_date->format('m-d');
                 $endMd = $s->end_date->format('m-d');
                 if ($startMd <= $endMd) {
-                    return $md >= $startMd && $md <= $endMd;
+                    return ! $s->is_default && $md >= $startMd && $md <= $endMd;
                 }
 
-                return $md >= $startMd || $md <= $endMd;
+                return ! $s->is_default && ($md >= $startMd || $md <= $endMd);
             });
-
+            $season = $customSeason ?: $defaultSeason;
             $seasonPrice = $season?->seasonPrices->first();
 
             $isBlackout = $blackouts->contains(function (BlackoutDate $b) use ($date) {
@@ -65,6 +66,7 @@ class CalendarController extends Controller
                 'available' => ! ($isBlackout || $isBooked),
                 'blackout' => $isBlackout,
                 'season' => $season?->name,
+                'season_is_default' => (bool) ($season?->is_default ?? false),
                 'price' => $seasonPrice?->price,
             ];
 
