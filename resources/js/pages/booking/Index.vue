@@ -1,9 +1,16 @@
 <template>
   <div class="p-6 max-w-5xl mx-auto">
+    <div class="flex items-center gap-2 mb-6">
+      <button class="px-4 py-2 rounded" :class="step === 1 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 1">1. Termín</button>
+      <button class="px-4 py-2 rounded" :class="step === 2 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 2" :disabled="!canProceed">2. Informace</button>
+      <button class="px-4 py-2 rounded" :class="step === 3 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 3" :disabled="!canProceed || !formReady">3. Služby</button>
+      <button class="px-4 py-2 rounded" :class="step === 4 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 4" :disabled="!canSubmit">4. Shrnutí</button>
+      <button class="px-4 py-2 rounded" :class="step === 5 ? 'bg-gray-900 text-white' : 'bg-gray-200'" @click="step = 5" :disabled="!submitted">5. Dokončeno</button>
+    </div>
     <div class="flex items-center justify-between mb-6">
       <div class="text-2xl font-semibold">{{ monthLabel }} {{ year }}</div>
       <div class="flex items-center gap-2">
-        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="prevMonth">Předchozí</button>
+        <button v-if="canGoPrev" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="prevMonth">Předchozí</button>
         <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="nextMonth">Další</button>
       </div>
     </div>
@@ -11,7 +18,7 @@
     <div v-if="error" class="text-red-600 mb-4">{{ error }}</div>
     <div v-if="loading" class="text-gray-600 mb-4">Načítání…</div>
 
-    <div class="grid grid-cols-7 gap-2">
+    <div v-if="step === 1" class="grid grid-cols-7 gap-2">
       <div v-for="d in weekDays" :key="d" class="text-center font-medium text-gray-700">{{ d }}</div>
       <div
         v-for="cell in cells"
@@ -20,9 +27,11 @@
         :class="[
           cell.inCurrent ? '' : 'opacity-60',
           !isAvailable(cell.date) ? 'bg-red-50 border-red-400' : '',
+          !isAvailable(cell.date) ? 'cursor-not-allowed pointer-events-none' : '',
           isInRange(cell.date) ? 'bg-emerald-50 border-emerald-400' : '',
           isStart(cell.date) || isEnd(cell.date) ? 'ring-2 ring-emerald-500' : ''
         ]"
+        :aria-disabled="!isAvailable(cell.date)"
         @click="selectDate(cell)"
       >
         <div class="flex items-center justify-between">
@@ -36,13 +45,107 @@
       </div>
     </div>
 
-    <div class="mt-4 flex items-center gap-3">
+    <div v-if="step === 1" class="mt-4 flex items-center gap-3">
       <div class="text-sm text-gray-700">Od: <strong>{{ selectedStart || '-' }}</strong></div>
       <div class="text-sm text-gray-700">Do: <strong>{{ selectedEnd || '-' }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Cena celkem: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
       <div v-if="rangeHasUnavailable" class="text-sm text-red-700">Výběr obsahuje obsazené dny</div>
       <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Vymazat výběr</button>
+      <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canProceed" @click="step = 2">Pokračovat</button>
+    </div>
+
+    <div v-if="step === 2" class="mt-2 space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Jméno</label>
+          <input v-model="customer.firstName" type="text" class="w-full rounded border px-3 py-2" placeholder="Jméno" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Příjmení</label>
+          <input v-model="customer.lastName" type="text" class="w-full rounded border px-3 py-2" placeholder="Příjmení" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Email</label>
+          <input v-model="customer.email" type="email" class="w-full rounded border px-3 py-2" placeholder="email@domena.cz" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Telefon</label>
+          <input v-model="customer.phone" type="tel" class="w-full rounded border px-3 py-2" placeholder="+420" />
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-700 mb-1">Poznámka</label>
+          <textarea v-model="customer.note" rows="4" class="w-full rounded border px-3 py-2" placeholder="Poznámka"></textarea>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="text-sm text-gray-700">Termín: <strong>{{ selectedStart }} – {{ selectedEnd }}</strong></div>
+        <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
+        <div class="text-sm text-gray-700">Cena: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
+        <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět</button>
+        <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!formReady" @click="step = 3">Pokračovat</button>
+      </div>
+    </div>
+
+    <div v-if="step === 3" class="mt-2 space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border rounded p-3">
+          <div class="font-medium">Pes</div>
+          <div class="text-sm text-gray-700">{{ currency(dogPerDayPrice) }} /den /pes</div>
+          <div class="mt-2 flex items-center gap-2">
+            <label class="text-sm text-gray-700">Počet psů</label>
+            <input v-model.number="dogCount" type="number" min="0" class="w-24 rounded border px-3 py-2" />
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="text-sm text-gray-700">Termín: <strong>{{ selectedStart }} – {{ selectedEnd }}</strong></div>
+        <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
+        <div class="text-sm text-gray-700">Služby: <strong>{{ currency(addonsTotalPrice) }}</strong></div>
+        <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
+        <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 2">Zpět</button>
+        <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canSubmit" @click="step = 4">Pokračovat</button>
+      </div>
+    </div>
+
+    <div v-if="step === 4" class="mt-2 space-y-4">
+      <div class="border rounded p-4 space-y-2">
+        <div class="text-lg font-semibold">Shrnutí rezervace</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <div class="text-sm text-gray-700">Od: <strong>{{ selectedStart }}</strong></div>
+            <div class="text-sm text-gray-700">Do: <strong>{{ selectedEnd }}</strong></div>
+            <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
+            <div class="text-sm text-gray-700">Cena ubytování: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
+            <div class="text-sm text-gray-700">Pes: <strong>{{ dogCount }}</strong> × {{ currency(dogPerDayPrice) }} /den</div>
+            <div class="text-sm text-gray-700">Cena služeb: <strong>{{ currency(addonsTotalPrice) }}</strong></div>
+            <div class="text-sm text-gray-900">Celkem k úhradě: <strong>{{ currency(grandTotalPrice) }}</strong></div>
+          </div>
+          <div>
+            <div class="text-sm text-gray-700">Jméno: <strong>{{ customer.firstName }}</strong></div>
+            <div class="text-sm text-gray-700">Příjmení: <strong>{{ customer.lastName }}</strong></div>
+            <div class="text-sm text-gray-700">Email: <strong>{{ customer.email }}</strong></div>
+            <div class="text-sm text-gray-700">Telefon: <strong>{{ customer.phone }}</strong></div>
+            <div class="text-sm text-gray-700">Poznámka: <strong>{{ customer.note || '-' }}</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 3">Zpět</button>
+        <button class="px-3 py-2 rounded bg-gray-900 text-white disabled:opacity-50" :disabled="!canSubmit" @click="submit">Odeslat</button>
+      </div>
+    </div>
+
+    <div v-if="step === 5" class="mt-2 space-y-4">
+      <div class="border rounded p-6 text-center">
+        <div class="text-2xl font-semibold mb-2">Dokončeno</div>
+        <div class="text-gray-700">Děkujeme, vaše rezervace byla odeslána.</div>
+        <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ selectedStart }} – {{ selectedEnd }}</strong></div>
+        <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět na začátek</button>
+      </div>
     </div>
   </div>
 </template>
@@ -54,11 +157,18 @@ import { ref, computed, onMounted } from 'vue'
 const now = new Date()
 const month = ref(now.getMonth() + 1)
 const year = ref(now.getFullYear())
+const todayMonth = now.getMonth() + 1
+const todayYear = now.getFullYear()
 const daysData = ref([])
 const loading = ref(false)
 const error = ref('')
 const selectedStart = ref(null)
 const selectedEnd = ref(null)
+const step = ref(1)
+const customer = ref({ firstName: '', lastName: '', email: '', phone: '', note: '' })
+const dogPerDayPrice = 300
+const dogCount = ref(0)
+const submitted = ref(false)
 
 const monthLabel = computed(() => new Date(year.value, month.value - 1, 1).toLocaleString('cs-CZ', { month: 'long' }))
 const weekDays = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
@@ -147,6 +257,12 @@ const cells = computed(() => {
   return [...prevCells, ...currCells]
 })
 
+const canGoPrev = computed(() => {
+  const targetY = prevYear.value
+  const targetM = prevMonthNum.value
+  return targetY > todayYear || (targetY === todayYear && targetM >= todayMonth)
+})
+
 function parseISO(s) {
   const [Y, M, D] = s.split('-').map(Number)
   return new Date(Y, M - 1, D)
@@ -189,6 +305,7 @@ function isAvailable(dateStr) {
 }
 
 function selectDate(cell) {
+  if (!isAvailable(cell.date)) return
   const date = cell.date
   if (!selectedStart.value || (selectedStart.value && selectedEnd.value)) {
     selectedStart.value = date
@@ -248,4 +365,32 @@ const rangeHasUnavailable = computed(() => {
     return info && info.available === false
   })
 })
+
+const canProceed = computed(() => {
+  return !!(selectedStart.value && selectedEnd.value) && !rangeHasUnavailable.value
+})
+
+const formReady = computed(() => {
+  return (
+    canProceed.value &&
+    customer.value.firstName &&
+    customer.value.lastName &&
+    customer.value.email &&
+    customer.value.phone
+  )
+})
+
+const addonsTotalPrice = computed(() => {
+  if (dogCount.value <= 0 || selectedNights.value <= 0) return 0
+  return dogCount.value * selectedNights.value * dogPerDayPrice
+})
+
+const grandTotalPrice = computed(() => selectedTotalPrice.value + addonsTotalPrice.value)
+
+const canSubmit = computed(() => formReady.value)
+
+function submit() {
+  submitted.value = true
+  step.value = 5
+}
 </script>
