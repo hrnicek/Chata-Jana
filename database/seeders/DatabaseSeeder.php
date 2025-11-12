@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(SeasonSeeder::class);
         $this->call(BookingSeeder::class);
+        $this->call(BlackoutDateSeeder::class);
     }
 }

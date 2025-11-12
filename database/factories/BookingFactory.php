@@ -36,7 +36,7 @@ class BookingFactory extends Factory
 
         return [
             'season_id' => $season?->id,
-            'user_id' => null,
+            'customer_id' => null,
             'start_date' => $start->toDateString(),
             'end_date' => $end->toDateString(),
             'total_price' => $price * $nights,
