@@ -46,8 +46,8 @@
     </div>
 
     <div v-if="step === 1" class="mt-4 flex items-center gap-3">
-      <div class="text-sm text-gray-700">Od: <strong>{{ startDate || '-' }}</strong></div>
-      <div class="text-sm text-gray-700">Do: <strong>{{ endDate || '-' }}</strong></div>
+      <div class="text-sm text-gray-700">Od: <strong>{{ formatDate(startDate) || '-' }}</strong></div>
+      <div class="text-sm text-gray-700">Do: <strong>{{ formatDate(endDate) || '-' }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Cena celkem: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
       <div v-if="rangeHasUnavailable" class="text-sm text-red-700">Výběr obsahuje obsazené dny</div>
@@ -81,7 +81,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <div class="text-sm text-gray-700">Termín: <strong>{{ startDate }} – {{ endDate }}</strong></div>
+        <div class="text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
         <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
         <div class="text-sm text-gray-700">Cena: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
         <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět</button>
@@ -101,7 +101,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <div class="text-sm text-gray-700">Termín: <strong>{{ startDate }} – {{ endDate }}</strong></div>
+        <div class="text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
         <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
         <div class="text-sm text-gray-700">Služby: <strong>{{ currency(addonsTotalPrice) }}</strong></div>
         <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
@@ -115,8 +115,8 @@
         <div class="text-lg font-semibold">Shrnutí rezervace</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <div class="text-sm text-gray-700">Od: <strong>{{ startDate }}</strong></div>
-            <div class="text-sm text-gray-700">Do: <strong>{{ endDate }}</strong></div>
+            <div class="text-sm text-gray-700">Od: <strong>{{ formatDate(startDate) }}</strong></div>
+            <div class="text-sm text-gray-700">Do: <strong>{{ formatDate(endDate) }}</strong></div>
             <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
             <div class="text-sm text-gray-700">Cena ubytování: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
             <div class="text-sm text-gray-700">Pes: <strong>{{ dogCount }}</strong> × {{ currency(dogPerDayPrice) }} /den</div>
@@ -143,7 +143,7 @@
       <div class="border rounded p-6 text-center">
         <div class="text-2xl font-semibold mb-2">Dokončeno</div>
         <div class="text-gray-700">Děkujeme, vaše rezervace byla odeslána.</div>
-        <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ startDate }} – {{ endDate }}</strong></div>
+        <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
         <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
       </div>
       <div class="flex items-center gap-3">
@@ -222,6 +222,12 @@ function infoByDate(date) {
 
 function currency(n) {
   return new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(Number(n))
+}
+
+function formatDate(iso) {
+  if (!iso) return ''
+  const d = parseISO(iso)
+  return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()}`
 }
 
 async function fetchCalendar() {
