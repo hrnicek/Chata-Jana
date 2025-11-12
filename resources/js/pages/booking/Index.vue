@@ -5,7 +5,7 @@
         <div class="p-4">
           <div class="flex items-center gap-2 mb-4">
             <Calendar class="w-5 h-5 text-emerald-600" />
-            <div class="font-medium">Kroky rezervace</div>
+            <div class="font-medium">Průběh rezervace</div>
           </div>
           <div class="space-y-4">
             <div class="flex items-start gap-3">
@@ -15,8 +15,8 @@
               </div>
               <div>
                 <div :class="step === 1 ? 'font-medium text-gray-900' : step > 1 ? 'text-gray-700' : 'text-gray-500'">Krok 1</div>
-                <div class="text-xs text-gray-700">Termín</div>
-                <div :class="step > 1 ? 'text-xs text-emerald-600' : step === 1 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 1 ? 'Hotovo' : step === 1 ? 'Probíhá' : 'Čeká' }}</div>
+                <div class="text-xs text-gray-700">Termín pobytu</div>
+                <div :class="step > 1 ? 'text-xs text-emerald-600' : step === 1 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 1 ? 'Dokončeno' : step === 1 ? 'Probíhá' : 'Čeká' }}</div>
               </div>
             </div>
             <div class="flex items-start gap-3">
@@ -26,8 +26,8 @@
               </div>
               <div>
                 <div :class="step === 2 ? 'font-medium text-gray-900' : step > 2 ? 'text-gray-700' : 'text-gray-500'">Krok 2</div>
-                <div class="text-xs text-gray-700">Informace</div>
-                <div :class="step > 2 ? 'text-xs text-emerald-600' : step === 2 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 2 ? 'Hotovo' : step === 2 ? 'Probíhá' : 'Čeká' }}</div>
+                <div class="text-xs text-gray-700">Vaše údaje</div>
+                <div :class="step > 2 ? 'text-xs text-emerald-600' : step === 2 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 2 ? 'Dokončeno' : step === 2 ? 'Probíhá' : 'Čeká' }}</div>
               </div>
             </div>
             <div class="flex items-start gap-3">
@@ -37,8 +37,8 @@
               </div>
               <div>
                 <div :class="step === 3 ? 'font-medium text-gray-900' : step > 3 ? 'text-gray-700' : 'text-gray-500'">Krok 3</div>
-                <div class="text-xs text-gray-700">Služby</div>
-                <div :class="step > 3 ? 'text-xs text-emerald-600' : step === 3 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 3 ? 'Hotovo' : step === 3 ? 'Probíhá' : 'Čeká' }}</div>
+                <div class="text-xs text-gray-700">Doplňkové služby</div>
+                <div :class="step > 3 ? 'text-xs text-emerald-600' : step === 3 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 3 ? 'Dokončeno' : step === 3 ? 'Probíhá' : 'Čeká' }}</div>
               </div>
             </div>
             <div class="flex items-start gap-3">
@@ -48,8 +48,8 @@
               </div>
               <div>
                 <div :class="step === 4 ? 'font-medium text-gray-900' : step > 4 ? 'text-gray-700' : 'text-gray-500'">Krok 4</div>
-                <div class="text-xs text-gray-700">Shrnutí</div>
-                <div :class="step > 4 ? 'text-xs text-emerald-600' : step === 4 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 4 ? 'Hotovo' : step === 4 ? 'Probíhá' : 'Čeká' }}</div>
+                <div class="text-xs text-gray-700">Kontrola</div>
+                <div :class="step > 4 ? 'text-xs text-emerald-600' : step === 4 ? 'text-xs text-amber-600' : 'text-xs text-gray-500'">{{ step > 4 ? 'Dokončeno' : step === 4 ? 'Probíhá' : 'Čeká' }}</div>
               </div>
             </div>
             <div class="flex items-start gap-3">
@@ -58,8 +58,8 @@
               </div>
               <div>
                 <div :class="step === 5 ? 'font-medium text-gray-900' : step > 5 ? 'text-gray-700' : 'text-gray-500'">Krok 5</div>
-                <div class="text-xs text-gray-700">Dokončeno</div>
-                <div :class="step >= 5 ? 'text-xs text-emerald-600' : 'text-xs text-gray-500'">{{ step >= 5 ? 'Hotovo' : 'Čeká' }}</div>
+                <div class="text-xs text-gray-700">Potvrzení</div>
+                <div :class="step >= 5 ? 'text-xs text-emerald-600' : 'text-xs text-gray-500'">{{ step >= 5 ? 'Dokončeno' : 'Čeká' }}</div>
               </div>
             </div>
           </div>
@@ -74,10 +74,10 @@
         <div class="flex items-center gap-2">
           <button v-if="canGoPrev" class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="prevMonth">
             <ChevronLeft class="w-4 h-4" />
-            Předchozí
+            Předchozí měsíc
           </button>
           <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1" @click="nextMonth">
-            Další
+            Další měsíc
             <ChevronRight class="w-4 h-4" />
           </button>
         </div>
@@ -85,7 +85,7 @@
 
     <div class="flex-1 overflow-auto px-4 py-3 bg-white">
       <div v-if="error" class="text-red-600 mb-4">{{ error }}</div>
-      <div v-if="loading" class="text-gray-600 mb-4">Načítání…</div>
+      <div v-if="loading" class="text-gray-600 mb-4">Načítáme kalendář…</div>
 
       <div v-if="step === 1" class="grid grid-cols-7 gap-2">
       <div v-for="d in weekDays" :key="d" class="text-center font-medium text-gray-700">{{ d }}</div>
@@ -123,17 +123,17 @@
       <div class="text-sm text-gray-700">Do: <strong>{{ formatDate(endDate) || '-' }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
       <div v-if="selectedNights > 0" class="text-sm text-gray-700">Cena celkem: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
-      <div v-if="rangeHasUnavailable" class="text-sm text-red-700">Výběr obsahuje obsazené dny</div>
-      <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Smazat výběr</button>
+      <div v-if="rangeHasUnavailable" class="text-sm text-red-700">Ve zvoleném období jsou některé dny obsazené. Zvolte prosím jiné datum.</div>
+      <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="clearSelection">Zrušit výběr</button>
       <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canProceed || verifying" @click="verifyAndProceed">Pokračovat</button>
     </div>
-    <div v-if="verifying" class="mt-2 text-sm text-gray-700">Ověřování dostupnosti…</div>
+    <div v-if="verifying" class="mt-2 text-sm text-gray-700">Ověřujeme dostupnost…</div>
 
     </div>
 
     <div v-if="step === 2" class="h-full flex flex-col">
       <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
-        <div class="text-2xl font-semibold">Informace</div>
+        <div class="text-2xl font-semibold">Vaše údaje</div>
         <div class="text-sm text-gray-700">Krok 2</div>
       </div>
       <div class="flex-1 overflow-auto px-4 py-6">
@@ -157,20 +157,20 @@
               <div>
                 <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
                   <Mail class="w-4 h-4" />
-                  Email
+                  E‑mail
                 </label>
-                <input v-model="customer.email" type="email" class="w-full rounded border px-3 py-2" placeholder="email@domena.cz" />
+                <input v-model="customer.email" type="email" class="w-full rounded border px-3 py-2" placeholder="např. jana@domena.cz" />
               </div>
               <div>
                 <label class="block text-sm text-gray-700 mb-1 flex items-center gap-1">
                   <Phone class="w-4 h-4" />
                   Telefon
                 </label>
-                <input v-model="customer.phone" type="tel" class="w-full rounded border px-3 py-2" placeholder="+420" />
+                <input v-model="customer.phone" type="tel" class="w-full rounded border px-3 py-2" placeholder="např. +420 777 000 000" />
               </div>
               <div class="md:col-span-2">
-                <label class="block text-sm text-gray-700 mb-1">Poznámka</label>
-                <textarea v-model="customer.note" rows="4" class="w-full rounded border px-3 py-2" placeholder="Poznámka"></textarea>
+                <label class="block text-sm text-gray-700 mb-1">Poznámka (nepovinné)</label>
+                <textarea v-model="customer.note" rows="4" class="w-full rounded border px-3 py-2" placeholder="Např. speciální požadavky"></textarea>
               </div>
             </div>
           </div>
@@ -179,7 +179,7 @@
       <div class="shrink-0 border-t bg-white px-4 py-3 flex items-center gap-3">
         <div class="text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
         <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
-        <div class="text-sm text-gray-700">Cena: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
+        <div class="text-sm text-gray-700">Cena ubytování: <strong>{{ currency(selectedTotalPrice) }}</strong></div>
         <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět</button>
         <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!formReady" @click="step = 3">Pokračovat</button>
       </div>
@@ -187,15 +187,15 @@
 
     <div v-if="step === 3" class="h-full flex flex-col">
       <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
-        <div class="text-2xl font-semibold">Služby</div>
+        <div class="text-2xl font-semibold">Doplňkové služby</div>
         <div class="text-sm text-gray-700">Krok 3</div>
       </div>
       <div class="flex-1 overflow-auto px-4 py-6">
         <div class="min-h-full grid place-items-center">
           <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6">
             <div class="space-y-4">
-              <div class="font-medium">Pes</div>
-              <div class="text-sm text-gray-700">{{ currency(dogPerDayPrice) }} /den /pes</div>
+              <div class="font-medium">Pobyt se psem</div>
+              <div class="text-sm text-gray-700">{{ currency(dogPerDayPrice) }} /den za psa</div>
               <div class="mt-2 flex items-center gap-2">
                 <label class="text-sm text-gray-700">Počet psů</label>
                 <input v-model.number="dogCount" type="number" min="0" class="w-24 rounded border px-3 py-2" />
@@ -208,7 +208,7 @@
         <div class="text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
         <div class="text-sm text-gray-700">Nocí: <strong>{{ selectedNights }}</strong></div>
         <div class="text-sm text-gray-700">Služby: <strong>{{ currency(addonsTotalPrice) }}</strong></div>
-        <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
+        <div class="text-sm text-gray-700">Celkem k úhradě: <strong>{{ currency(grandTotalPrice) }}</strong></div>
         <button class="ml-auto px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 2">Zpět</button>
         <button class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" :disabled="!canSubmit" @click="step = 4">Pokračovat</button>
       </div>
@@ -218,7 +218,7 @@
       <div class="shrink-0 flex items-center justify-between border-b bg-white px-4 py-3">
         <div class="flex items-center gap-2">
           <Calendar class="w-5 h-5 text-gray-900" />
-          <div class="text-2xl font-semibold">Shrnutí rezervace</div>
+          <div class="text-2xl font-semibold">Zkontrolujte rezervaci</div>
         </div>
         <div class="text-sm text-gray-700">Krok 4</div>
       </div>
@@ -296,7 +296,7 @@
           Zpět
         </button>
         <button class="px-3 py-2 rounded bg-gray-900 text-white disabled:opacity-50 flex items-center gap-1" :disabled="!canSubmit || submitting" @click="submit">
-          Odeslat
+          Odeslat rezervaci
           <Send class="w-4 h-4" />
         </button>
       </div>
@@ -312,14 +312,14 @@
         <div class="min-h-full grid place-items-center">
           <div class="w-full max-w-2xl rounded-2xl border bg-white shadow-sm p-6 text-center">
             <div class="text-2xl font-semibold mb-2">Dokončeno</div>
-            <div class="text-gray-700">Děkujeme, vaše rezervace byla odeslána.</div>
+            <div class="text-gray-700">Děkujeme, rezervace byla úspěšně odeslána. Potvrzení vám zašleme e‑mailem.</div>
             <div class="mt-4 text-sm text-gray-700">Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong></div>
             <div class="text-sm text-gray-700">Celkem: <strong>{{ currency(grandTotalPrice) }}</strong></div>
           </div>
         </div>
       </div>
       <div class="shrink-0 border-t bg-white px-4 py-3 flex items-center gap-3">
-        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět na začátek</button>
+        <button class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" @click="step = 1">Zpět na kalendář</button>
       </div>
     </div>
     </section>
@@ -416,7 +416,7 @@ async function fetchCalendar() {
     ])
     daysData.value = [...prev.data.days, ...curr.data.days]
   } catch (e) {
-    error.value = 'Nepodařilo se načíst kalendář'
+    error.value = 'Kalendář se nepodařilo načíst. Obnovte stránku nebo zkuste později.'
   } finally {
     loading.value = false
   }
@@ -649,7 +649,7 @@ async function submit() {
     submitted.value = true
     step.value = 5
   } catch (e) {
-    submitError.value = 'Nepodařilo se odeslat rezervaci'
+    submitError.value = 'Rezervaci se nepodařilo odeslat. Zkuste to prosím znovu.'
   } finally {
     submitting.value = false
   }
@@ -665,7 +665,7 @@ async function verifyAndProceed() {
       end_date: endDate.value,
     })
     if (!res.data.available) {
-      toast.error('Vybraný termín již není dostupný')
+      toast.error('Vybraný termín je mezitím obsazen. Vyberte prosím jiné datum.')
       return
     }
     const requests = monthsForRange.value.map(({ month, year }) => axios.get('/api/bookings/calendar', { params: { month, year } }))
@@ -676,7 +676,7 @@ async function verifyAndProceed() {
     daysData.value = Array.from(merged.values())
     step.value = 2
   } catch (e) {
-    toast.error('Nepodařilo se ověřit dostupnost')
+    toast.error('Ověření dostupnosti se nezdařilo. Zkuste to prosím znovu.')
   } finally {
     verifying.value = false
   }
