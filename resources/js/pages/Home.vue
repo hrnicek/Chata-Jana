@@ -211,15 +211,26 @@ const stats = [
     </section>
 
     <!-- Philosophy of Silence Section -->
-    <section class="relative bg-honey py-40">
+    <section class="relative overflow-hidden bg-primary py-40 text-white">
+      <!-- Background Texture -->
+      <div class="absolute inset-0">
+        <img 
+          src="/img/hero4.png" 
+          alt="Hory v mlze" 
+          class="h-full w-full object-cover opacity-10 mix-blend-overlay"
+        />
+        <div class="absolute inset-0 bg-primary/40"></div>
+      </div>
+      
       <div class="absolute top-0 left-0 right-0 h-16 bg-white" style="clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);"></div>
-      <div class="container mx-auto px-6 text-center">
-        <Wind class="mx-auto mb-8 h-12 w-12 text-secondary/50" />
-        <h2 class="mx-auto max-w-4xl text-3xl font-light leading-tight text-primary md:text-5xl">
+      
+      <div class="container relative z-10 mx-auto px-6 text-center">
+        <Wind class="mx-auto mb-8 h-12 w-12 text-white/60" />
+        <h2 class="mx-auto max-w-4xl text-3xl font-light leading-tight text-white md:text-5xl">
           "Ticho není prázdno. Je to prostor, kde se můžete znovu nadechnout."
         </h2>
-        <div class="mx-auto mt-12 h-px w-24 bg-secondary"></div>
-        <p class="mx-auto mt-12 max-w-2xl text-lg text-gray-600">
+        <div class="mx-auto mt-12 h-px w-24 bg-white/30"></div>
+        <p class="mx-auto mt-12 max-w-2xl text-lg text-white/80">
           Věříme, že skutečný odpočinek přichází, když se zastaví čas. Naše chata je navržena tak, aby vás obklopila klidem hor a nechala starosti v údolí.
         </p>
       </div>
