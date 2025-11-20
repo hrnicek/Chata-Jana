@@ -17,6 +17,8 @@ class Season extends Model
         'end_date',
         'is_fixed_range',
         'is_default',
+        'min_stay',
+        'check_in_days',
     ];
 
     protected function casts(): array
@@ -26,6 +28,8 @@ class Season extends Model
             'end_date' => 'date',
             'is_fixed_range' => 'boolean',
             'is_default' => 'boolean',
+            'min_stay' => 'integer',
+            'check_in_days' => 'array',
         ];
     }
 

@@ -7,38 +7,42 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-enum BookingStatus: string
-{
-    case Pending = 'pending';
-    case Confirmed = 'confirmed';
-    case Cancelled = 'cancelled';
-}
+use App\States\Booking\BookingState;
+use Spatie\ModelStates\HasStates;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Booking extends Model
 {
     /** @use HasFactory<\Database\Factories\BookingFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes, HasStates, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     protected $fillable = [
         'code',
-        'customer_id',
-        'season_id',
         'start_date',
         'end_date',
         'total_price',
         'status',
+        'customer_id',
+        'notes',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'start_date' => 'date',
-            'end_date' => 'date',
-            'total_price' => 'decimal:2',
-            'status' => BookingStatus::class,
-        ];
-    }
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'total_price' => 'decimal:2',
+        'status' => BookingState::class,
+    ];
 
     public function customer(): BelongsTo
     {
@@ -50,9 +54,9 @@ class Booking extends Model
         return $this->hasOne(BookingPayment::class);
     }
 
-    public function extras(): BelongsToMany
+    public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Extra::class, 'booking_extras')
+        return $this->belongsToMany(Service::class, 'booking_services', 'booking_id', 'extra_id')
             ->withPivot(['quantity', 'price_total'])
             ->withTimestamps();
     }

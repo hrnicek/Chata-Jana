@@ -33,7 +33,8 @@ class StoreBookingRequest extends FormRequest
             'grand_total' => ['nullable', 'numeric', 'min:0'],
             'addons_total' => ['nullable', 'numeric', 'min:0'],
             'addons' => ['nullable', 'array'],
-            'addons.*.extra_id' => ['required_with:addons', 'integer', 'exists:extras,id'],
+            'addons.*.extra_id' => ['required_without:addons.*.service_id', 'integer', 'exists:services,id'],
+            'addons.*.service_id' => ['required_without:addons.*.extra_id', 'integer', 'exists:services,id'],
             'addons.*.quantity' => ['required_with:addons', 'integer', 'min:0'],
         ];
     }

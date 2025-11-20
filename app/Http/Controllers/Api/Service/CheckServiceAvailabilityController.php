@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers\Api\Service;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Service\CheckAvailabilityRequest;
+use App\Models\Booking;
+use App\Models\Service;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
+
+class CheckServiceAvailabilityController extends Controller
+{
+    public function __invoke(CheckAvailabilityRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $start = Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
+        $end = Carbon::createFromFormat('Y-m-d', $data['end_date'])->endOfDay();
+
+        $overlappingBookings = Booking::query()
+            ->where('status', '!=', 'cancelled')
+            ->where('start_date', '<=', $end->toDateString())
+            ->where('end_date', '>=', $start->toDateString())
+            ->with(['services'])
+            ->get();
+
+        $resultItems = [];
+        $overallAvailable = true;
+
+        foreach ($data['selections'] as $selection) {
+            $serviceId = $selection['service_id'] ?? $selection['extra_id'] ?? null;
+
+            /** @var Service $service */
+            $service = Service::query()->find($serviceId);
+            if (! $service || ! $service->is_active) {
+                $resultItems[] = [
+                    'service_id' => $serviceId,
+                    'extra_id' => $serviceId, // Backward compatibility
+                    'available_quantity' => 0,
+                    'requested_quantity' => (int) $selection['quantity'],
+                    'is_available' => false,
+                ];
+                $overallAvailable = false;
+
+                continue;
+            }
+
+            $bookedQty = 0;
+            foreach ($overlappingBookings as $booking) {
+                $pivot = $booking->services->firstWhere('id', $service->id)?->pivot;
+                if ($pivot) {
+                    $bookedQty += (int) $pivot->quantity;
+                }
+            }
+
+            $availableQty = max(0, (int) $service->max_quantity - $bookedQty);
+            $isAvailable = $availableQty >= (int) $selection['quantity'];
+            $overallAvailable = $overallAvailable && $isAvailable;
+
+            $resultItems[] = [
+                'service_id' => $service->id,
+                'extra_id' => $service->id, // Backward compatibility
+                'available_quantity' => $availableQty,
+                'requested_quantity' => (int) $selection['quantity'],
+                'is_available' => $isAvailable,
+            ];
+        }
+
+        return response()->json([
+            'available' => $overallAvailable,
+            'items' => $resultItems,
+        ]);
+    }
+}

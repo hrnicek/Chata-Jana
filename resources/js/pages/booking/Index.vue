@@ -1056,7 +1056,7 @@ async function submit() {
         note: customer.value.note || "",
       },
       addons: selectedExtras.value.map((ex) => ({
-        extra_id: ex.id,
+        service_id: ex.id,
         quantity: Number(extraSelection.value[ex.id] || 0),
       })),
       accommodation_total: selectedTotalPrice.value,
@@ -1105,10 +1105,12 @@ async function verifyAndProceed() {
 async function loadExtras() {
   extrasLoading.value = true;
   extrasError.value = "";
+
   try {
-    const res = await axios.get("/api/extras");
-    booking.setExtras(res.data.extras || []);
+    const res = await axios.get("/api/services");
+    booking.setExtras(res.data.services || []);
   } catch (e) {
+    console.error(e);
     extrasError.value = "Příplatkové služby se nepodařilo načíst.";
   } finally {
     extrasLoading.value = false;
@@ -1116,19 +1118,21 @@ async function loadExtras() {
 }
 
 async function checkExtrasAvailability() {
+  if (selectedExtras.value.length === 0) {
+    step.value = 4;
+    return;
+  }
+
   try {
     const selections = selectedExtras.value.map((ex) => ({
-      extra_id: ex.id,
+      service_id: ex.id, // Changed from extra_id
       quantity: Number(extraSelection.value[ex.id] || 0),
     }));
-    if (selections.length === 0) {
-      step.value = 4;
-      return;
-    }
-    const res = await axios.post("/api/extras/availability", {
-      start_date: startDate.value,
-      end_date: endDate.value,
-      selections,
+
+    const res = await axios.post("/api/services/availability", {
+      start_date: booking.dateRange.start,
+      end_date: booking.dateRange.end,
+      items: selections,
     });
     if (!res.data.available) {
       toast.error("Některé služby nejsou v požadovaném množství dostupné.");

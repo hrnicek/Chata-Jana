@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Bookings\Tables;
 
 use Filament\Tables\Table;
-use App\Models\BookingStatus;
+use App\States\Booking\BookingState;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Actions\DeleteAction;
@@ -36,16 +36,13 @@ class BookingsTable
                 TextColumn::make('status')
                     ->label('Stav')
                     ->badge()
-                    ->color(fn(BookingStatus $state): string => match ($state->value) {
-                        'pending' => 'warning',
-                        'confirmed' => 'success',
-                        'cancelled' => 'danger',
-                    })
-                    ->formatStateUsing(fn(BookingStatus $state): string => match ($state->value) {
+                    ->color(fn(BookingState $state): string => $state->color())
+                    ->formatStateUsing(fn(BookingState $state): string => match ($state->getValue()) {
                         'pending' => 'Čekající',
                         'confirmed' => 'Potvrzeno',
+                        'completed' => 'Dokončeno',
                         'cancelled' => 'Zrušeno',
-                        default => $state->value,
+                        default => $state->getValue(),
                     }),
                 TextColumn::make('total_price')
                     ->label('Cena')
@@ -58,6 +55,7 @@ class BookingsTable
                     ->options([
                         'pending' => 'Čekající',
                         'confirmed' => 'Potvrzeno',
+                        'completed' => 'Dokončeno',
                         'cancelled' => 'Zrušeno',
                     ]),
             ])

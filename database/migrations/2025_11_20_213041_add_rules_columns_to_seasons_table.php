@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
-            $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
-            $table->timestamps();
+        Schema::table('seasons', function (Blueprint $table) {
+            $table->integer('min_stay')->default(2);
+            $table->json('check_in_days')->nullable();
         });
     }
 
@@ -26,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::table('seasons', function (Blueprint $table) {
+            $table->dropColumn(['min_stay', 'check_in_days']);
+        });
     }
 };

@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Extra extends Model
+class Service extends Model
 {
-    /** @use HasFactory<\Database\Factories\ExtraFactory> */
-    use HasFactory;
+    /** @use HasFactory<\Database\Factories\ServiceFactory> */
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
+        'description',
         'price_type',
         'price',
         'max_quantity',
@@ -29,7 +31,7 @@ class Extra extends Model
 
     public function bookings(): BelongsToMany
     {
-        return $this->belongsToMany(Booking::class, 'booking_extras')
+        return $this->belongsToMany(Booking::class, 'booking_services')
             ->withPivot(['quantity', 'price_total'])
             ->withTimestamps();
     }
