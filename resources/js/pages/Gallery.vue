@@ -22,7 +22,7 @@ const images = [
       image="/img/hero3.jpg"
     />
 
-    <section class="relative -mt-20 py-24">
+    <section class="relative -mt-20 pb-24">
       <div class="container mx-auto px-6">
         <div class="mb-12 flex items-end justify-between">
           <div class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">

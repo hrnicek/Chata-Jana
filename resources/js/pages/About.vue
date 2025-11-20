@@ -19,7 +19,7 @@ const highlights = [
       image="/img/hero2.jpg"
     />
 
-    <section class="relative -mt-20 py-24">
+    <section class="relative -mt-20 pb-24">
       <div class="container mx-auto px-6">
         <div class="grid gap-8 md:grid-cols-2">
           <div class="light-card p-10">

@@ -7,7 +7,7 @@ import Head from "../components/Head.vue";
 
 <template>
   <Head />
-  <div class="relative z-50">
+  <div class="absolute top-0 w-full z-50">
     <AppHeader />
   </div>
   <slot />

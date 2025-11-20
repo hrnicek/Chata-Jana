@@ -7,8 +7,20 @@
 
 :root {
     --color-primary: #214E34;
+    --color-primary-foreground: #ffffff;
+
     --color-secondary: #FFC107;
+    --color-secondary-foreground: #111827;
+
     --color-honey: #DFF8EB;
+
+    --color-destructive: #ef4444;
+    --color-destructive-foreground: #ffffff;
+
+    --color-accent: #DFF8EB;
+    --color-accent-foreground: #214E34;
+
+    --color-ring: #214E34;
 }
 
 @theme {
@@ -16,8 +28,16 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 
     --color-primary: var(--color-primary);
+    --color-primary-foreground: var(--color-primary-foreground);
     --color-secondary: var(--color-secondary);
+    --color-secondary-foreground: var(--color-secondary-foreground);
     --color-honey: var(--color-honey);
+
+    --color-destructive: var(--color-destructive);
+    --color-destructive-foreground: var(--color-destructive-foreground);
+    --color-accent: var(--color-accent);
+    --color-accent-foreground: var(--color-accent-foreground);
+    --color-ring: var(--color-ring);
 }
 
 @layer base {

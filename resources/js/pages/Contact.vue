@@ -14,7 +14,7 @@ import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-vue-next
       image="/img/hero2.jpg"
     />
 
-    <section class="relative -mt-20 py-24">
+    <section class="relative -mt-20 pb-24">
       <div class="container mx-auto px-6">
         <div class="grid gap-12 lg:grid-cols-2">
           <!-- Contact Info Cards -->

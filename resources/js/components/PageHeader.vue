@@ -20,7 +20,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="relative overflow-hidden pt-48 pb-32 -mt-26 -z-10">
+  <div class="relative overflow-hidden pt-48 pb-32 -z-10">
     <!-- Background Image -->
     <div class="absolute inset-0 bg-cover bg-center opacity-100" :style="{ backgroundImage: `url(${image})` }"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900"></div>

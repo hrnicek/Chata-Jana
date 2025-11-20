@@ -3,7 +3,7 @@ import HeroContent from "./HeroContent.vue";
 </script>
 
 <template>
-  <div class="hero-font bg-gray-900 text-white -mt-26">
+  <div class="hero-font bg-gray-900 text-white">
     <div class="relative min-h-screen w-full overflow-hidden">
       <div class="absolute inset-0 z-0">
         <img

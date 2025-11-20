@@ -67,6 +67,37 @@ const reviews = [
     rating: 5,
   },
 ];
+
+const faqs = [
+  {
+    q: "Jaká je kapacita a dispozice pokojů?",
+    a: "Kapacita je 12 osob v pěti pokojích: 2× dvojlůžko s přistýlkou, 2× dvojlůžko a 1× pokoj se dvěma samostatnými lůžky.",
+  },
+  {
+    q: "Je wellness soukromé a co obsahuje?",
+    a: "Ano, wellness je soukromé: vířivka pro 6 osob, odpočinková kuchyňka, WC a prostorný obývací pokoj v přízemí.",
+  },
+  {
+    q: "Jaké jsou ceny a sezóny?",
+    a: "Ceny se liší podle sezóny (Léto 5 500 Kč/noc, Zima 6 000 Kč/noc, Mimo sezónu 5 000 Kč/noc, Silvestr fixně 85 000 Kč). Kompletní přehled najdete v sekci Ceník.",
+  },
+  {
+    q: "Jak probíhá platba a záloha?",
+    a: "Záloha 30 % potvrzuje rezervaci, doplatek 70 % nejpozději 14 dní před příjezdem. U last minute pod 14 dní se hradí 100 % ihned.",
+  },
+  {
+    q: "Jsou povoleni psi a jaké jsou poplatky?",
+    a: "Ano, pes je povolen za 350 Kč/den. Rekreační poplatek je 20 Kč za dospělou osobu/den.",
+  },
+  {
+    q: "Jak se účtuje elektřina?",
+    a: "Hradí se dle skutečné spotřeby na místě: VT 9 Kč/kWh, NT 8 Kč/kWh.",
+  },
+  {
+    q: "Časy příjezdu a odjezdu?",
+    a: "Check‑in od 14:00, check‑out do 10:00.",
+  },
+];
 </script>
 
 <template>
@@ -153,7 +184,7 @@ const reviews = [
           <div 
             v-for="(feature, index) in features" 
             :key="index"
-            class="rounded-[2.5rem] border border-gray-200 bg-white p-8 hover:border-primary"
+            class="light-card transition-colors hover:border-primary"
           >
             <div class="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-honey text-primary">
               <component :is="feature.icon" class="h-6 w-6" />
@@ -227,7 +258,7 @@ const reviews = [
           <div 
             v-for="(review, index) in reviews" 
             :key="index"
-            class="rounded-[2.5rem] border border-gray-200 bg-white p-8 hover:border-primary"
+            class="light-card transition-colors hover:border-primary"
           >
             <div>
               <div class="mb-4 flex gap-1">
@@ -276,6 +307,26 @@ const reviews = [
               </Button>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="bg-white py-24">
+      <div class="container mx-auto px-6">
+        <div class="mb-10 text-center">
+          <div class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
+            <span>Časté otázky</span>
+          </div>
+          <h2 class="mt-2 text-3xl font-bold text-gray-900">Nejčastější dotazy</h2>
+        </div>
+        <div class="mx-auto max-w-3xl rounded-[2.5rem] border border-gray-200 bg-white">
+          <ul class="divide-y divide-gray-200">
+            <li v-for="(item, i) in faqs" :key="i" class="p-6">
+              <div class="text-lg font-semibold text-gray-900">{{ item.q }}</div>
+              <div class="mt-2 text-gray-700">{{ item.a }}</div>
+            </li>
+          </ul>
         </div>
       </div>
     </section>

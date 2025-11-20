@@ -111,24 +111,20 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
   <!-- Bottom Info Bar -->
   <div class="mt-auto w-full border-t border-white/10 bg-black/20">
     <div class="container mx-auto px-6 py-8">
-      <ul class="grid grid-cols-2 md:grid-cols-4 divide-white/10 divide-y md:divide-y-0 md:divide-x">
-        <li class="flex items-center justify-center gap-3 py-4 text-center">
-          <span class="text-4xl font-bold text-white tabular-nums">5</span>
-          <span class="text-sm text-white/70">pokojů</span>
-        </li>
-        <li class="flex items-center justify-center gap-3 py-4 text-center">
-          <span class="text-4xl font-bold text-white tabular-nums">12</span>
-          <span class="text-sm text-white/70">lůžek</span>
-        </li>
-        <li class="flex items-center justify-center gap-3 py-4 text-center">
-          <span class="text-4xl font-bold text-white tabular-nums">3</span>
-          <span class="text-sm text-white/70">koupelny</span>
-        </li>
-        <li class="flex items-center justify-center gap-3 py-4 text-center">
-          <span class="text-4xl font-bold text-white tabular-nums">∞</span>
-          <span class="text-sm text-white/70">zážitků</span>
-        </li>
-      </ul>
+      <div class="grid grid-cols-1 md:grid-cols-3 divide-white/10 divide-y md:divide-y-0 md:divide-x">
+        <div class="py-4 md:py-0 md:px-6 text-center md:text-left">
+          <div class="font-semibold text-white">Kapacita 12 osob (5 pokojů)</div>
+          <div class="mt-1 text-sm text-white/70">2× dvojlůžko s přistýlkou, 2× dvojlůžko, 1× pokoj se dvěma samostatnými lůžky.</div>
+        </div>
+        <div class="py-4 md:py-0 md:px-6 text-center md:text-left">
+          <div class="font-semibold text-white">Komfortní wellness (soukromé)</div>
+          <div class="mt-1 text-sm text-white/70">Vířivka pro 6 osob, odpočinková kuchyňka a WC. V přízemí prostorný obývací pokoj.</div>
+        </div>
+        <div class="py-4 md:py-0 md:px-6 text-center md:text-left">
+          <div class="font-semibold text-white">Skvělá lokalita (Ostružná)</div>
+          <div class="mt-1 text-sm text-white/70">Jonas Park 1 km • Ramzová 1,5 km</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -75,7 +75,7 @@ const additionalPricing = [
             v-for="season in seasons" 
             :key="season.name" 
             :class="[
-              'rounded-[2.5rem] border p-8 transition-colors',
+              'rounded-[2.5rem] border p-10 transition-colors',
               season.highlighted 
                 ? 'bg-primary text-white' 
                 : 'bg-white text-gray-900 hover:border-primary'
