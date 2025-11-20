@@ -135,12 +135,12 @@ const reviews = [
           <div 
             v-for="(item, index) in amenities" 
             :key="index"
-            class="group flex flex-col items-center justify-center gap-3 rounded-3xl bg-white p-6 text-center"
+            class="group flex flex-col items-center justify-center gap-3 rounded-3xl bg-white p-6 text-center hover:bg-primary hover:text-white"
           >
-            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-honey text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-honey text-primary">
               <component :is="item.icon" class="h-6 w-6" />
             </div>
-            <span class="text-sm font-medium text-gray-900">{{ item.label }}</span>
+            <span class="text-sm font-medium text-gray-900 group-hover:text-white">{{ item.label }}</span>
           </div>
         </div>
       </div>
@@ -153,9 +153,9 @@ const reviews = [
           <div 
             v-for="(feature, index) in features" 
             :key="index"
-            class="light-card"
+            class="rounded-[2.5rem] border border-gray-200 bg-white p-8 hover:border-primary"
           >
-            <div class="light-icon mb-6">
+            <div class="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-honey text-primary">
               <component :is="feature.icon" class="h-6 w-6" />
             </div>
             <h3 class="mb-3 text-xl font-bold text-gray-900">{{ feature.title }}</h3>
@@ -181,7 +181,7 @@ const reviews = [
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div class="group relative overflow-hidden rounded-3xl md:col-span-2">
             <img src="/img/hero.jpg" alt="Wellness" class="h-80 w-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100">
               <div class="absolute bottom-6 left-6 text-white">
                 <p class="font-medium">Wellness zóna</p>
               </div>
@@ -189,7 +189,7 @@ const reviews = [
           </div>
           <div class="group relative overflow-hidden rounded-3xl">
             <img src="/img/hero3.jpg" alt="Interiér" class="h-80 w-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100">
               <div class="absolute bottom-6 left-6 text-white">
                 <p class="font-medium">Obývací prostor</p>
               </div>
@@ -197,7 +197,7 @@ const reviews = [
           </div>
           <div class="group relative overflow-hidden rounded-3xl">
             <img src="/img/hero2.jpg" alt="Exteriér" class="h-80 w-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100">
               <div class="absolute bottom-6 left-6 text-white">
                 <p class="font-medium">Exteriér chaty</p>
               </div>
@@ -205,7 +205,7 @@ const reviews = [
           </div>
           <div class="group relative overflow-hidden rounded-3xl md:col-span-2">
             <img src="/img/hero4.png" alt="Okolí" class="h-80 w-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100">
               <div class="absolute bottom-6 left-6 text-white">
                 <p class="font-medium">Zimní atmosféra</p>
               </div>
@@ -227,7 +227,7 @@ const reviews = [
           <div 
             v-for="(review, index) in reviews" 
             :key="index"
-            class="light-card"
+            class="rounded-[2.5rem] border border-gray-200 bg-white p-8 hover:border-primary"
           >
             <div>
               <div class="mb-4 flex gap-1">
@@ -250,10 +250,6 @@ const reviews = [
     <section class="pb-24 pt-12">
       <div class="container mx-auto px-6">
         <div class="relative overflow-hidden rounded-[3rem] bg-primary px-6 py-20 text-center sm:px-12 lg:py-32">
-          <!-- Decorative elements -->
-          <div class="absolute left-0 top-0 -ml-24 -mt-24 h-96 w-96 rounded-full bg-white/5 blur-3xl"></div>
-          <div class="absolute bottom-0 right-0 -mb-24 -mr-24 h-96 w-96 rounded-full bg-secondary/10 blur-3xl"></div>
-          
           <div class="relative z-10 mx-auto max-w-2xl">
             <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
               Připraveni na nezapomenutelný pobyt?

@@ -20,14 +20,14 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="relative overflow-hidden pt-48 pb-32 -mt-24 -z-10">
+  <div class="relative overflow-hidden pt-48 pb-32 -mt-26 -z-10">
     <!-- Background Image -->
     <div class="absolute inset-0 bg-cover bg-center opacity-100" :style="{ backgroundImage: `url(${image})` }"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900"></div>
     
     <div class="container relative mx-auto px-6 text-center">
       <!-- Badge -->
-      <div v-if="badge" class="glassmorphism mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium text-honey">
+      <div v-if="badge" class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-sm font-medium text-white">
         <span>{{ badge }}</span>
       </div>
       

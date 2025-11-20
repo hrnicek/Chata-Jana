@@ -4,7 +4,7 @@ import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
-  <header class="glassmorphism container mx-auto mt-4 rounded-4xl p-3 px-6 py-1 z-50">
+  <header class="container mx-auto mt-4 rounded-4xl bg-transparent px-6 py-3 z-50">
     <nav class="flex items-center justify-between text-white">
       <Link href="/" class="text-xl font-bold">
         <img alt="Chata Jana Ostružná Logo" class="h-16" src="/img/logo.png" />
