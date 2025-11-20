@@ -144,10 +144,16 @@
 
               <!-- Calendar Grid -->
               <div class="relative">
-                 <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
-                    <div class="flex items-center gap-2 text-primary">
-                      <Loader2 class="h-6 w-6 animate-spin" />
-                      <span class="font-medium">Načítám dostupnost...</span>
+                 <!-- Skeleton Loading -->
+                 <div v-if="loading" class="grid grid-cols-7 gap-2">
+                    <!-- Weekday Skeletons -->
+                    <div v-for="i in 7" :key="`skeleton-day-${i}`" class="h-6 bg-gray-200 rounded animate-pulse"></div>
+                    
+                    <!-- Day Cell Skeletons -->
+                    <div v-for="i in 35" :key="`skeleton-cell-${i}`" class="rounded border border-gray-200 p-2 space-y-2">
+                      <div class="h-4 bg-gray-200 rounded animate-pulse w-8"></div>
+                      <div class="h-3 bg-gray-200 rounded animate-pulse w-12"></div>
+                      <div class="h-3 bg-gray-200 rounded animate-pulse w-16"></div>
                     </div>
                  </div>
 
@@ -243,45 +249,73 @@
                 <!-- First Name -->
                 <div class="space-y-1.5">
                   <label class="text-sm font-medium text-gray-700">Jméno</label>
-                  <input
-                    v-model="customer.firstName"
-                    type="text"
-                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
-                    placeholder="Jan"
-                  />
+                  <div class="relative">
+                    <input
+                      v-model="customer.firstName"
+                      @blur="validateField('firstName')"
+                      @focus="clearFieldError('firstName')"
+                      type="text"
+                      class="w-full rounded-lg border-2 px-4 py-2.5 pr-10 text-gray-900 placeholder-gray-400 transition-colors focus:outline-none"
+                      :class="fieldErrors.firstName ? 'border-red-400' : validFields.firstName ? 'border-emerald-400' : 'border-gray-200 focus:border-primary'"
+                      placeholder="Jan"
+                    />
+                    <CheckCircle v-if="validFields.firstName" class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-500" />
+                  </div>
+                  <p v-if="fieldErrors.firstName" class="text-xs text-red-600">{{ fieldErrors.firstName }}</p>
                 </div>
 
                 <!-- Last Name -->
                 <div class="space-y-1.5">
                   <label class="text-sm font-medium text-gray-700">Příjmení</label>
-                  <input
-                    v-model="customer.lastName"
-                    type="text"
-                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
-                    placeholder="Novák"
-                  />
+                  <div class="relative">
+                    <input
+                      v-model="customer.lastName"
+                      @blur="validateField('lastName')"
+                      @focus="clearFieldError('lastName')"
+                      type="text"
+                      class="w-full rounded-lg border-2 px-4 py-2.5 pr-10 text-gray-900 placeholder-gray-400 transition-colors focus:outline-none"
+                      :class="fieldErrors.lastName ? 'border-red-400' : validFields.lastName ? 'border-emerald-400' : 'border-gray-200 focus:border-primary'"
+                      placeholder="Novák"
+                    />
+                    <CheckCircle v-if="validFields.lastName" class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-500" />
+                  </div>
+                  <p v-if="fieldErrors.lastName" class="text-xs text-red-600">{{ fieldErrors.lastName }}</p>
                 </div>
 
                 <!-- Email -->
                 <div class="space-y-1.5">
                   <label class="text-sm font-medium text-gray-700">E-mail</label>
-                  <input
-                    v-model="customer.email"
-                    type="email"
-                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
-                    placeholder="jan.novak@example.com"
-                  />
+                  <div class="relative">
+                    <input
+                      v-model="customer.email"
+                      @blur="validateField('email')"
+                      @focus="clearFieldError('email')"
+                      type="email"
+                      class="w-full rounded-lg border-2 px-4 py-2.5 pr-10 text-gray-900 placeholder-gray-400 transition-colors focus:outline-none"
+                      :class="fieldErrors.email ? 'border-red-400' : validFields.email ? 'border-emerald-400' : 'border-gray-200 focus:border-primary'"
+                      placeholder="jan.novak@example.com"
+                    />
+                    <CheckCircle v-if="validFields.email" class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-500" />
+                  </div>
+                  <p v-if="fieldErrors.email" class="text-xs text-red-600">{{ fieldErrors.email }}</p>
                 </div>
 
                 <!-- Phone -->
                 <div class="space-y-1.5">
                   <label class="text-sm font-medium text-gray-700">Telefon</label>
-                  <input
-                    v-model="customer.phone"
-                    type="tel"
-                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
-                    placeholder="+420 777 123 456"
-                  />
+                  <div class="relative">
+                    <input
+                      v-model="customer.phone"
+                      @blur="validateField('phone')"
+                      @focus="clearFieldError('phone')"
+                      type="tel"
+                      class="w-full rounded-lg border-2 px-4 py-2.5 pr-10 text-gray-900 placeholder-gray-400 transition-colors focus:outline-none"
+                      :class="fieldErrors.phone ? 'border-red-400' : validFields.phone ? 'border-emerald-400' : 'border-gray-200 focus:border-primary'"
+                      placeholder="+420 777 123 456"
+                    />
+                    <CheckCircle v-if="validFields.phone" class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-500" />
+                  </div>
+                  <p v-if="fieldErrors.phone" class="text-xs text-red-600">{{ fieldErrors.phone }}</p>
                 </div>
 
                 <!-- Note -->
@@ -322,9 +356,20 @@
                 <p class="text-gray-500">Vylepšete si svůj pobyt.</p>
               </header>
 
-              <div v-if="extrasLoading" class="py-12 text-center text-gray-500">
-                <Loader2 class="mx-auto h-8 w-8 animate-spin text-primary mb-2" />
-                Načítám nabídku služeb...
+              <div v-if="extrasLoading" class="grid gap-4 sm:grid-cols-2">
+                <div v-for="i in 4" :key="`skeleton-extra-${i}`" class="rounded-xl border-2 border-gray-100 p-5 space-y-3">
+                  <div class="flex justify-between">
+                    <div class="h-5 bg-gray-200 rounded animate-pulse w-32"></div>
+                    <div class="h-5 bg-gray-200 rounded animate-pulse w-16"></div>
+                  </div>
+                  <div class="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+                  <div class="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                  <div class="flex justify-end gap-3 pt-2">
+                    <div class="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
+                    <div class="h-8 w-8 bg-gray-200 rounded animate-pulse"></div>
+                    <div class="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
+                  </div>
+                </div>
               </div>
               
               <div v-else-if="extrasError" class="rounded-lg bg-red-50 p-4 text-red-700">
@@ -521,6 +566,58 @@
 
       </div>
     </div>
+
+    <!-- Sticky Mobile Summary Bar -->
+    <div 
+      v-if="step < 5" 
+      class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-gray-200 px-4 py-3 shadow-2xl lg:hidden transition-transform duration-300"
+      :class="step === 1 && !startDate ? 'translate-y-full' : 'translate-y-0'"
+    >
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex flex-col">
+          <span class="text-xs text-gray-500">Celková cena</span>
+          <span class="text-lg font-semibold text-primary">{{ currency(grandTotalPrice) }}</span>
+        </div>
+        <button
+          v-if="step === 1"
+          @click="verifyAndProceed"
+          :disabled="!canProceed || verifying"
+          class="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Loader2 v-if="verifying" class="h-4 w-4 animate-spin" />
+          <span>{{ verifying ? 'Ověřuji...' : 'Pokračovat' }}</span>
+          <ChevronRight v-if="!verifying" class="h-4 w-4" />
+        </button>
+        <button
+          v-else-if="step === 2"
+          @click="step = 3"
+          :disabled="!formReady"
+          class="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Pokračovat
+          <ChevronRight class="h-4 w-4" />
+        </button>
+        <button
+          v-else-if="step === 3"
+          @click="checkExtrasAvailability"
+          :disabled="!canSubmit"
+          class="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Pokračovat
+          <ChevronRight class="h-4 w-4" />
+        </button>
+        <button
+          v-else-if="step === 4"
+          @click="submit"
+          :disabled="!canSubmit || submitting"
+          class="flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-3 text-sm font-medium text-white shadow-lg transition-all hover:bg-black hover:shadow-xl disabled:opacity-50 disabled:shadow-none"
+        >
+          <Loader2 v-if="submitting" class="h-4 w-4 animate-spin" />
+          <span v-else>Odeslat</span>
+          <Send v-if="!submitting" class="h-4 w-4" />
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -586,6 +683,66 @@ const verifying = ref(false);
 const verifyError = ref("");
 const extrasLoading = ref(false);
 const extrasError = ref("");
+
+// Form validation
+const fieldErrors = ref({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+});
+const validFields = ref({
+  firstName: false,
+  lastName: false,
+  email: false,
+  phone: false,
+});
+
+function validateField(field) {
+  const value = customer.value[field];
+  
+  if (field === 'firstName' || field === 'lastName') {
+    if (!value || value.trim().length < 2) {
+      fieldErrors.value[field] = 'Prosím vyplňte alespoň 2 znaky';
+      validFields.value[field] = false;
+    } else {
+      fieldErrors.value[field] = '';
+      validFields.value[field] = true;
+    }
+  }
+  
+  if (field === 'email') {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!value) {
+      fieldErrors.value.email = 'E-mail je povinný';
+      validFields.value.email = false;
+    } else if (!emailRegex.test(value)) {
+      fieldErrors.value.email = 'Neplatný formát e-mailu';
+      validFields.value.email = false;
+    } else {
+      fieldErrors.value.email = '';
+      validFields.value.email = true;
+    }
+  }
+  
+  if (field === 'phone') {
+    const phoneRegex = /^(\+420)?\s?[0-9]{3}\s?[0-9]{3}\s?[0-9]{3}$/;
+    if (!value) {
+      fieldErrors.value.phone = 'Telefon je povinný';
+      validFields.value.phone = false;
+    } else if (!phoneRegex.test(value.replace(/\s/g, ''))) {
+      fieldErrors.value.phone = 'Neplatný formát (např. +420 777 123 456)';
+      validFields.value.phone = false;
+    } else {
+      fieldErrors.value.phone = '';
+      validFields.value.phone = true;
+    }
+  }
+}
+
+function clearFieldError(field) {
+  fieldErrors.value[field] = '';
+}
 
 const monthLabel = computed(() =>
   new Date(year.value, month.value - 1, 1).toLocaleString("cs-CZ", { month: "long" })
