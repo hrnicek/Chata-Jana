@@ -22,7 +22,7 @@
                 canNavigateTo(item.id)
                   ? 'hover:bg-honey focus:bg-honey'
                   : 'cursor-not-allowed opacity-60',
-                step === item.id ? 'border bg-white shadow-sm' : 'border',
+                step === item.id ? 'border bg-white' : 'border',
               ]"
               :aria-current="step === item.id ? 'step' : undefined"
               :disabled="!canNavigateTo(item.id)"
@@ -210,7 +210,7 @@
           </div>
           <div class="flex-1 overflow-auto px-4 py-6">
             <div class="grid min-h-full place-items-center">
-              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6 shadow-sm">
+              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6">
                 <div class="mb-4 text-sm text-gray-700">
                   Vyplňte prosím kontaktní údaje, abychom vám mohli potvrdit rezervaci. E‑mail
                   použijeme pro zaslání potvrzení a telefon jen v případě potřeby.
@@ -315,7 +315,7 @@
           </div>
           <div class="flex-1 overflow-auto px-4 py-6">
             <div class="grid min-h-full place-items-center">
-              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6 shadow-sm">
+              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6">
                 <div class="mb-4 text-sm text-gray-700">
                   Vyberte si z doplňkových služeb. Cena se počítá dle typu služby (za den nebo za
                   pobyt).
@@ -391,7 +391,7 @@
           </div>
           <div class="flex-1 overflow-auto px-4 py-6">
             <div class="grid min-h-full place-items-center">
-              <div class="w-full max-w-3xl rounded-2xl border bg-white p-6 shadow-sm">
+              <div class="w-full max-w-3xl rounded-2xl border bg-white p-6">
                 <div class="mb-4 text-sm text-gray-700">
                   Zkontrolujte prosím všechny údaje níže. Pokud je vše v pořádku, klikněte na
                   „Odeslat rezervaci“. V případě potřeby se vraťte a údaje upravte.
@@ -518,7 +518,7 @@
           </div>
           <div class="flex-1 overflow-auto px-4 py-6">
             <div class="grid min-h-full place-items-center">
-              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6 text-center shadow-sm">
+              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6 text-center">
                 <div class="mb-2 text-2xl font-semibold">Dokončeno</div>
                 <div class="text-gray-700">
                   Děkujeme, rezervace byla úspěšně odeslána. Potvrzení vám zašleme e‑mailem.

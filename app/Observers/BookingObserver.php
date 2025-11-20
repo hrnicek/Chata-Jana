@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class BookingObserver
 {
-    public function created(Booking $booking): void
+    public function creating(Booking $booking): void
     {
         if ($booking->code) {
             return;

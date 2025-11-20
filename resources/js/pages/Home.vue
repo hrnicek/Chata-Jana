@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Hero from "../components/Hero.vue";
 import WebLayout from "../layouts/WebLayout.vue";
+import Button from "../components/ui/button.vue";
 import { Link } from "@inertiajs/vue3";
 import {
   Mountain,
@@ -81,18 +82,18 @@ const reviews = [
               <img
                 src="/img/hero2.jpg"
                 alt="Chata Jana exteriér"
-                class="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                class="h-full w-full object-cover"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>
           </div>
           <div class="order-1 lg:order-2">
-            <div class="mb-6 inline-flex items-center gap-2 rounded-full bg-[--color-honey] px-4 py-1.5 text-sm font-medium text-[--color-primary]">
+            <div class="mb-6 inline-flex items-center gap-2 rounded-full bg-honey px-4 py-1.5 text-sm font-medium text-primary">
               <Mountain class="h-4 w-4" />
               <span>O místě</span>
             </div>
             <h2 class="text-4xl font-bold tracking-tight text-gray-900 lg:text-5xl">
-              Vaše horské <span class="text-[--color-primary]">útočiště</span>
+              Vaše horské <span class="text-primary">útočiště</span>
             </h2>
             <p class="mt-6 text-lg leading-relaxed text-gray-600">
               Chata Jana nabízí unikátní spojení komfortu, soukromého wellness a divoké přírody Jeseníků. 
@@ -101,19 +102,22 @@ const reviews = [
             </p>
             
             <div class="mt-10 flex flex-wrap items-center gap-4">
-              <Link
+              <Button
+                :as="Link"
                 :href="route('bookings.calendar')"
-                class="group inline-flex items-center gap-2 rounded-full bg-[--color-primary] px-8 py-4 font-medium text-white transition-all hover:bg-[#1a3f2a] hover:shadow-lg hover:shadow-[--color-primary]/20"
+                variant="default"
+                class="group"
               >
                 Rezervovat termín
-                <ArrowRight class="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link 
+                <ArrowRight class="h-4 w-4" />
+              </Button>
+              <Button 
+                :as="Link"
                 href="#galerie" 
-                class="inline-flex items-center gap-2 rounded-full border border-gray-200 px-8 py-4 font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                variant="outline"
               >
                 Prohlédnout galerii
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -132,9 +136,9 @@ const reviews = [
           <div 
             v-for="(item, index) in amenities" 
             :key="index"
-            class="group flex flex-col items-center justify-center gap-3 rounded-3xl bg-white p-6 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+            class="group flex flex-col items-center justify-center gap-3 rounded-3xl bg-white p-6 text-center"
           >
-            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[--color-honey] text-[--color-primary] transition-colors group-hover:bg-[--color-primary] group-hover:text-white">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-honey text-primary transition-colors group-hover:bg-primary group-hover:text-white">
               <component :is="item.icon" class="h-6 w-6" />
             </div>
             <span class="text-sm font-medium text-gray-900">{{ item.label }}</span>
@@ -150,10 +154,10 @@ const reviews = [
           <div 
             v-for="(feature, index) in features" 
             :key="index"
-            class="relative overflow-hidden rounded-[2.5rem] bg-gray-900 p-10 text-white transition-transform hover:scale-[1.02]"
+            class="relative overflow-hidden rounded-[2.5rem] bg-gray-900 p-10 text-white"
           >
             <div class="absolute right-0 top-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-white/5 blur-3xl"></div>
-            <component :is="feature.icon" class="relative mb-6 h-10 w-10 text-[--color-secondary]" />
+            <component :is="feature.icon" class="relative mb-6 h-10 w-10 text-secondary" />
             <h3 class="relative mb-3 text-xl font-bold">{{ feature.title }}</h3>
             <p class="relative text-gray-300">{{ feature.description }}</p>
           </div>
@@ -166,7 +170,7 @@ const reviews = [
       <div class="container mx-auto px-6">
         <div class="mb-12 flex items-end justify-between">
           <div>
-            <div class="mb-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[--color-primary]">
+            <div class="mb-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
               <Camera class="h-4 w-4" />
               <span>Galerie</span>
             </div>
@@ -176,7 +180,7 @@ const reviews = [
 
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div class="group relative overflow-hidden rounded-3xl md:col-span-2">
-            <img src="/img/hero.jpg" alt="Wellness" class="h-80 w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="/img/hero.jpg" alt="Wellness" class="h-80 w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <div class="absolute bottom-6 left-6 text-white">
                 <p class="font-medium">Wellness zóna</p>
@@ -184,7 +188,7 @@ const reviews = [
             </div>
           </div>
           <div class="group relative overflow-hidden rounded-3xl">
-            <img src="/img/hero3.jpg" alt="Interiér" class="h-80 w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="/img/hero3.jpg" alt="Interiér" class="h-80 w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <div class="absolute bottom-6 left-6 text-white">
                 <p class="font-medium">Obývací prostor</p>
@@ -192,7 +196,7 @@ const reviews = [
             </div>
           </div>
           <div class="group relative overflow-hidden rounded-3xl">
-            <img src="/img/hero2.jpg" alt="Exteriér" class="h-80 w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="/img/hero2.jpg" alt="Exteriér" class="h-80 w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <div class="absolute bottom-6 left-6 text-white">
                 <p class="font-medium">Exteriér chaty</p>
@@ -200,7 +204,7 @@ const reviews = [
             </div>
           </div>
           <div class="group relative overflow-hidden rounded-3xl md:col-span-2">
-            <img src="/img/hero4.png" alt="Okolí" class="h-80 w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="/img/hero4.png" alt="Okolí" class="h-80 w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <div class="absolute bottom-6 left-6 text-white">
                 <p class="font-medium">Zimní atmosféra</p>
@@ -215,7 +219,7 @@ const reviews = [
     <section class="py-24">
       <div class="container mx-auto px-6">
         <div class="mb-16 text-center">
-          <Quote class="mx-auto mb-4 h-8 w-8 text-[--color-primary]/30" />
+          <Quote class="mx-auto mb-4 h-8 w-8 text-primary/30" />
           <h2 class="text-3xl font-bold text-gray-900">Co o nás říkají hosté</h2>
         </div>
 
@@ -223,11 +227,11 @@ const reviews = [
           <div 
             v-for="(review, index) in reviews" 
             :key="index"
-            class="flex flex-col justify-between rounded-3xl border border-gray-100 bg-white p-8 shadow-lg shadow-gray-200/50"
+            class="flex flex-col justify-between rounded-3xl border border-gray-100 bg-white p-8"
           >
             <div>
               <div class="mb-4 flex gap-1">
-                <Star v-for="i in 5" :key="i" class="h-4 w-4 fill-[--color-secondary] text-[--color-secondary]" />
+                <Star v-for="i in 5" :key="i" class="h-4 w-4 fill-secondary text-secondary" />
               </div>
               <p class="text-gray-700 leading-relaxed">"{{ review.text }}"</p>
             </div>
@@ -245,10 +249,10 @@ const reviews = [
     <!-- CTA Section -->
     <section class="pb-24 pt-12">
       <div class="container mx-auto px-6">
-        <div class="relative overflow-hidden rounded-[3rem] bg-[--color-primary] px-6 py-20 text-center sm:px-12 lg:py-32">
+        <div class="relative overflow-hidden rounded-[3rem] bg-primary px-6 py-20 text-center sm:px-12 lg:py-32">
           <!-- Decorative elements -->
           <div class="absolute left-0 top-0 -ml-24 -mt-24 h-96 w-96 rounded-full bg-white/5 blur-3xl"></div>
-          <div class="absolute bottom-0 right-0 -mb-24 -mr-24 h-96 w-96 rounded-full bg-[--color-secondary]/10 blur-3xl"></div>
+          <div class="absolute bottom-0 right-0 -mb-24 -mr-24 h-96 w-96 rounded-full bg-secondary/10 blur-3xl"></div>
           
           <div class="relative z-10 mx-auto max-w-2xl">
             <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
@@ -258,47 +262,26 @@ const reviews = [
               Rezervujte si svůj termín včas. Těšíme se na vaši návštěvu v Chatě Jana.
             </p>
             <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
+              <Button
+                :as="Link"
                 :href="route('bookings.calendar')"
-                class="w-full rounded-full bg-white px-8 py-4 font-bold text-[--color-primary] transition-transform hover:scale-105 sm:w-auto"
+                variant="cta-primary"
+                class="w-full sm:w-auto"
               >
                 Rezervovat nyní
-              </Link>
-              <Link
+              </Button>
+              <Button
+                :as="Link"
                 href="#galerie"
-                class="w-full rounded-full border border-white/30 bg-white/10 px-8 py-4 font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:w-auto"
+                variant="cta-secondary"
+                class="w-full sm:w-auto"
               >
                 Prohlédnout chatu
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="border-t border-gray-100 bg-white py-16">
-      <div class="container mx-auto px-6">
-        <div class="flex flex-col items-center justify-between gap-8 md:flex-row">
-          <div class="flex items-center gap-4">
-            <img src="/img/logo.png" alt="Logo" class="h-12" />
-            <div class="flex flex-col">
-              <span class="font-bold text-gray-900">Chata Jana</span>
-              <span class="text-sm text-gray-500">Ostružná, Jeseníky</span>
-            </div>
-          </div>
-          
-          <div class="flex gap-8 text-sm font-medium text-gray-600">
-            <Link :href="route('bookings.calendar')" class="hover:text-[--color-primary]">Rezervace</Link>
-            <a href="#" class="hover:text-[--color-primary]">Obchodní podmínky</a>
-            <a href="#" class="hover:text-[--color-primary]">Kontakt</a>
-          </div>
-          
-          <div class="text-sm text-gray-400">
-            © {{ new Date().getFullYear() }} Chata Jana. Všechna práva vyhrazena.
-          </div>
-        </div>
-      </div>
-    </footer>
   </WebLayout>
 </template>

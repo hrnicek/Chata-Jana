@@ -9,12 +9,12 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
       <div class="text-left text-white">
         <div class="max-w-2xl">
           <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm backdrop-blur-md">
-            <Star class="h-4 w-4 text-[--color-secondary]" fill="currentColor" />
+            <Star class="h-4 w-4 text-secondary" fill="currentColor" />
             <span class="font-medium text-white">Nejlépe hodnocená chata v okolí</span>
           </div>
           
           <h1 class="mb-6 text-5xl font-bold leading-tight tracking-tight text-white md:text-7xl lg:text-8xl">
-            Horský <span class="text-transparent bg-clip-text bg-gradient-to-r from-[--color-honey] to-white">luxus</span>
+            Horský <span class="text-transparent bg-clip-text bg-gradient-to-r from-honey to-white">luxus</span>
             <br />v srdci přírody
           </h1>
           
@@ -25,7 +25,7 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
 
           <div class="flex flex-wrap gap-4">
             <div class="flex items-center gap-3 rounded-2xl bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[--color-honey]/20 text-[--color-honey]">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-honey/20 text-honey">
                 <Users class="h-5 w-5" />
               </div>
               <div>
@@ -35,7 +35,7 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
             </div>
             
             <div class="flex items-center gap-3 rounded-2xl bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[--color-honey]/20 text-[--color-honey]">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-honey/20 text-honey">
                 <Sparkles class="h-5 w-5" />
               </div>
               <div>
@@ -45,7 +45,7 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
             </div>
 
             <div class="flex items-center gap-3 rounded-2xl bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[--color-honey]/20 text-[--color-honey]">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-honey/20 text-honey">
                 <MapPin class="h-5 w-5" />
               </div>
               <div>
@@ -61,17 +61,17 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
       <div class="flex justify-center lg:justify-end">
         <div class="relative w-full max-w-sm">
           <!-- Glow effect -->
-          <div class="absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-[--color-honey] to-[--color-primary] opacity-30 blur-xl"></div>
+          <div class="absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-honey to-primary opacity-30 blur-xl"></div>
           
           <div class="relative rounded-[2rem] border border-white/10 bg-black/40 p-8 backdrop-blur-xl">
             <div class="mb-6 flex items-center justify-between">
               <h2 class="text-xl font-bold text-white">Rychlý kontakt</h2>
-              <div class="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+              <div class="h-2 w-2 rounded-full bg-green-500"></div>
             </div>
 
             <div class="space-y-6">
               <a href="tel:+420777123456" class="group flex items-center gap-4 rounded-xl bg-white/5 p-4 transition-colors hover:bg-white/10">
-                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors group-hover:bg-[--color-primary] group-hover:text-white">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors group-hover:bg-primary group-hover:text-white">
                   <Phone class="h-5 w-5" />
                 </div>
                 <div>
@@ -81,7 +81,7 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
               </a>
 
               <a href="mailto:info@chatajanao.cz" class="group flex items-center gap-4 rounded-xl bg-white/5 p-4 transition-colors hover:bg-white/10">
-                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors group-hover:bg-[--color-primary] group-hover:text-white">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors group-hover:bg-primary group-hover:text-white">
                   <Mail class="h-5 w-5" />
                 </div>
                 <div>

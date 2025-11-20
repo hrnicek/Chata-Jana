@@ -1,10 +1,9 @@
 <script setup>
-import AppHeader from "./AppHeader.vue";
 import HeroContent from "./HeroContent.vue";
 </script>
 
 <template>
-  <div class="hero-font bg-gray-900 text-white">
+  <div class="hero-font bg-gray-900 text-white -mt-24">
     <div class="relative min-h-screen w-full overflow-hidden">
       <div class="absolute inset-0 z-0">
         <img
@@ -18,8 +17,7 @@ import HeroContent from "./HeroContent.vue";
         ></div>
       </div>
 
-      <div class="relative z-10 flex min-h-screen flex-col">
-        <AppHeader />
+      <div class="relative z-10 flex min-h-screen flex-col pt-24">
         <HeroContent />
       </div>
     </div>
