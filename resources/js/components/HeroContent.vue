@@ -110,28 +110,25 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
   
   <!-- Bottom Info Bar -->
   <div class="mt-auto w-full border-t border-white/10 bg-black/20">
-    <div class="container mx-auto px-6 py-6">
-      <div class="flex flex-wrap justify-center gap-8 text-center md:justify-between md:text-left">
-        <div>
-          <div class="text-2xl font-bold text-white">5</div>
-          <div class="text-sm text-gray-400">pokojů</div>
-        </div>
-        <div class="h-10 w-px bg-white/10 hidden md:block"></div>
-        <div>
-          <div class="text-2xl font-bold text-white">12</div>
-          <div class="text-sm text-gray-400">lůžek</div>
-        </div>
-        <div class="h-10 w-px bg-white/10 hidden md:block"></div>
-        <div>
-          <div class="text-2xl font-bold text-white">3</div>
-          <div class="text-sm text-gray-400">koupelny</div>
-        </div>
-        <div class="h-10 w-px bg-white/10 hidden md:block"></div>
-        <div>
-          <div class="text-2xl font-bold text-white">∞</div>
-          <div class="text-sm text-gray-400">zážitků</div>
-        </div>
-      </div>
+    <div class="container mx-auto px-6 py-8">
+      <ul class="grid grid-cols-2 md:grid-cols-4 divide-white/10 divide-y md:divide-y-0 md:divide-x">
+        <li class="flex items-center justify-center gap-3 py-4 text-center">
+          <span class="text-4xl font-bold text-white tabular-nums">5</span>
+          <span class="text-sm text-white/70">pokojů</span>
+        </li>
+        <li class="flex items-center justify-center gap-3 py-4 text-center">
+          <span class="text-4xl font-bold text-white tabular-nums">12</span>
+          <span class="text-sm text-white/70">lůžek</span>
+        </li>
+        <li class="flex items-center justify-center gap-3 py-4 text-center">
+          <span class="text-4xl font-bold text-white tabular-nums">3</span>
+          <span class="text-sm text-white/70">koupelny</span>
+        </li>
+        <li class="flex items-center justify-center gap-3 py-4 text-center">
+          <span class="text-4xl font-bold text-white tabular-nums">∞</span>
+          <span class="text-sm text-white/70">zážitků</span>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
