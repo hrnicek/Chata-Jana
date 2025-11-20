@@ -25,8 +25,8 @@ class Customer extends Model
             ->get(fn(Customer $customer): string => $customer->first_name . ' ' . $customer->last_name);
     }
 
-    public function booking(): HasOne
+    public function bookings(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasOne(Booking::class);
+        return $this->hasMany(Booking::class);
     }
 }

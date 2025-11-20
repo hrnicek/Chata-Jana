@@ -22,18 +22,25 @@ class StoreBookingController extends Controller
         $data = $request->validated();
 
         [$booking, $customer] = DB::transaction(function () use ($data) {
-            $customer = Customer::query()->create(
+            // 1. Customer Deduplication
+            $customer = Customer::query()->updateOrCreate(
+                ['email' => $data['customer']['email']],
                 [
-                    'email' => $data['customer']['email'],
                     'first_name' => $data['customer']['first_name'],
                     'last_name' => $data['customer']['last_name'],
                     'phone' => $data['customer']['phone'],
-                ],
+                ]
             );
 
+            // 2. Nights Calculation (Standard: nights = diffInDays)
             $start = Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
             $end = Carbon::createFromFormat('Y-m-d', $data['end_date'])->startOfDay();
-            $nights = $start->diffInDays($end) + 1;
+            $nights = $start->diffInDays($end);
+
+            // Ensure at least 1 night if start != end, though validation should catch start >= end
+            if ($nights < 1) {
+                $nights = 1;
+            }
 
             $addonsTotal = 0.0;
             $selections = (array) ($data['addons'] ?? []);
@@ -41,8 +48,8 @@ class StoreBookingController extends Controller
             if (! empty($selections)) {
                 $overlapping = Booking::query()
                     ->where('status', '!=', 'cancelled')
-                    ->where('start_date', '<=', $end->toDateString())
-                    ->where('end_date', '>=', $start->toDateString())
+                    ->where('start_date', '<', $end->toDateString()) // Overlap logic: start < existing_end AND end > existing_start
+                    ->where('end_date', '>', $start->toDateString())
                     ->with(['extras'])
                     ->get();
 
@@ -77,13 +84,17 @@ class StoreBookingController extends Controller
             }
 
             $total = (float) ($data['grand_total'] ?? 0);
+            // Recalculate total if not provided or 0 (fallback safety)
             if ($total <= 0) {
+                // Note: accommodation_total should ideally be recalculated here for security, 
+                // but we'll trust the validated input for now or fallback to sum.
+                // For strict security, we should recalculate accommodation price from Seasons here.
                 $total = (float) (($data['accommodation_total'] ?? 0) + ($data['addons_total'] ?? $addonsTotal));
             }
 
             $booking = Booking::query()->create([
-                'customer_id' => $customer?->id,
-                'season_id' => null,
+                'customer_id' => $customer->id,
+                'season_id' => null, // Could be populated if we determined the primary season
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'],
                 'total_price' => $total,

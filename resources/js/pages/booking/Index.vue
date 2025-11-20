@@ -1,545 +1,525 @@
 <template>
-  <div class="h-screen w-full">
-    <div class="grid h-full grid-cols-1 rounded-4xl md:grid-cols-12">
-      <aside class="h-full overflow-auto border-r bg-neutral-50 md:sticky md:top-0 md:col-span-3">
-        <div class="p-4">
-          <div class="mb-3 flex items-center gap-2">
-            <Calendar class="text-primary h-5 w-5" />
-            <div class="font-semibold">Průběh rezervace</div>
-          </div>
-          <div class="mb-4 h-2 rounded-full bg-gray-200">
-            <div
-              class="bg-primary h-2 rounded-full"
-              :style="{ width: progressPercent + '%' }"
-            ></div>
-          </div>
-          <nav aria-label="Průběh" class="space-y-2">
-            <button
-              v-for="item in stepItems"
-              :key="item.id"
-              class="flex w-full items-start gap-3 rounded-2xl p-3 transition-colors"
-              :class="[
-                canNavigateTo(item.id)
-                  ? 'hover:bg-honey focus:bg-honey'
-                  : 'cursor-not-allowed opacity-60',
-                step === item.id ? 'border bg-white' : 'border',
-              ]"
-              :aria-current="step === item.id ? 'step' : undefined"
-              :disabled="!canNavigateTo(item.id)"
-              @click="navigateTo(item.id)"
-            >
-              <div class="mt-0.5">
-                <CheckCircle v-if="step > item.id" class="h-4 w-4 text-emerald-600" />
-                <component v-else :is="item.icon" class="h-4 w-4 text-gray-900" />
+  <div class="min-h-screen w-full bg-neutral-50 text-gray-900 font-sans">
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        
+        <!-- SIDEBAR: Progress & Summary -->
+        <aside class="lg:col-span-4 xl:col-span-3">
+          <div class="sticky top-8 space-y-8">
+            
+            <!-- Progress Steps -->
+            <nav aria-label="Průběh rezervace">
+              <div class="mb-4 flex items-center gap-2 text-primary">
+                <Calendar class="h-5 w-5" />
+                <h2 class="text-lg font-medium">Vaše cesta</h2>
               </div>
-              <div class="text-left">
-                <div
-                  :class="
-                    step === item.id
-                      ? 'font-medium text-gray-900'
-                      : step > item.id
-                        ? 'text-gray-700'
-                        : 'text-gray-500'
-                  "
-                >
-                  {{ item.label }}
+              
+              <!-- Mobile Progress Bar -->
+              <div class="mb-6 block lg:hidden">
+                <div class="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                  <div class="h-full bg-primary transition-all duration-500" :style="{ width: progressPercent + '%' }"></div>
                 </div>
-                <div class="text-xs text-gray-700">{{ item.desc }}</div>
-                <div
-                  :class="
-                    step > item.id
-                      ? 'text-xs text-emerald-600'
-                      : step === item.id
-                        ? 'text-xs text-amber-600'
-                        : 'text-xs text-gray-500'
-                  "
-                >
-                  {{ step > item.id ? "Dokončeno" : step === item.id ? "Probíhá" : "Čeká" }}
+                <div class="mt-2 flex justify-between text-xs text-gray-500">
+                  <span>Start</span>
+                  <span>Dokončení</span>
                 </div>
               </div>
-            </button>
-          </nav>
-        </div>
-      </aside>
-      <section class="h-full bg-white md:col-span-9">
-        <div v-if="step === 1" class="flex h-full flex-col">
-          <div class="flex shrink-0 items-center justify-between border-b bg-white px-4 py-3">
-            <div class="flex items-center gap-2 text-2xl font-semibold">
-              {{ monthLabel }} {{ year }}
-            </div>
-            <div class="flex items-center gap-2">
-              <button
-                v-if="canGoPrev"
-                class="flex items-center gap-1 rounded bg-gray-200 px-3 py-2 hover:bg-gray-300"
-                @click="prevMonth"
-              >
-                <ChevronLeft class="h-4 w-4" />
-                Předchozí měsíc
-              </button>
-              <button
-                class="flex items-center gap-1 rounded bg-gray-200 px-3 py-2 hover:bg-gray-300"
-                @click="nextMonth"
-              >
-                Další měsíc
-                <ChevronRight class="h-4 w-4" />
-              </button>
-            </div>
-          </div>
 
-          <div class="flex-1 overflow-auto bg-white px-4 py-3">
-            <div v-if="error" class="mb-4 text-red-600">{{ error }}</div>
-            <div v-if="loading" class="mb-4 text-gray-600">Načítáme kalendář…</div>
-
-            <div v-if="step === 1" class="mb-3 text-sm text-gray-700">
-              Vyberte začátek a konec pobytu kliknutím v kalendáři. Dostupné dny jsou označeny
-              „Volné“.
-            </div>
-            <div v-if="step === 1" class="mb-4 space-y-1 text-xs text-gray-600">
-              <div>Nejprve klikněte na den začátku, poté na den konce.</div>
-              <div>Po výběru uvidíte počet nocí a celkovou cenu dole.</div>
-              <div>Dny „Nedostupné“ nebo „Obsazené“ není možné zvolit.</div>
-            </div>
-            <div
-              v-if="step === 1 && verifying"
-              role="status"
-              aria-live="polite"
-              class="bg-honey text-primary mb-4 flex items-center gap-2 rounded-2xl border px-3 py-2"
-            >
-              <Loader2 class="h-4 w-4 animate-spin" />
-              <div class="text-sm">Ověřujeme dostupnost…</div>
-            </div>
-            <div
-              v-if="step === 1 && rangeHasUnavailable"
-              role="alert"
-              aria-live="polite"
-              class="mb-4 flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-red-800"
-            >
-              <XCircle class="h-4 w-4 shrink-0" />
-              <div class="text-sm">
-                Ve zvoleném období jsou některé dny obsazené. Zvolte prosím jiné datum.
-              </div>
-            </div>
-            <div v-if="step === 1" class="grid grid-cols-7 gap-2">
-              <div v-for="d in weekDays" :key="d" class="text-center font-medium text-gray-700">
-                {{ d }}
-              </div>
-              <div
-                v-for="cell in cells"
-                :key="cell.date"
-                class="cursor-pointer rounded border p-2"
-                :class="[
-                  cell.inCurrent ? '' : 'opacity-60',
-                  !isAvailable(cell.date)
-                    ? isBlackout(cell.date)
-                      ? 'border-orange-400 bg-orange-50'
-                      : 'border-red-400 bg-red-50'
-                    : '',
-                  !isAvailable(cell.date) ? 'pointer-events-none cursor-not-allowed' : '',
-                  isInRange(cell.date) ? 'border-emerald-400 bg-emerald-50' : '',
-                  isStart(cell.date) || isEnd(cell.date) ? 'ring-2 ring-emerald-500' : '',
-                ]"
-                :aria-disabled="!isAvailable(cell.date)"
-                @click="selectDate(cell)"
-              >
-                <div class="flex items-center justify-between">
-                  <div class="font-semibold">{{ cell.day }}</div>
-                  <div v-if="infoByDate(cell.date)?.season" class="text-[10px]">
-                    <span
-                      :class="
-                        infoByDate(cell.date)?.season_is_default
-                          ? 'rounded bg-gray-100 px-1.5 py-0.5 text-gray-700'
-                          : 'rounded bg-amber-100 px-1.5 py-0.5 text-amber-700'
-                      "
+              <!-- Desktop Steps -->
+              <ul class="space-y-1">
+                <li v-for="item in stepItems" :key="item.id">
+                  <button
+                    @click="navigateTo(item.id)"
+                    :disabled="!canNavigateTo(item.id)"
+                    class="group flex w-full items-center gap-3 rounded-lg border border-transparent px-3 py-2.5 text-left transition-colors"
+                    :class="[
+                      step === item.id 
+                        ? 'bg-white border-gray-200 shadow-sm' 
+                        : canNavigateTo(item.id) 
+                          ? 'hover:bg-gray-100' 
+                          : 'opacity-50 cursor-not-allowed'
+                    ]"
+                  >
+                    <div 
+                      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border transition-colors"
+                      :class="[
+                        step === item.id ? 'border-primary bg-primary/5 text-primary' :
+                        step > item.id ? 'border-primary bg-primary/5 text-primary' :
+                        'border-gray-200 bg-gray-50 text-gray-400'
+                      ]"
                     >
-                      {{ infoByDate(cell.date)?.season }}
-                    </span>
-                  </div>
-                </div>
-                <div :class="statusClass(cell.date)" class="mt-1 flex items-center gap-1 text-sm">
-                  <CheckCircle v-if="infoByDate(cell.date)?.available" class="h-4 w-4" />
-                  <Ban v-else-if="isBlackout(cell.date)" class="h-4 w-4" />
-                  <XCircle v-else class="h-4 w-4" />
-                  {{ statusText(cell.date) }}
-                </div>
-                <div v-if="infoByDate(cell.date)?.price" class="mt-1 text-sm text-gray-800">
-                  {{ currency(infoByDate(cell.date)?.price) }}/noc
-                </div>
-              </div>
-            </div>
-          </div>
+                      <CheckCircle v-if="step > item.id" class="h-5 w-5" />
+                      <component v-else :is="item.icon" class="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div class="text-sm font-medium" :class="step === item.id ? 'text-gray-900' : 'text-gray-600'">
+                        {{ item.label }}
+                      </div>
+                      <div class="text-xs text-gray-500">{{ item.desc }}</div>
+                    </div>
+                  </button>
+                </li>
+              </ul>
+            </nav>
 
-          <div
-            v-if="step === 1"
-            class="flex shrink-0 items-center gap-3 border-t bg-white px-4 py-3"
-          >
-            <div class="text-sm text-gray-700">
-              Od: <strong>{{ formatDate(startDate) || "-" }}</strong>
-            </div>
-            <div class="text-sm text-gray-700">
-              Do: <strong>{{ formatDate(endDate) || "-" }}</strong>
-            </div>
-            <div v-if="selectedNights > 0" class="text-sm text-gray-700">
-              Nocí: <strong>{{ selectedNights }}</strong>
-            </div>
-            <div v-if="selectedNights > 0" class="text-sm text-gray-700">
-              Cena celkem: <strong>{{ currency(selectedTotalPrice) }}</strong>
-            </div>
-            <button
-              class="ml-auto rounded bg-gray-200 px-3 py-2 hover:bg-gray-300"
-              @click="clearSelection"
-            >
-              Zrušit výběr
-            </button>
-            <button
-              type="button"
-              class="flex items-center gap-2 rounded bg-emerald-600 px-3 py-2 text-white disabled:opacity-50"
-              :disabled="!canProceed || verifying"
-              @click="verifyAndProceed"
-            >
-              <Loader2 v-if="verifying" class="h-4 w-4 animate-spin" />
-              <span v-if="!verifying">Pokračovat</span>
-              <span v-else>Ověřujeme…</span>
-            </button>
-          </div>
-        </div>
+            <!-- Live Summary (Desktop Sticky) -->
+            <div class="hidden rounded-xl border border-gray-200 bg-white p-5 lg:block">
+              <h3 class="mb-4 flex items-center gap-2 font-medium text-gray-900">
+                <StickyNote class="h-4 w-4 text-gray-400" />
+                Shrnutí rezervace
+              </h3>
+              
+              <div class="space-y-4 text-sm">
+                <!-- Dates -->
+                <div class="flex justify-between border-b border-gray-100 pb-3">
+                  <span class="text-gray-500">Termín</span>
+                  <div class="text-right">
+                    <div v-if="startDate && endDate" class="font-medium text-gray-900">
+                      {{ formatDate(startDate) }} <br> {{ formatDate(endDate) }}
+                    </div>
+                    <span v-else class="text-gray-400 italic">Vyberte termín</span>
+                  </div>
+                </div>
 
-        <div v-if="step === 2" class="flex h-full flex-col">
-          <div class="flex shrink-0 items-center justify-between border-b bg-white px-4 py-3">
-            <div class="text-2xl font-semibold">Vaše údaje</div>
-            <div class="text-sm text-gray-700">Krok 2</div>
-          </div>
-          <div class="flex-1 overflow-auto px-4 py-6">
-            <div class="grid min-h-full place-items-center">
-              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6">
-                <div class="mb-4 text-sm text-gray-700">
-                  Vyplňte prosím kontaktní údaje, abychom vám mohli potvrdit rezervaci. E‑mail
-                  použijeme pro zaslání potvrzení a telefon jen v případě potřeby.
+                <!-- Nights -->
+                <div class="flex justify-between border-b border-gray-100 pb-3">
+                  <span class="text-gray-500">Délka pobytu</span>
+                  <span class="font-medium text-gray-900">{{ selectedNights }} nocí</span>
                 </div>
-                <div class="mb-4 space-y-1 text-xs text-gray-600">
-                  <div>Uveďte jméno a příjmení tak, jak chcete mít na potvrzení.</div>
-                  <div>Použijte e‑mail, který běžně čtete; potvrzení zašleme tam.</div>
-                  <div>Telefon slouží pouze pro rychlé upřesnění před příjezdem.</div>
+
+                <!-- Base Price -->
+                <div class="flex justify-between py-1">
+                  <span class="text-gray-500">Ubytování</span>
+                  <span class="font-medium text-gray-900">{{ currency(selectedTotalPrice) }}</span>
                 </div>
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div>
-                    <label class="mb-1 block flex items-center gap-1 text-sm text-gray-800">
-                      <User class="text-primary h-4 w-4" />
-                      Jméno
-                    </label>
-                    <input
-                      v-model="customer.firstName"
-                      type="text"
-                      class="focus:ring-primary w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:ring-2 focus:outline-none"
-                      placeholder="Jméno"
-                    />
-                  </div>
-                  <div>
-                    <label class="mb-1 block flex items-center gap-1 text-sm text-gray-800">
-                      <User class="text-primary h-4 w-4" />
-                      Příjmení
-                    </label>
-                    <input
-                      v-model="customer.lastName"
-                      type="text"
-                      class="focus:ring-primary w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:ring-2 focus:outline-none"
-                      placeholder="Příjmení"
-                    />
-                  </div>
-                  <div>
-                    <label class="mb-1 block flex items-center gap-1 text-sm text-gray-800">
-                      <Mail class="text-primary h-4 w-4" />
-                      E‑mail
-                    </label>
-                    <input
-                      v-model="customer.email"
-                      type="email"
-                      class="focus:ring-primary w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:ring-2 focus:outline-none"
-                      placeholder="např. jana@domena.cz"
-                    />
-                  </div>
-                  <div>
-                    <label class="mb-1 block flex items-center gap-1 text-sm text-gray-800">
-                      <Phone class="text-primary h-4 w-4" />
-                      Telefon
-                    </label>
-                    <input
-                      v-model="customer.phone"
-                      type="tel"
-                      class="focus:ring-primary w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:ring-2 focus:outline-none"
-                      placeholder="např. +420 777 000 000"
-                    />
-                  </div>
-                  <div class="md:col-span-2">
-                    <label class="mb-1 block text-sm text-gray-800">Poznámka (nepovinné)</label>
-                    <textarea
-                      v-model="customer.note"
-                      rows="4"
-                      class="focus:ring-primary w-full rounded-2xl border px-3.5 py-2.5 placeholder:text-gray-400 focus:ring-2 focus:outline-none"
-                      placeholder="Např. speciální požadavky"
-                    ></textarea>
+
+                <!-- Extras -->
+                <div v-if="addonsTotalPrice > 0" class="flex justify-between py-1">
+                  <span class="text-gray-500">Doplňkové služby</span>
+                  <span class="font-medium text-gray-900">{{ currency(addonsTotalPrice) }}</span>
+                </div>
+
+                <!-- Total -->
+                <div class="mt-4 border-t border-gray-200 pt-4">
+                  <div class="flex items-end justify-between">
+                    <span class="font-medium text-gray-900">Celkem</span>
+                    <span class="text-xl font-semibold text-primary">{{ currency(grandTotalPrice) }}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="flex shrink-0 items-center gap-3 border-t bg-white px-4 py-3">
-            <div class="text-sm text-gray-700">
-              Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong>
-            </div>
-            <div class="text-sm text-gray-700">
-              Nocí: <strong>{{ selectedNights }}</strong>
-            </div>
-            <div class="text-sm text-gray-700">
-              Cena ubytování: <strong>{{ currency(selectedTotalPrice) }}</strong>
-            </div>
-            <button
-              class="ml-auto rounded bg-gray-200 px-3 py-2 hover:bg-gray-300"
-              @click="step = 1"
-            >
-              Zpět
-            </button>
-            <button
-              class="rounded bg-emerald-600 px-3 py-2 text-white disabled:opacity-50"
-              :disabled="!formReady"
-              @click="step = 3"
-            >
-              Pokračovat
-            </button>
-          </div>
-        </div>
+        </aside>
 
-        <div v-if="step === 3" class="flex h-full flex-col">
-          <div class="flex shrink-0 items-center justify-between border-b bg-white px-4 py-3">
-            <div class="text-2xl font-semibold">Doplňkové služby</div>
-            <div class="text-sm text-gray-700">Krok 3</div>
-          </div>
-          <div class="flex-1 overflow-auto px-4 py-6">
-            <div class="grid min-h-full place-items-center">
-              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6">
-                <div class="mb-4 text-sm text-gray-700">
-                  Vyberte si z doplňkových služeb. Cena se počítá dle typu služby (za den nebo za
-                  pobyt).
+        <!-- MAIN CONTENT -->
+        <main class="lg:col-span-8 xl:col-span-9">
+          <div class="min-h-[600px] rounded-xl border border-gray-200 bg-white p-4 sm:p-6 lg:p-8">
+            
+            <!-- Step 1: Calendar -->
+            <div v-if="step === 1" class="space-y-6">
+              <header class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h1 class="text-2xl font-medium text-gray-900">Vyberte termín</h1>
+                  <p class="text-gray-500">Klikněte na datum příjezdu a poté na datum odjezdu.</p>
                 </div>
-                <div v-if="extrasLoading" class="flex items-center gap-2 text-sm text-gray-700">
-                  <Loader2 class="h-4 w-4 animate-spin" /> Načítám služby…
-                </div>
-                <div v-else-if="extrasError" class="text-sm text-red-700">{{ extrasError }}</div>
-                <div v-else class="space-y-4">
-                  <div v-for="ex in validExtras" :key="ex.id" class="rounded-2xl border p-4">
-                    <div class="flex items-center justify-between">
-                      <div>
-                        <div class="font-medium">{{ ex.name }}</div>
-                        <div class="text-sm text-gray-700">
-                          {{ currency(ex.price)
-                          }}<span v-if="ex.price_type === 'per_day'"> /den</span
-                          ><span v-else> /pobyt</span>
-                        </div>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <label class="text-sm text-gray-700">Množství</label>
-                        <input
-                          :value="extraSelection[ex.id] || 0"
-                          @input="booking.setExtraQuantity(ex.id, $event.target.value)"
-                          type="number"
-                          min="0"
-                          :max="ex.max_quantity"
-                          class="w-24 rounded border px-3 py-2"
-                        />
-                      </div>
-                    </div>
+                <div class="flex items-center gap-2">
+                  <button 
+                    v-if="canGoPrev"
+                    @click="prevMonth"
+                    class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50"
+                  >
+                    <ChevronLeft class="h-5 w-5" />
+                  </button>
+                  <div class="min-w-[140px] text-center font-medium text-gray-900">
+                    {{ monthLabel }} {{ year }}
                   </div>
+                  <button 
+                    @click="nextMonth"
+                    class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50"
+                  >
+                    <ChevronRight class="h-5 w-5" />
+                  </button>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex shrink-0 items-center gap-3 border-t bg-white px-4 py-3">
-            <div class="text-sm text-gray-700">
-              Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong>
-            </div>
-            <div class="text-sm text-gray-700">
-              Nocí: <strong>{{ selectedNights }}</strong>
-            </div>
-            <div class="text-sm text-gray-700">
-              Služby: <strong>{{ currency(addonsTotalPrice) }}</strong>
-            </div>
-            <div class="text-sm text-gray-700">
-              Celkem k úhradě: <strong>{{ currency(grandTotalPrice) }}</strong>
-            </div>
-            <button
-              class="ml-auto rounded bg-gray-200 px-3 py-2 hover:bg-gray-300"
-              @click="step = 2"
-            >
-              Zpět
-            </button>
-            <button
-              class="rounded bg-emerald-600 px-3 py-2 text-white disabled:opacity-50"
-              :disabled="!canSubmit"
-              @click="checkExtrasAvailability"
-            >
-              Pokračovat
-            </button>
-          </div>
-        </div>
+              </header>
 
-        <div v-if="step === 4" class="flex h-full flex-col">
-          <div class="flex shrink-0 items-center justify-between border-b bg-white px-4 py-3">
-            <div class="flex items-center gap-2">
-              <Calendar class="text-primary h-5 w-5" />
-              <div class="text-2xl font-semibold">Zkontrolujte rezervaci</div>
-            </div>
-            <div class="text-sm text-gray-700">Krok 4</div>
-          </div>
-          <div class="flex-1 overflow-auto px-4 py-6">
-            <div class="grid min-h-full place-items-center">
-              <div class="w-full max-w-3xl rounded-2xl border bg-white p-6">
-                <div class="mb-4 text-sm text-gray-700">
-                  Zkontrolujte prosím všechny údaje níže. Pokud je vše v pořádku, klikněte na
-                  „Odeslat rezervaci“. V případě potřeby se vraťte a údaje upravte.
-                </div>
-                <div class="mb-4 space-y-1 text-xs text-gray-600">
-                  <div>Zkontrolujte termín, počet nocí, ceny a kontaktní údaje.</div>
-                  <div>Pro opravy použijte tlačítko „Zpět“ a upravte potřebné informace.</div>
-                </div>
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div class="space-y-3">
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <Calendar class="h-4 w-4" />
-                      <span>Termín:</span>
-                      <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong>
+              <!-- Calendar Grid -->
+              <div class="relative">
+                 <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+                    <div class="flex items-center gap-2 text-primary">
+                      <Loader2 class="h-6 w-6 animate-spin" />
+                      <span class="font-medium">Načítám dostupnost...</span>
                     </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <Moon class="h-4 w-4" />
-                      <span>Nocí:</span>
-                      <strong>{{ selectedNights }}</strong>
+                 </div>
+
+                 <div class="grid grid-cols-7 gap-2">
+                    <!-- Weekdays -->
+                    <div v-for="d in weekDays" :key="d" class="text-center font-medium text-gray-700">
+                      {{ d }}
                     </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <Home class="h-4 w-4" />
-                      <span>Cena ubytování:</span>
-                      <strong>{{ currency(selectedTotalPrice) }}</strong>
-                    </div>
-                    <div class="space-y-2">
-                      <div class="flex items-center gap-2 text-sm text-gray-700">
-                        <PawPrint class="h-4 w-4" />
-                        <span>Doplňkové služby:</span>
-                      </div>
-                      <div class="text-sm text-gray-700" v-if="selectedExtras.length === 0">—</div>
-                      <div v-else class="space-y-1">
-                        <div
-                          v-for="ex in selectedExtras"
-                          :key="ex.id"
-                          class="flex items-center gap-2 text-sm text-gray-700"
+                    
+                    <!-- Days -->
+                    <div
+                      v-for="cell in cells"
+                      :key="cell.date"
+                      @click="selectDate(cell)"
+                      class="cursor-pointer rounded border p-2 transition-colors"
+                      :class="[
+                        cell.inCurrent ? '' : 'opacity-60',
+                        !isAvailable(cell.date)
+                          ? isBlackout(cell.date)
+                            ? 'border-orange-400 bg-orange-50'
+                            : 'border-red-400 bg-red-50'
+                          : '',
+                        !isAvailable(cell.date) ? 'pointer-events-none cursor-not-allowed' : '',
+                        isInRange(cell.date) ? 'border-emerald-400 bg-emerald-50' : '',
+                        isStart(cell.date) || isEnd(cell.date) ? 'ring-2 ring-emerald-500' : '',
+                      ]"
+                    >
+                      <div class="flex justify-between items-center">
+                        <span class="font-semibold">{{ cell.day }}</span>
+                        
+                        <!-- Season Badge -->
+                        <span 
+                          v-if="infoByDate(cell.date)?.season && !infoByDate(cell.date)?.season_is_default"
+                          class="rounded px-1.5 py-0.5 text-[10px] font-medium"
+                          :class="infoByDate(cell.date)?.season_is_default ? 'bg-gray-100 text-gray-700' : 'bg-amber-100 text-amber-700'"
                         >
-                          <strong>{{ ex.name }}</strong>
-                          <span>× {{ extraSelection[ex.id] }}</span>
-                          <span v-if="ex.price_type === 'per_day'"
-                            >× {{ selectedNights }} nocí</span
-                          >
-                          <span
-                            >=
-                            {{
-                              currency(
-                                ex.price_type === "per_day"
-                                  ? extraSelection[ex.id] * selectedNights * ex.price
-                                  : extraSelection[ex.id] * ex.price
-                              )
-                            }}</span
-                          >
-                        </div>
+                          {{ infoByDate(cell.date)?.season }}
+                        </span>
                       </div>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <BarChart3 class="h-4 w-4" />
-                      <span>Cena služeb:</span>
-                      <strong>{{ currency(addonsTotalPrice) }}</strong>
-                    </div>
-                    <div class="mt-2 flex items-center gap-2 border-t pt-3 text-gray-900">
-                      <CreditCard class="text-primary h-5 w-5" />
-                      <div class="text-base">Celkem k úhradě:</div>
-                      <div class="text-primary ml-auto text-xl font-semibold">
-                        {{ currency(grandTotalPrice) }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="space-y-3">
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <User class="h-4 w-4" />
-                      <span>Jméno:</span>
-                      <strong>{{ customer.firstName }}</strong>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <User class="h-4 w-4" />
-                      <span>Příjmení:</span>
-                      <strong>{{ customer.lastName }}</strong>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <Mail class="h-4 w-4" />
-                      <span>Email:</span>
-                      <strong>{{ customer.email }}</strong>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <Phone class="h-4 w-4" />
-                      <span>Telefon:</span>
-                      <strong>{{ customer.phone }}</strong>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                      <StickyNote class="h-4 w-4" />
-                      <span>Poznámka:</span>
-                      <strong>{{ customer.note || "-" }}</strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex shrink-0 items-center gap-3 border-t bg-white px-4 py-3">
-            <button
-              class="flex items-center gap-1 rounded bg-gray-200 px-3 py-2 hover:bg-gray-300"
-              @click="step = 3"
-            >
-              <ChevronLeft class="h-4 w-4" />
-              Zpět
-            </button>
-            <button
-              class="flex items-center gap-1 rounded bg-gray-900 px-3 py-2 text-white disabled:opacity-50"
-              :disabled="!canSubmit || submitting"
-              @click="submit"
-            >
-              Odeslat rezervaci
-              <Send class="h-4 w-4" />
-            </button>
-          </div>
-          <div v-if="submitError" class="mt-2 text-sm text-red-700">{{ submitError }}</div>
-        </div>
 
-        <div v-if="step === 5" class="flex h-full flex-col">
-          <div class="flex shrink-0 items-center justify-between border-b bg-white px-4 py-3">
-            <div class="text-2xl font-semibold">Dokončeno</div>
-            <div class="text-sm text-gray-700">Krok 5</div>
-          </div>
-          <div class="flex-1 overflow-auto px-4 py-6">
-            <div class="grid min-h-full place-items-center">
-              <div class="w-full max-w-2xl rounded-2xl border bg-white p-6 text-center">
-                <div class="mb-2 text-2xl font-semibold">Dokončeno</div>
-                <div class="text-gray-700">
-                  Děkujeme, rezervace byla úspěšně odeslána. Potvrzení vám zašleme e‑mailem.
-                </div>
-                <div class="mt-2 text-sm text-gray-700">V případě dotazů jsme vám k dispozici.</div>
-                <div class="mt-4 text-sm text-gray-700">
-                  Termín: <strong>{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</strong>
-                </div>
-                <div class="text-sm text-gray-700">
-                  Celkem: <strong>{{ currency(grandTotalPrice) }}</strong>
-                </div>
+                      <!-- Status/Price -->
+                      <div class="mt-1 flex items-center gap-1 text-sm" :class="statusClass(cell.date)">
+                         <CheckCircle v-if="infoByDate(cell.date)?.available" class="h-4 w-4" />
+                         <Ban v-else-if="isBlackout(cell.date)" class="h-4 w-4" />
+                         <XCircle v-else class="h-4 w-4" />
+                         {{ statusText(cell.date) }}
+                      </div>
+                      
+                      <div v-if="infoByDate(cell.date)?.price" class="mt-1 text-sm text-gray-800">
+                        {{ currency(infoByDate(cell.date)?.price) }}
+                      </div>
+                    </div>
+                 </div>
+              </div>
+
+              <!-- Step 1 Footer -->
+              <div class="flex flex-col gap-4 border-t border-gray-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
+                 <div class="text-sm text-gray-600">
+                    <span v-if="startDate && !endDate">Vyberte datum odjezdu</span>
+                    <span v-else-if="!startDate">Začněte výběrem data příjezdu</span>
+                    <span v-else class="text-primary font-medium">Termín vybrán</span>
+                 </div>
+                 
+                 <div class="flex gap-3">
+                    <button 
+                      v-if="startDate"
+                      @click="clearSelection"
+                      class="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                    >
+                      Zrušit výběr
+                    </button>
+                    <button
+                      @click="verifyAndProceed"
+                      :disabled="!canProceed || verifying"
+                      class="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Loader2 v-if="verifying" class="h-4 w-4 animate-spin" />
+                      <span>{{ verifying ? 'Ověřuji...' : 'Pokračovat' }}</span>
+                      <ChevronRight v-if="!verifying" class="h-4 w-4" />
+                    </button>
+                 </div>
               </div>
             </div>
+
+            <!-- Step 2: Personal Info -->
+            <div v-if="step === 2" class="space-y-8">
+              <header>
+                <h1 class="text-2xl font-medium text-gray-900">Osobní údaje</h1>
+                <p class="text-gray-500">Vyplňte kontaktní údaje pro potvrzení rezervace.</p>
+              </header>
+
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <!-- First Name -->
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-gray-700">Jméno</label>
+                  <input
+                    v-model="customer.firstName"
+                    type="text"
+                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
+                    placeholder="Jan"
+                  />
+                </div>
+
+                <!-- Last Name -->
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-gray-700">Příjmení</label>
+                  <input
+                    v-model="customer.lastName"
+                    type="text"
+                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
+                    placeholder="Novák"
+                  />
+                </div>
+
+                <!-- Email -->
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-gray-700">E-mail</label>
+                  <input
+                    v-model="customer.email"
+                    type="email"
+                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
+                    placeholder="jan.novak@example.com"
+                  />
+                </div>
+
+                <!-- Phone -->
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-gray-700">Telefon</label>
+                  <input
+                    v-model="customer.phone"
+                    type="tel"
+                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
+                    placeholder="+420 777 123 456"
+                  />
+                </div>
+
+                <!-- Note -->
+                <div class="md:col-span-2 space-y-1.5">
+                  <label class="text-sm font-medium text-gray-700">Poznámka (nepovinné)</label>
+                  <textarea
+                    v-model="customer.note"
+                    rows="4"
+                    class="w-full rounded-lg border-2 border-gray-200 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-primary focus:outline-none"
+                    placeholder="Máte nějaké speciální přání?"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="flex justify-between border-t border-gray-100 pt-6">
+                <button 
+                  @click="step = 1"
+                  class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                >
+                  <ChevronLeft class="h-4 w-4" />
+                  Zpět
+                </button>
+                <button
+                  @click="step = 3"
+                  :disabled="!formReady"
+                  class="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Pokračovat
+                  <ChevronRight class="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 3: Extras -->
+            <div v-if="step === 3" class="space-y-8">
+              <header>
+                <h1 class="text-2xl font-medium text-gray-900">Doplňkové služby</h1>
+                <p class="text-gray-500">Vylepšete si svůj pobyt.</p>
+              </header>
+
+              <div v-if="extrasLoading" class="py-12 text-center text-gray-500">
+                <Loader2 class="mx-auto h-8 w-8 animate-spin text-primary mb-2" />
+                Načítám nabídku služeb...
+              </div>
+              
+              <div v-else-if="extrasError" class="rounded-lg bg-red-50 p-4 text-red-700">
+                {{ extrasError }}
+              </div>
+
+              <div v-else class="grid gap-4 sm:grid-cols-2">
+                <div 
+                  v-for="ex in validExtras" 
+                  :key="ex.id"
+                  class="group relative flex flex-col justify-between rounded-xl border-2 border-gray-100 p-5 transition-all hover:border-primary/50"
+                  :class="{ 'border-primary bg-primary/5': (extraSelection[ex.id] || 0) > 0 }"
+                >
+                  <div>
+                    <div class="flex items-start justify-between mb-2">
+                      <h3 class="font-medium text-gray-900">{{ ex.name }}</h3>
+                      <div class="text-sm font-semibold text-primary">
+                        {{ currency(ex.price) }}
+                        <span class="text-xs font-normal text-gray-500">
+                          {{ ex.price_type === 'per_day' ? '/den' : '/pobyt' }}
+                        </span>
+                      </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-4">{{ ex.description }}</p>
+                  </div>
+
+                  <div class="flex items-center justify-end gap-3">
+                    <button 
+                      @click="booking.setExtraQuantity(ex.id, Math.max(0, (extraSelection[ex.id] || 0) - 1))"
+                      class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
+                      :disabled="(extraSelection[ex.id] || 0) === 0"
+                    >
+                      -
+                    </button>
+                    <span class="w-8 text-center font-medium text-gray-900">{{ extraSelection[ex.id] || 0 }}</span>
+                    <button 
+                      @click="booking.setExtraQuantity(ex.id, Math.min(ex.max_quantity, (extraSelection[ex.id] || 0) + 1))"
+                      class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
+                      :disabled="(extraSelection[ex.id] || 0) >= ex.max_quantity"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-between border-t border-gray-100 pt-6">
+                <button 
+                  @click="step = 2"
+                  class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                >
+                  <ChevronLeft class="h-4 w-4" />
+                  Zpět
+                </button>
+                <button
+                  @click="checkExtrasAvailability"
+                  :disabled="!canSubmit"
+                  class="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Pokračovat
+                  <ChevronRight class="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 4: Review -->
+            <div v-if="step === 4" class="space-y-8">
+              <header>
+                <h1 class="text-2xl font-medium text-gray-900">Kontrola rezervace</h1>
+                <p class="text-gray-500">Prosím zkontrolujte všechny údaje před odesláním.</p>
+              </header>
+
+              <div class="space-y-6">
+                <!-- Date & Price Summary Block -->
+                <div class="rounded-xl border border-gray-200 bg-gray-50/50 p-6">
+                  <h3 class="mb-4 font-medium text-gray-900">Termín a cena</h3>
+                  <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase tracking-wide">Příjezd</dt>
+                      <dd class="mt-1 font-medium text-gray-900">{{ formatDate(startDate) }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase tracking-wide">Odjezd</dt>
+                      <dd class="mt-1 font-medium text-gray-900">{{ formatDate(endDate) }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase tracking-wide">Délka pobytu</dt>
+                      <dd class="mt-1 text-gray-900">{{ selectedNights }} nocí</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase tracking-wide">Celková cena</dt>
+                      <dd class="mt-1 text-xl font-semibold text-primary">{{ currency(grandTotalPrice) }}</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <!-- Personal Info Block -->
+                <div class="rounded-xl border border-gray-200 p-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-medium text-gray-900">Kontaktní údaje</h3>
+                    <button @click="step = 2" class="text-sm text-primary hover:underline">Upravit</button>
+                  </div>
+                  <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase tracking-wide">Jméno</dt>
+                      <dd class="mt-1 text-gray-900">{{ customer.firstName }} {{ customer.lastName }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase tracking-wide">Email</dt>
+                      <dd class="mt-1 text-gray-900">{{ customer.email }}</dd>
+                    </div>
+                    <div>
+                      <dt class="text-xs text-gray-500 uppercase tracking-wide">Telefon</dt>
+                      <dd class="mt-1 text-gray-900">{{ customer.phone }}</dd>
+                    </div>
+                  </dl>
+                  <div v-if="customer.note" class="mt-4 border-t border-gray-100 pt-4">
+                    <dt class="text-xs text-gray-500 uppercase tracking-wide">Poznámka</dt>
+                    <dd class="mt-1 text-gray-700 italic">"{{ customer.note }}"</dd>
+                  </div>
+                </div>
+
+                <!-- Extras Block -->
+                <div v-if="selectedExtras.length > 0" class="rounded-xl border border-gray-200 p-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-medium text-gray-900">Vybrané služby</h3>
+                    <button @click="step = 3" class="text-sm text-primary hover:underline">Upravit</button>
+                  </div>
+                  <ul class="space-y-3">
+                    <li v-for="ex in selectedExtras" :key="ex.id" class="flex justify-between text-sm">
+                      <span class="text-gray-700">
+                        {{ ex.name }} <span class="text-gray-400">× {{ extraSelection[ex.id] }}</span>
+                      </span>
+                      <span class="font-medium text-gray-900">
+                        {{ currency(ex.price_type === "per_day" ? extraSelection[ex.id] * selectedNights * ex.price : extraSelection[ex.id] * ex.price) }}
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div v-if="submitError" class="rounded-lg bg-red-50 p-4 text-sm text-red-700">
+                {{ submitError }}
+              </div>
+
+              <div class="flex justify-between border-t border-gray-100 pt-6">
+                <button 
+                  @click="step = 3"
+                  class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                >
+                  <ChevronLeft class="h-4 w-4" />
+                  Zpět
+                </button>
+                <button
+                  @click="submit"
+                  :disabled="!canSubmit || submitting"
+                  class="flex items-center gap-2 rounded-lg bg-gray-900 px-8 py-3 text-sm font-medium text-white shadow-lg transition-all hover:bg-black hover:shadow-xl disabled:opacity-50 disabled:shadow-none"
+                >
+                  <Loader2 v-if="submitting" class="h-4 w-4 animate-spin" />
+                  <span v-else>Odeslat závaznou rezervaci</span>
+                  <Send v-if="!submitting" class="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 5: Success -->
+            <div v-if="step === 5" class="flex min-h-[400px] flex-col items-center justify-center text-center">
+              <div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                <CheckCircle class="h-10 w-10" />
+              </div>
+              <h1 class="mb-2 text-3xl font-medium text-gray-900">Rezervace odeslána</h1>
+              <p class="mb-8 max-w-md text-gray-500">
+                Děkujeme za vaši rezervaci. Na email <strong>{{ customer.email }}</strong> jsme vám poslali potvrzení a další instrukce.
+              </p>
+              
+              <div class="flex gap-4">
+                <button 
+                  @click="step = 1"
+                  class="rounded-lg border border-gray-200 px-6 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                >
+                  Nová rezervace
+                </button>
+                <a 
+                  href="/"
+                  class="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white hover:bg-primary/90"
+                >
+                  Zpět na úvod
+                </a>
+              </div>
+            </div>
+
           </div>
-          <div class="flex shrink-0 items-center gap-3 border-t bg-white px-4 py-3">
-            <button class="rounded bg-gray-200 px-3 py-2 hover:bg-gray-300" @click="step = 1">
-              Zpět na kalendář
-            </button>
-          </div>
-        </div>
-      </section>
+        </main>
+
+      </div>
     </div>
   </div>
 </template>
