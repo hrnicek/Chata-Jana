@@ -11,10 +11,7 @@ import HeroContent from "./HeroContent.vue";
           class="h-full w-full object-cover"
           src="/img/hero4.png"
         />
-        <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/30 to-black/10"></div>
-        <div
-          class="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-black/20"
-        ></div>
+        <div class="absolute inset-0 bg-black/40"></div>
       </div>
 
       <div class="relative z-10 flex min-h-screen flex-col pt-24">

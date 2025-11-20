@@ -54,18 +54,18 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-gray-200 px-8 py-4 font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 border border-transparent",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 border border-transparent",
+        outline: "border border-gray-200 px-8 py-4 font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-transparent",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        reserve: "bg-white text-black px-5 py-2 hover:bg-gray-200",
-        "cta-primary": "bg-white px-8 py-4 font-bold text-primary hover:bg-white/90",
-        "cta-secondary": "border border-white/30 bg-white/10 px-8 py-4 font-bold text-white transition-colors hover:bg-white/20",
-        "pricing-primary": "w-full bg-primary text-white hover:bg-primary/90 px-6 py-4",
-        "pricing-highlighted": "w-full bg-white text-primary hover:bg-honey px-6 py-4",
-        "navigation": "bg-gray-200 px-3 py-2 hover:bg-gray-300",
+        reserve: "bg-white text-black px-5 py-2 border border-transparent hover:bg-gray-100 hover:border-gray-200",
+        "cta-primary": "bg-white px-8 py-4 font-bold text-primary border border-transparent hover:bg-gray-50",
+        "cta-secondary": "border-2 border-white bg-transparent px-8 py-4 font-bold text-white transition-colors hover:bg-white hover:text-primary",
+        "pricing-primary": "w-full bg-primary text-white hover:bg-primary/90 px-6 py-4 border border-transparent",
+        "pricing-highlighted": "w-full bg-white text-primary hover:bg-honey px-6 py-4 border border-gray-200",
+        "navigation": "bg-gray-200 px-3 py-2 hover:bg-gray-300 border border-transparent",
       },
       size: {
         default: "h-10 px-4 py-2",

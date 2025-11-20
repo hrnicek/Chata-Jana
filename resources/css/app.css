@@ -6,21 +6,21 @@
 @source '../**/*.js';
 
 :root {
-    --color-primary: #214E34;
+    --color-primary: #2C4A3B;
     --color-primary-foreground: #ffffff;
 
-    --color-secondary: #FFC107;
-    --color-secondary-foreground: #111827;
+    --color-secondary: #8B7D6B;
+    --color-secondary-foreground: #ffffff;
 
-    --color-honey: #DFF8EB;
+    --color-honey: #F0F4F8;
 
     --color-destructive: #ef4444;
     --color-destructive-foreground: #ffffff;
 
-    --color-accent: #DFF8EB;
-    --color-accent-foreground: #214E34;
+    --color-accent: #5D6D7E;
+    --color-accent-foreground: #ffffff;
 
-    --color-ring: #214E34;
+    --color-ring: #2C4A3B;
 }
 
 @theme {
@@ -52,7 +52,7 @@
 }
 
 .glassmorphism {
-    background: rgba(26, 32, 44, 0.6);
+    background: rgba(26, 32, 44, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -63,17 +63,12 @@
     padding: 2.5rem;
     background-color: #111827;
     color: #fff;
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease;
 }
 
-.feature-card .feature-glow {
-    position: absolute;
-    top: -4rem;
-    right: -4rem;
-    width: 0;
-    height: 0;
-    border-radius: 0;
-    background: transparent;
-    filter: none;
+.feature-card:hover {
+    border-color: var(--color-secondary);
 }
 
 .feature-card .feature-icon {
@@ -86,7 +81,12 @@
     border-radius: 2.5rem;
     padding: 2.5rem;
     background-color: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-gray-200);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.light-card:hover {
+    border-color: var(--color-primary);
 }
 
 .light-icon {

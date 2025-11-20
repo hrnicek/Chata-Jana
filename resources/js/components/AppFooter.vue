@@ -9,7 +9,7 @@ import { CalendarDays, FileText, Mail, Phone, MapPin, Wallet, Globe, Hash, User 
         <div class="grid gap-16 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div class="flex items-center gap-4">
-              <img src="/img/logo.png" alt="Logo" class="h-12" />
+              <img src="/img/logo-black.png" alt="Logo" class="h-12" />
               <div>
                 <div class="font-bold text-primary">Chata Jana</div>
                 <div class="text-sm text-primary/70">Ostružná, Jeseníky</div>

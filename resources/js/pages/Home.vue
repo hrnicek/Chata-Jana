@@ -20,6 +20,13 @@ import {
   ArrowRight,
   Star,
   MapPin,
+  CreditCard,
+  Key,
+  Users,
+  ShieldCheck,
+  CloudSun,
+  Wind,
+  MountainSnow,
 } from "lucide-vue-next";
 
 const amenities = [
@@ -98,16 +105,64 @@ const faqs = [
     a: "Check‑in od 14:00, check‑out do 10:00.",
   },
 ];
+
+const howItWorks = [
+  {
+    icon: CalendarDays,
+    title: "Vyberte termín",
+    desc: "V našem online kalendáři snadno zjistíte volné kapacity.",
+  },
+  {
+    icon: CreditCard,
+    title: "Potvrďte rezervaci",
+    desc: "Uhrazením 30% zálohy se váš termín stává závazným.",
+  },
+  {
+    icon: Key,
+    title: "Užijte si pobyt",
+    desc: "Příjezd je bezstarostný díky self-check-in systému.",
+  },
+];
+
+const stats = [
+  { value: "1200+", label: "Spokojených hostů", icon: Users },
+  { value: "4.9/5", label: "Průměrné hodnocení", icon: Star },
+  { value: "100%", label: "Soukromí a klid", icon: ShieldCheck },
+  { value: "800m", label: "Nadmořská výška", icon: CloudSun },
+];
 </script>
 
 <template>
   <WebLayout>
     <Hero />
 
-    <!-- Intro Section -->
-    <section class="relative overflow-hidden bg-white py-24 lg:py-32">
+            <!-- Amenities Marquee/Grid -->
+    <section class="bg-honey py-32">
       <div class="container mx-auto px-6">
-        <div class="grid items-center gap-16 lg:grid-cols-2">
+        <div class="mb-16 text-center">
+          <h3 class="text-3xl font-bold text-primary">Prvotřídní vybavení</h3>
+          <p class="mt-4 text-gray-600">Vše pro vaše maximální pohodlí</p>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-6 md:grid-cols-4 lg:grid-cols-7">
+          <div 
+            v-for="(item, index) in amenities" 
+            :key="index"
+            class="group flex flex-col items-center justify-center gap-4 rounded-3xl bg-white p-8 text-center transition-colors hover:bg-primary hover:text-white"
+          >
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-honey text-primary group-hover:bg-white/10 group-hover:text-white">
+              <component :is="item.icon" class="h-7 w-7" />
+            </div>
+            <span class="text-sm font-medium text-gray-900 group-hover:text-white">{{ item.label }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Intro Section -->
+    <section class="relative overflow-hidden bg-white py-32 lg:py-40">
+      <div class="container mx-auto px-6">
+        <div class="grid items-center gap-20 lg:grid-cols-2">
           <div class="order-2 lg:order-1">
             <div class="relative aspect-[4/3] overflow-hidden rounded-[2.5rem]">
               <img
@@ -115,36 +170,37 @@ const faqs = [
                 alt="Chata Jana exteriér"
                 class="h-full w-full object-cover"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              <div class="absolute inset-0 bg-black/10"></div>
             </div>
           </div>
           <div class="order-1 lg:order-2">
-            <div class="mb-6 inline-flex items-center gap-2 rounded-full bg-honey px-4 py-1.5 text-sm font-medium text-primary">
+            <div class="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-honey px-4 py-1.5 text-sm font-medium text-primary">
               <Mountain class="h-4 w-4" />
               <span>O místě</span>
             </div>
-            <h2 class="text-4xl font-bold tracking-tight text-gray-900 lg:text-5xl">
-              Vaše horské <span class="text-primary">útočiště</span> v Jeseníkách
+            <h2 class="text-4xl font-bold tracking-tight text-primary lg:text-6xl">
+              Vaše horské <span class="text-secondary">útočiště</span> v Jeseníkách
             </h2>
-            <p class="mt-6 text-lg leading-relaxed text-gray-600">
+            <p class="mt-8 text-xl leading-relaxed text-gray-600">
               Chata Jana spojuje komfort, soukromé wellness a kouzlo Jeseníků. 
               Ať už míříte za sportem, nebo klidem s rodinou, čeká vás pohodlí i zážitky.
             </p>
             
-            <div class="mt-10 flex flex-wrap items-center gap-4">
+            <div class="mt-12 flex flex-wrap items-center gap-6">
               <Button
                 :as="Link"
                 :href="route('bookings.calendar')"
                 variant="default"
-                class="group"
+                class="group px-8 py-6 text-lg"
               >
                 Rezervovat termín
-                <ArrowRight class="h-4 w-4" />
+                <ArrowRight class="ml-2 h-5 w-5" />
               </Button>
               <Button 
                 :as="Link"
                 href="#galerie" 
                 variant="outline"
+                class="px-8 py-6 text-lg"
               >
                 Prohlédnout galerii
               </Button>
@@ -154,24 +210,44 @@ const faqs = [
       </div>
     </section>
 
-    <!-- Amenities Marquee/Grid -->
-    <section class="bg-gray-50 py-20">
+    <!-- Philosophy of Silence Section -->
+    <section class="relative bg-honey py-40">
+      <div class="absolute top-0 left-0 right-0 h-16 bg-white" style="clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);"></div>
+      <div class="container mx-auto px-6 text-center">
+        <Wind class="mx-auto mb-8 h-12 w-12 text-secondary/50" />
+        <h2 class="mx-auto max-w-4xl text-3xl font-light leading-tight text-primary md:text-5xl">
+          "Ticho není prázdno. Je to prostor, kde se můžete znovu nadechnout."
+        </h2>
+        <div class="mx-auto mt-12 h-px w-24 bg-secondary"></div>
+        <p class="mx-auto mt-12 max-w-2xl text-lg text-gray-600">
+          Věříme, že skutečný odpočinek přichází, když se zastaví čas. Naše chata je navržena tak, aby vás obklopila klidem hor a nechala starosti v údolí.
+        </p>
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 h-16 bg-white" style="clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%);"></div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="bg-white py-32">
       <div class="container mx-auto px-6">
-        <div class="mb-12 text-center">
-          <h3 class="text-2xl font-bold text-gray-900">Prvotřídní vybavení</h3>
-          <p class="mt-2 text-gray-600">Vše pro vaše maximální pohodlí</p>
+        <div class="mb-16 text-center">
+          <h2 class="text-3xl font-bold text-gray-900">Jak to u nás funguje?</h2>
+          <p class="mt-4 text-gray-600">Jednoduchá cesta k vašemu odpočinku</p>
         </div>
-        
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
+
+        <div class="grid gap-8 md:grid-cols-3">
           <div 
-            v-for="(item, index) in amenities" 
+            v-for="(step, index) in howItWorks" 
             :key="index"
-            class="group flex flex-col items-center justify-center gap-3 rounded-3xl bg-white p-6 text-center hover:bg-primary hover:text-white"
+            class="group relative flex flex-col items-center text-center"
           >
-            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-honey text-primary">
-              <component :is="item.icon" class="h-6 w-6" />
+            <div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full border-2 border-gray-100 bg-white text-primary transition-colors group-hover:border-primary group-hover:bg-honey">
+              <component :is="step.icon" class="h-8 w-8" />
             </div>
-            <span class="text-sm font-medium text-gray-900 group-hover:text-white">{{ item.label }}</span>
+            <h3 class="mb-3 text-xl font-bold text-gray-900">{{ step.title }}</h3>
+            <p class="text-gray-600">{{ step.desc }}</p>
+            
+            <!-- Connector Line (Desktop only) -->
+            <div v-if="index < 2" class="absolute top-10 -right-1/2 hidden h-0.5 w-full bg-gray-100 lg:block"></div>
           </div>
         </div>
       </div>
@@ -246,6 +322,25 @@ const faqs = [
       </div>
     </section>
 
+    <!-- Stats Section -->
+    <section class="border-y border-gray-100 bg-white py-20">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+          <div 
+            v-for="(stat, index) in stats" 
+            :key="index"
+            class="text-center"
+          >
+            <div class="mb-4 flex justify-center text-primary/20">
+              <component :is="stat.icon" class="h-10 w-10" />
+            </div>
+            <div class="text-3xl font-bold text-primary md:text-4xl">{{ stat.value }}</div>
+            <div class="mt-2 text-sm font-medium uppercase tracking-wider text-gray-500">{{ stat.label }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Reviews Section -->
     <section class="py-24">
       <div class="container mx-auto px-6">
@@ -278,22 +373,34 @@ const faqs = [
     </section>
 
     <!-- CTA Section -->
-    <section class="pb-24 pt-12">
+    <section class="pb-32 pt-12">
       <div class="container mx-auto px-6">
-        <div class="relative overflow-hidden rounded-[3rem] bg-primary px-6 py-20 text-center sm:px-12 lg:py-32">
-          <div class="relative z-10 mx-auto max-w-2xl">
-            <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Připraveni na nezapomenutelný pobyt?
+        <div class="relative overflow-hidden rounded-[3rem] bg-primary px-6 py-32 text-center sm:px-12 lg:py-40">
+          <!-- Background Image -->
+          <div class="absolute inset-0">
+            <img 
+              src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop" 
+              alt="Hory v mlze" 
+              class="h-full w-full object-cover opacity-40 mix-blend-overlay"
+            />
+            <div class="absolute inset-0 bg-primary/60"></div>
+          </div>
+
+          <div class="relative z-10 mx-auto max-w-3xl">
+            <MountainSnow class="mx-auto mb-8 h-16 w-16 text-white/80" />
+            <h2 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Hory volají. <br/>
+              <span class="text-white/70">Kdy vyrazíte vy?</span>
             </h2>
-            <p class="mx-auto mt-6 max-w-xl text-lg text-white/80">
-              Rezervujte si termín včas. Těšíme se na vaši návštěvu v Chatě Jana.
+            <p class="mx-auto mt-8 max-w-xl text-xl text-white/80">
+              Rezervujte si svůj termín včas a zažijte neopakovatelnou atmosféru Jeseníků.
             </p>
-            <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div class="mt-12 flex flex-col items-center justify-center gap-6 sm:flex-row">
               <Button
                 :as="Link"
                 :href="route('bookings.calendar')"
                 variant="cta-primary"
-                class="w-full sm:w-auto"
+                class="w-full min-w-[200px] py-6 text-lg sm:w-auto"
               >
                 Rezervovat nyní
               </Button>
@@ -301,7 +408,7 @@ const faqs = [
                 :as="Link"
                 href="#galerie"
                 variant="cta-secondary"
-                class="w-full sm:w-auto"
+                class="w-full min-w-[200px] py-6 text-lg sm:w-auto"
               >
                 Prohlédnout chatu
               </Button>
