@@ -1,12 +1,83 @@
 <script setup lang="ts">
 import Hero from "../components/Hero.vue";
 import WebLayout from "../layouts/WebLayout.vue";
-import { Mountain, Bath, Trees, Quote, Camera, CalendarDays } from "lucide-vue-next";
+import {
+  Mountain,
+  Bath,
+  Trees,
+  Quote,
+  Camera,
+  CalendarDays,
+  Wifi,
+  Tv,
+  Utensils,
+  Car,
+  Baby,
+  Bike,
+  Snowflake,
+} from "lucide-vue-next";
 </script>
 
 <template>
   <WebLayout>
     <Hero />
+    <section class="bg-gray-50 py-16">
+      <div class="container mx-auto px-6">
+        <div class="mb-6 flex items-center gap-2">
+          <Utensils class="h-5 w-5 text-[--color-primary]" />
+          <div class="text-sm font-semibold text-[--color-primary]">Vybavení a služby</div>
+        </div>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="rounded-3xl border bg-white p-6">
+            <div class="flex items-center gap-2">
+              <Wifi class="h-5 w-5 text-[--color-primary]" />
+              <div class="font-semibold">Wifi zdarma</div>
+            </div>
+          </div>
+          <div class="rounded-3xl border bg-white p-6">
+            <div class="flex items-center gap-2">
+              <Tv class="h-5 w-5 text-[--color-primary]" />
+              <div class="font-semibold">TV</div>
+            </div>
+          </div>
+          <div class="rounded-3xl border bg-white p-6">
+            <div class="flex items-center gap-2">
+              <Utensils class="h-5 w-5 text-[--color-primary]" />
+              <div class="font-semibold">Plně vybavená kuchyň</div>
+            </div>
+          </div>
+          <div class="rounded-3xl border bg-white p-6">
+            <div class="flex items-center gap-2">
+              <Car class="h-5 w-5 text-[--color-primary]" />
+              <div class="font-semibold">Parkování přímo u chaty</div>
+            </div>
+          </div>
+          <div class="rounded-3xl border bg-white p-6">
+            <div class="flex items-center gap-2">
+              <Baby class="h-5 w-5 text-[--color-primary]" />
+              <div class="font-semibold">Vhodné i pro rodiny s malými dětmi</div>
+            </div>
+          </div>
+          <div class="rounded-3xl border bg-white p-6">
+            <div class="flex items-center gap-2">
+              <Bike class="h-5 w-5 text-[--color-primary]" />
+              <div class="font-semibold">Možnost uskladnění horského kola</div>
+            </div>
+          </div>
+          <div class="rounded-3xl border bg-white p-6 sm:col-span-2 lg:col-span-3">
+            <div class="flex items-start gap-2">
+              <Snowflake class="mt-0.5 h-5 w-5 text-[--color-primary]" />
+              <div>
+                <div class="font-semibold">Možnost uskladnění lyží, běžek či zimního vybavení</div>
+                <div class="mt-1 text-sm text-gray-700">
+                  (Pro lyže je určena skříň přímo v předsíni domu)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="bg-white py-16">
       <div class="container mx-auto px-6">
         <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-2">

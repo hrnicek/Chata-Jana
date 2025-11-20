@@ -14,9 +14,9 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucid
           </h1>
           <div class="mt-2 flex items-center text-sm text-white/80">
             <Star class="mr-1 h-4 w-4 text-yellow-400" />
-            <span class="font-semibold">4.9</span>
+            <span class="font-semibold">4.3</span>
             <span class="mx-2">•</span>
-            <span>z 200+ pobytů</span>
+            <span>z 600+ pobytů</span>
           </div>
           <p class="mt-3 max-w-3xl text-lg text-white/80 md:text-xl">
             Soukromé wellness uprostřed Jeseníků. Ideální pro rodiny, přátele i malé oslavy.
