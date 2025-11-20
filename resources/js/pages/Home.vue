@@ -162,9 +162,11 @@ const stats = [
     <!-- Intro Section -->
     <section class="relative overflow-hidden bg-white py-32 lg:py-40">
       <div class="container mx-auto px-6">
-        <div class="grid items-center gap-20 lg:grid-cols-2">
-          <div class="order-2 lg:order-1">
-            <div class="relative aspect-[4/3] overflow-hidden rounded-[2.5rem]">
+        <div class="grid items-center gap-16 lg:grid-cols-12">
+          <!-- Image Composition -->
+          <div class="relative order-2 lg:col-span-7 lg:order-1">
+            <!-- Main Image -->
+            <div class="relative z-10 aspect-[4/3] w-5/6 overflow-hidden rounded-[3rem]">
               <img
                 src="/img/hero2.jpg"
                 alt="Chata Jana exteriér"
@@ -172,8 +174,24 @@ const stats = [
               />
               <div class="absolute inset-0 bg-black/10"></div>
             </div>
+            
+            <!-- Secondary Image (Overlapping) -->
+            <div class="absolute -bottom-12 -right-4 z-20 w-1/2 overflow-hidden rounded-[2.5rem] border-8 border-white shadow-none lg:-right-8 lg:bottom-12">
+               <div class="aspect-square relative">
+                 <img
+                  src="/img/hero3.jpg"
+                  alt="Interiér detail"
+                  class="h-full w-full object-cover"
+                />
+               </div>
+            </div>
+
+            <!-- Decorative Circle -->
+            <div class="absolute -left-12 -top-12 z-0 h-64 w-64 rounded-full bg-honey opacity-50 blur-3xl"></div>
           </div>
-          <div class="order-1 lg:order-2">
+
+          <!-- Text Content -->
+          <div class="order-1 lg:col-span-5 lg:order-2 lg:pl-12">
             <div class="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-honey px-4 py-1.5 text-sm font-medium text-primary">
               <Mountain class="h-4 w-4" />
               <span>O místě</span>
@@ -217,7 +235,7 @@ const stats = [
         <img 
           src="/img/hero4.png" 
           alt="Hory v mlze" 
-          class="h-full w-full object-cover opacity-10 mix-blend-overlay"
+          class="h-full w-full object-cover opacity-40 mix-blend-overlay"
         />
         <div class="absolute inset-0 bg-primary/40"></div>
       </div>
@@ -284,51 +302,75 @@ const stats = [
     </section>
 
     <!-- Gallery Section -->
-    <section id="galerie" class="bg-gray-50 py-24">
+    <section id="galerie" class="bg-white py-32">
       <div class="container mx-auto px-6">
-        <div class="mb-12 flex items-end justify-between">
-          <div>
-            <div class="mb-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
-              <Camera class="h-4 w-4" />
-              <span>Galerie</span>
-            </div>
-            <h2 class="text-3xl font-bold text-gray-900 md:text-4xl">Nahlédněte dovnitř</h2>
+        <div class="mb-20 flex flex-col items-center text-center">
+          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-honey px-4 py-1.5 text-sm font-medium text-primary">
+            <Camera class="h-4 w-4" />
+            <span>Fotogalerie</span>
           </div>
+          <h2 class="text-4xl font-bold text-primary md:text-5xl">Okna do ticha</h2>
+          <p class="mt-6 max-w-2xl text-lg text-gray-600">
+            Každý kout naší chaty je navržen pro vaše pohodlí. 
+            Prohlédněte si místa, kde budete trávit společné chvíle.
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div class="group relative overflow-hidden rounded-3xl md:col-span-2">
-            <img src="/img/hero.jpg" alt="Wellness" class="h-80 w-full object-cover" />
-            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100">
-              <div class="absolute bottom-6 left-6 text-white">
-                <p class="font-medium">Wellness zóna</p>
-              </div>
+        <div class="grid gap-8 md:grid-cols-12">
+          <!-- Item 1: Large (Wellness) -->
+          <div class="group md:col-span-8">
+            <div class="relative aspect-[16/10] overflow-hidden rounded-[2.5rem]">
+              <img src="/img/hero.jpg" alt="Wellness zóna" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            </div>
+            <div class="mt-4 flex items-center justify-between px-2">
+              <h3 class="text-xl font-semibold text-primary">Wellness zóna</h3>
+              <span class="text-sm text-secondary">Vířivka & Relax</span>
             </div>
           </div>
-          <div class="group relative overflow-hidden rounded-3xl">
-            <img src="/img/hero3.jpg" alt="Interiér" class="h-80 w-full object-cover" />
-            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100">
-              <div class="absolute bottom-6 left-6 text-white">
-                <p class="font-medium">Obývací prostor</p>
-              </div>
+
+          <!-- Item 2: Tall (Interior) -->
+          <div class="group md:col-span-4">
+            <div class="relative aspect-[4/5] overflow-hidden rounded-[2.5rem]">
+              <img src="/img/hero3.jpg" alt="Obývací prostor" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            </div>
+            <div class="mt-4 flex items-center justify-between px-2">
+              <h3 class="text-xl font-semibold text-primary">Obývací prostor</h3>
+              <span class="text-sm text-secondary">Společné chvíle</span>
             </div>
           </div>
-          <div class="group relative overflow-hidden rounded-3xl">
-            <img src="/img/hero2.jpg" alt="Exteriér" class="h-80 w-full object-cover" />
-            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100">
-              <div class="absolute bottom-6 left-6 text-white">
-                <p class="font-medium">Exteriér chaty</p>
-              </div>
+
+          <!-- Item 3: Wide (Exterior) -->
+          <div class="group md:col-span-6">
+            <div class="relative aspect-[16/9] overflow-hidden rounded-[2.5rem]">
+              <img src="/img/hero2.jpg" alt="Exteriér chaty" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            </div>
+            <div class="mt-4 flex items-center justify-between px-2">
+              <h3 class="text-xl font-semibold text-primary">Exteriér chaty</h3>
+              <span class="text-sm text-secondary">V srdci přírody</span>
             </div>
           </div>
-          <div class="group relative overflow-hidden rounded-3xl md:col-span-2">
-            <img src="/img/hero4.png" alt="Okolí" class="h-80 w-full object-cover" />
-            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100">
-              <div class="absolute bottom-6 left-6 text-white">
-                <p class="font-medium">Zimní atmosféra</p>
-              </div>
+
+          <!-- Item 4: Wide (Surroundings) -->
+          <div class="group md:col-span-6">
+            <div class="relative aspect-[16/9] overflow-hidden rounded-[2.5rem]">
+              <img src="/img/hero4.png" alt="Zimní atmosféra" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            </div>
+            <div class="mt-4 flex items-center justify-between px-2">
+              <h3 class="text-xl font-semibold text-primary">Zimní atmosféra</h3>
+              <span class="text-sm text-secondary">Kouzlo hor</span>
             </div>
           </div>
+        </div>
+        
+        <div class="mt-16 text-center">
+           <Button 
+            :as="Link"
+            href="#" 
+            variant="outline"
+            class="px-8 py-6 text-lg"
+          >
+            Zobrazit celou galerii
+          </Button>
         </div>
       </div>
     </section>
