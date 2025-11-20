@@ -1,82 +1,108 @@
 <script setup>
-import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucide-vue-next";
+import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight } from "lucide-vue-next";
 </script>
 
 <template>
-  <div class="flex grow items-center">
-    <div class="container mx-auto grid grid-cols-1 items-center gap-8 px-6 lg:grid-cols-2">
+  <div class="flex grow flex-col justify-center pt-20 lg:pt-0">
+    <div class="container mx-auto grid grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
+      <!-- Left Content -->
       <div class="text-left text-white">
-        <div class="max-w-xl">
-          <h1
-            class="mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-5xl leading-tight font-bold text-transparent md:text-7xl"
-          >
-            Chata Jana Ostružná
-          </h1>
-          <div class="mt-2 flex items-center text-sm text-white/80">
-            <Star class="mr-1 h-4 w-4 text-yellow-400" />
-            <span class="font-semibold">4.3</span>
-            <span class="mx-2">•</span>
-            <span>z 600+ pobytů</span>
+        <div class="max-w-2xl">
+          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm backdrop-blur-md">
+            <Star class="h-4 w-4 text-[--color-secondary]" fill="currentColor" />
+            <span class="font-medium text-white">Nejlépe hodnocená chata v okolí</span>
           </div>
-          <p class="mt-3 max-w-3xl text-lg text-white/80 md:text-xl">
-            Soukromé wellness uprostřed Jeseníků. Ideální pro rodiny, přátele i malé oslavy.
+          
+          <h1 class="mb-6 text-5xl font-bold leading-tight tracking-tight text-white md:text-7xl lg:text-8xl">
+            Horský <span class="text-transparent bg-clip-text bg-gradient-to-r from-[--color-honey] to-white">luxus</span>
+            <br />v srdci přírody
+          </h1>
+          
+          <p class="mb-8 max-w-lg text-lg leading-relaxed text-gray-200 md:text-xl">
+            Objevte dokonalé útočiště pro vaši dovolenou. Soukromé wellness, 
+            designový interiér a nekonečné výhledy na Jeseníky.
           </p>
-          <div class="mt-4 flex flex-wrap gap-3">
-            <div
-              class="flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs text-white/80 backdrop-blur-sm"
-            >
-              <Sparkles class="h-3 w-3" />
-              <span>Soukromé wellness</span>
+
+          <div class="flex flex-wrap gap-4">
+            <div class="flex items-center gap-3 rounded-2xl bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[--color-honey]/20 text-[--color-honey]">
+                <Users class="h-5 w-5" />
+              </div>
+              <div>
+                <div class="text-xs text-gray-400">Kapacita</div>
+                <div class="font-semibold">Až 12 osob</div>
+              </div>
             </div>
-            <div
-              class="flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs text-white/80 backdrop-blur-sm"
-            >
-              <MapPin class="h-3 w-3" />
-              <span>Ostružná, Jeseníky</span>
+            
+            <div class="flex items-center gap-3 rounded-2xl bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[--color-honey]/20 text-[--color-honey]">
+                <Sparkles class="h-5 w-5" />
+              </div>
+              <div>
+                <div class="text-xs text-gray-400">Relaxace</div>
+                <div class="font-semibold">Wellness</div>
+              </div>
             </div>
-            <div
-              class="flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs text-white/80 backdrop-blur-sm"
-            >
-              <Users class="h-3 w-3" />
-              <span>Až 12 osob</span>
+
+            <div class="flex items-center gap-3 rounded-2xl bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[--color-honey]/20 text-[--color-honey]">
+                <MapPin class="h-5 w-5" />
+              </div>
+              <div>
+                <div class="text-xs text-gray-400">Lokalita</div>
+                <div class="font-semibold">Ostružná</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Right Content / Floating Card -->
       <div class="flex justify-center lg:justify-end">
-        <div class="glassmorphism w-full max-w-sm rounded-4xl p-6 text-white">
-          <div class="mb-4">
-            <h2 class="text-xl font-bold">Kontakt & informace</h2>
-          </div>
-          <div class="mb-4 grid gap-4 border-y border-white/10 py-4 text-sm">
-            <div class="flex items-start gap-3">
-              <Phone class="h-4 w-4 text-white/80" />
-              <div>
-                <p class="font-semibold">Telefon</p>
-                <a href="tel:+420777123456" class="text-xs text-gray-400">+420 777 123 456</a>
-              </div>
+        <div class="relative w-full max-w-sm">
+          <!-- Glow effect -->
+          <div class="absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-[--color-honey] to-[--color-primary] opacity-30 blur-xl"></div>
+          
+          <div class="relative rounded-[2rem] border border-white/10 bg-black/40 p-8 backdrop-blur-xl">
+            <div class="mb-6 flex items-center justify-between">
+              <h2 class="text-xl font-bold text-white">Rychlý kontakt</h2>
+              <div class="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
             </div>
-            <div class="flex items-start gap-3">
-              <Mail class="h-4 w-4 text-white/80" />
-              <div>
-                <p class="font-semibold">E‑mail</p>
-                <a href="mailto:info@chatajanao.cz" class="text-xs text-gray-400"
-                  >info@chatajanao.cz</a
-                >
-              </div>
+
+            <div class="space-y-6">
+              <a href="tel:+420777123456" class="group flex items-center gap-4 rounded-xl bg-white/5 p-4 transition-colors hover:bg-white/10">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors group-hover:bg-[--color-primary] group-hover:text-white">
+                  <Phone class="h-5 w-5" />
+                </div>
+                <div>
+                  <div class="text-xs text-gray-400">Zavolejte nám</div>
+                  <div class="font-medium text-white">+420 777 123 456</div>
+                </div>
+              </a>
+
+              <a href="mailto:info@chatajanao.cz" class="group flex items-center gap-4 rounded-xl bg-white/5 p-4 transition-colors hover:bg-white/10">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors group-hover:bg-[--color-primary] group-hover:text-white">
+                  <Mail class="h-5 w-5" />
+                </div>
+                <div>
+                  <div class="text-xs text-gray-400">Napište nám</div>
+                  <div class="font-medium text-white">info@chatajanao.cz</div>
+                </div>
+              </a>
             </div>
-            <div class="flex items-start gap-3">
-              <LogIn class="h-4 w-4 text-white/80" />
+
+            <div class="mt-8 grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
               <div>
-                <p class="font-semibold">Check‑in</p>
-                <p class="text-xs text-gray-400">po 14:00</p>
+                <div class="mb-1 flex items-center gap-2 text-xs text-gray-400">
+                  <LogIn class="h-3 w-3" /> Check-in
+                </div>
+                <div class="font-medium text-white">14:00</div>
               </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <LogOut class="h-4 w-4 text-white/80" />
               <div>
-                <p class="font-semibold">Check‑out</p>
-                <p class="text-xs text-gray-400">do 12:00</p>
+                <div class="mb-1 flex items-center gap-2 text-xs text-gray-400">
+                  <LogOut class="h-3 w-3" /> Check-out
+                </div>
+                <div class="font-medium text-white">10:00</div>
               </div>
             </div>
           </div>
@@ -84,28 +110,29 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucid
       </div>
     </div>
   </div>
-  <div class="pt-8 pb-12 md:pt-12 md:pb-16">
-    <div class="container mx-auto px-6">
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
-        <div class="glassmorphism rounded-3xl border p-6 text-left text-white">
-          <h3 class="text-lg font-semibold">Kapacita až 12 osob (5 pokojů)</h3>
-          <p class="mt-2 max-w-[300px] text-xs">
-            2 dvojlůžkové pokoje s přistýlkou, 2 pokoje s dvojlůžkem a 1 pokoj s 2× samostatnou
-            postelí.
-          </p>
+  
+  <!-- Bottom Info Bar -->
+  <div class="mt-auto w-full border-t border-white/10 bg-black/20 backdrop-blur-md">
+    <div class="container mx-auto px-6 py-6">
+      <div class="flex flex-wrap justify-center gap-8 text-center md:justify-between md:text-left">
+        <div>
+          <div class="text-2xl font-bold text-white">5</div>
+          <div class="text-sm text-gray-400">pokojů</div>
         </div>
-        <div class="glassmorphism rounded-3xl border p-6 text-left text-white">
-          <h3 class="text-lg font-semibold">Soukromé wellness</h3>
-          <p class="mt-2 max-w-[300px] text-xs">
-            Vířivka pro 6 osob, odpočinková zóna a prostorný obývací pokoj.
-          </p>
+        <div class="h-10 w-px bg-white/10 hidden md:block"></div>
+        <div>
+          <div class="text-2xl font-bold text-white">12</div>
+          <div class="text-sm text-gray-400">lůžek</div>
         </div>
-        <div class="glassmorphism rounded-3xl border p-6 text-left text-white">
-          <h3 class="text-lg font-semibold">Ostružná — skvělá lokalita</h3>
-          <p class="mt-2 max-w-[300px] text-xs">
-            V blízkosti lyžařského parku Ostružná – Jonas Park (1 km) a 1,5 km od ski areálu
-            Ramzová.
-          </p>
+        <div class="h-10 w-px bg-white/10 hidden md:block"></div>
+        <div>
+          <div class="text-2xl font-bold text-white">3</div>
+          <div class="text-sm text-gray-400">koupelny</div>
+        </div>
+        <div class="h-10 w-px bg-white/10 hidden md:block"></div>
+        <div>
+          <div class="text-2xl font-bold text-white">∞</div>
+          <div class="text-sm text-gray-400">zážitků</div>
         </div>
       </div>
     </div>

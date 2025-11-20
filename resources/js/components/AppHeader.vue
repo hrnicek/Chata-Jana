@@ -13,7 +13,7 @@
         <Link class="transition-colors hover:text-gray-300" href="#">Aktivity & okolí</Link>
         <Link class="transition-colors hover:text-gray-300" href="#">Fotogalerie</Link>
 
-        <Link class="transition-colors hover:text-gray-300" href="#">Kontakt</Link>
+        <Link class="transition-colors hover:text-gray-300" :href="route('contact')">Kontakt</Link>
       </div>
       <Link
         :href="route('bookings.calendar')"

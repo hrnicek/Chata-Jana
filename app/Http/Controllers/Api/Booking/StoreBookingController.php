@@ -22,20 +22,14 @@ class StoreBookingController extends Controller
         $data = $request->validated();
 
         [$booking, $customer] = DB::transaction(function () use ($data) {
-            $customer = Customer::query()->firstOrCreate(
-                ['email' => $data['customer']['email']],
+            $customer = Customer::query()->create(
                 [
+                    'email' => $data['customer']['email'],
                     'first_name' => $data['customer']['first_name'],
                     'last_name' => $data['customer']['last_name'],
                     'phone' => $data['customer']['phone'],
                 ],
             );
-
-            $customer->fill([
-                'first_name' => $data['customer']['first_name'],
-                'last_name' => $data['customer']['last_name'],
-                'phone' => $data['customer']['phone'],
-            ])->save();
 
             $start = Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
             $end = Carbon::createFromFormat('Y-m-d', $data['end_date'])->startOfDay();
@@ -88,6 +82,7 @@ class StoreBookingController extends Controller
             }
 
             $booking = Booking::query()->create([
+                'customer_id' => $customer?->id,
                 'season_id' => null,
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'],

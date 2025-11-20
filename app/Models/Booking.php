@@ -21,7 +21,7 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'season_id',
+        'code',
         'start_date',
         'end_date',
         'total_price',
@@ -36,11 +36,6 @@ class Booking extends Model
             'total_price' => 'decimal:2',
             'status' => BookingStatus::class,
         ];
-    }
-
-    public function season(): BelongsTo
-    {
-        return $this->belongsTo(Season::class);
     }
 
     public function customer(): BelongsTo
