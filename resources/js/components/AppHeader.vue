@@ -10,13 +10,13 @@ import { Link } from "@inertiajs/vue3";
         <img alt="Chata Jana Ostružná Logo" class="h-16" src="/img/logo.png" />
       </Link>
       <div class="hidden items-center space-x-8 text-sm font-medium lg:flex">
-        <Link class="transition-colors hover:text-gray-300" :href="route('home')">Úvod</Link>
-        <Link class="transition-colors hover:text-gray-300" href="#">O nás</Link>
-        <Link class="transition-colors hover:text-gray-300" :href="route('pricing')">Ceník</Link>
-        <Link class="transition-colors hover:text-gray-300" href="#">Aktivity &amp; okolí</Link>
-        <Link class="transition-colors hover:text-gray-300" href="#">Fotogalerie</Link>
+        <Link class="transition-colors hover:text-honey" :href="route('home')">Úvod</Link>
+        <Link class="transition-colors hover:text-honey" :href="route('about')">O nás</Link>
+        <Link class="transition-colors hover:text-honey" :href="route('pricing')">Ceník</Link>
+        <Link class="transition-colors hover:text-honey" :href="route('activities')">Aktivity &amp; okolí</Link>
+        <Link class="transition-colors hover:text-honey" :href="route('gallery')">Fotogalerie</Link>
 
-        <Link class="transition-colors hover:text-gray-300" :href="route('contact')">Kontakt</Link>
+        <Link class="transition-colors hover:text-honey" :href="route('contact')">Kontakt</Link>
       </div>
       <Button
         :as="Link"

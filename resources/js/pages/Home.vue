@@ -93,12 +93,11 @@ const reviews = [
               <span>O místě</span>
             </div>
             <h2 class="text-4xl font-bold tracking-tight text-gray-900 lg:text-5xl">
-              Vaše horské <span class="text-primary">útočiště</span>
+              Vaše horské <span class="text-primary">útočiště</span> v Jeseníkách
             </h2>
             <p class="mt-6 text-lg leading-relaxed text-gray-600">
-              Chata Jana nabízí unikátní spojení komfortu, soukromého wellness a divoké přírody Jeseníků. 
-              Ať už hledáte aktivní dovolenou na lyžích nebo klidný víkend s rodinou, u nás najdete 
-              vše potřebné pro nezapomenutelné zážitky.
+              Chata Jana spojuje komfort, soukromé wellness a kouzlo Jeseníků. 
+              Ať už míříte za sportem, nebo klidem s rodinou, čeká vás pohodlí i zážitky.
             </p>
             
             <div class="mt-10 flex flex-wrap items-center gap-4">
@@ -154,12 +153,13 @@ const reviews = [
           <div 
             v-for="(feature, index) in features" 
             :key="index"
-            class="relative overflow-hidden rounded-[2.5rem] bg-gray-900 p-10 text-white"
+            class="light-card"
           >
-            <div class="absolute right-0 top-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-white/5 blur-3xl"></div>
-            <component :is="feature.icon" class="relative mb-6 h-10 w-10 text-secondary" />
-            <h3 class="relative mb-3 text-xl font-bold">{{ feature.title }}</h3>
-            <p class="relative text-gray-300">{{ feature.description }}</p>
+            <div class="light-icon mb-6">
+              <component :is="feature.icon" class="h-6 w-6" />
+            </div>
+            <h3 class="mb-3 text-xl font-bold text-gray-900">{{ feature.title }}</h3>
+            <p class="text-gray-700">{{ feature.description }}</p>
           </div>
         </div>
       </div>
@@ -227,7 +227,7 @@ const reviews = [
           <div 
             v-for="(review, index) in reviews" 
             :key="index"
-            class="flex flex-col justify-between rounded-3xl border border-gray-100 bg-white p-8"
+            class="light-card"
           >
             <div>
               <div class="mb-4 flex gap-1">
@@ -259,7 +259,7 @@ const reviews = [
               Připraveni na nezapomenutelný pobyt?
             </h2>
             <p class="mx-auto mt-6 max-w-xl text-lg text-white/80">
-              Rezervujte si svůj termín včas. Těšíme se na vaši návštěvu v Chatě Jana.
+              Rezervujte si termín včas. Těšíme se na vaši návštěvu v Chatě Jana.
             </p>
             <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button

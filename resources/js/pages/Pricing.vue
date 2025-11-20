@@ -41,19 +41,19 @@ const seasons = [
 ];
 
 const reservationInfo = [
-  "Pro potvrzení rekreačního pobytu požadujeme úhradu 30% zálohy a doplatek ve výši 70% úhrady rekreant nejpozději 14 dní před nástupem na pobyt.",
-  "Pro rezervace kratší než 14 dní, je požadováno 100% poplatku pro potvrzení a zarezervování pobytu.",
-  "V případě neuhrazení doplatku 70% max. 14 dní předem dojde k propadnutí zálohy 30% a nebude vrácena (storno poplatek).",
-  "V případě ubytování na jednu noc bude účtován poplatek ve výši 3000Kč/jednorázový úklid",
+  "Rezervaci potvrzuje záloha 30 %. Doplatek 70 % nejpozději 14 dní před příjezdem.",
+  "U rezervací kratších než 14 dní se hradí 100 % ceny při potvrzení.",
+  "Neuhrazení doplatku do 14 dní před příjezdem znamená propadnutí 30% zálohy (storno).",
+  "Při ubytování na jednu noc se účtuje jednorázový úklid 3 000 Kč (3000Kč).",
   "Děti do 3 let zdarma bez lůžka.",
   "Vratná kauce vyžadovaná na místě ve výši 5 000 Kč.",
-  "Doplatky hrazené na místě: spotřebovaná elektrická energie a rekreační poplatek."
+  "Na místě se hradí spotřebovaná elektřina a rekreační poplatek."
 ];
 
 const additionalPricing = [
-  { name: "Cena el. Energie (kWh) VT", price: "9,00,- Kč" },
-  { name: "Cena el. Energie (kWh) NT", price: "8,00,- Kč" },
-  { name: "Poplatek za pobyt os. Starší 18tl let 20,- Kč", price: "" },
+  { name: "Elektrická energie (VT) / kWh", price: "9 Kč/kWh" },
+  { name: "Elektrická energie (NT) / kWh", price: "8 Kč/kWh" },
+  { name: "Rekreační poplatek za osobu 18+", price: "20 Kč/den" },
   { name: "Poplatek za psa", price: "350 Kč/den" }
 ];
 </script>
@@ -77,7 +77,7 @@ const additionalPricing = [
             :class="[
               'rounded-[2.5rem] border p-8 transition-colors',
               season.highlighted 
-                ? 'bg-primary text-white border-4 border-gray-900' 
+                ? 'bg-primary text-white' 
                 : 'bg-white text-gray-900 hover:border-primary'
             ]"
           >
@@ -136,7 +136,7 @@ const additionalPricing = [
         <div class="grid gap-12 lg:grid-cols-2">
           
           <!-- Left: Reservation Info -->
-          <div class="glassmorphism rounded-[2.5rem] p-10">
+          <div class="light-card p-10">
             
             <div class="relative">
               <div class="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
@@ -158,10 +158,10 @@ const additionalPricing = [
                     <div class="h-2 w-2 rounded-full bg-primary"></div>
                   </div>
                   <span 
-                    :class="[
-                      'text-gray-700 leading-relaxed',
-                      info.includes('3000Kč') ? 'font-semibold text-red-600' : ''
-                    ]"
+                  :class="[
+                    'text-gray-700 leading-relaxed',
+                    (info.includes('3000Kč') || info.includes('3 000 Kč')) ? 'font-semibold text-red-600' : ''
+                  ]"
                   >
                     {{ info }}
                   </span>
@@ -171,26 +171,26 @@ const additionalPricing = [
           </div>
 
           <!-- Right: Additional Pricing -->
-          <div class="rounded-[2.5rem] bg-primary p-10 text-white border-4 border-gray-900">
+          <div class="light-card p-10">
             
             <div class="relative">
-              <div class="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
+              <div class="mb-6 inline-flex items-center gap-2 rounded-full bg-honey px-4 py-1.5 text-sm font-medium text-primary">
                 <FileDown class="h-4 w-4" />
                 <span>Doplňkové poplatky</span>
               </div>
               
-              <h2 class="mb-8 text-3xl font-bold">
-                Další poplatky
+              <h2 class="mb-8 text-3xl font-bold text-gray-900">
+                Doplňkové poplatky
               </h2>
               
               <div class="mb-10 space-y-5">
                 <div 
                   v-for="item in additionalPricing" 
                   :key="item.name"
-                  class="flex items-start justify-between gap-4 border-b border-white/10 pb-4"
+                  class="flex items-start justify-between gap-4 border-b border-gray-100 pb-4"
                 >
-                  <span class="text-white/90">{{ item.name }}</span>
-                  <span v-if="item.price" class="shrink-0 font-bold text-honey">{{ item.price }}</span>
+                  <span class="text-gray-700">{{ item.name }}</span>
+                  <span v-if="item.price" class="shrink-0 font-bold text-primary">{{ item.price }}</span>
                 </div>
               </div>
 
@@ -198,15 +198,15 @@ const additionalPricing = [
               <Button
                 :as="Link"
                 href="#"
-                variant="cta-primary"
+                variant="pricing-primary"
                 class="group w-full"
               >
                 <FileDown class="h-5 w-5" />
                 Ubytovací a reklamační řád (PDF)
               </Button>
 
-              <p class="mt-6 text-center text-sm text-white/60">
-                Pro více informací nás neváhejte kontaktovat
+              <p class="mt-6 text-center text-sm text-gray-500">
+                Máte dotaz? Rádi poradíme.
               </p>
             </div>
           </div>
@@ -218,7 +218,7 @@ const additionalPricing = [
     <!-- CTA Section -->
     <section class="bg-gray-50 py-24">
       <div class="container mx-auto px-6">
-        <div class="rounded-[3rem] border-4 border-gray-900 bg-primary px-6 py-20 text-center sm:px-12 lg:py-32">
+        <div class="rounded-[3rem] bg-primary px-6 py-20 text-center sm:px-12 lg:py-32">
           
           <div class="relative z-10 mx-auto max-w-2xl">
             <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">

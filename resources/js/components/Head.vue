@@ -28,6 +28,7 @@ export default {
     const headElements = this.renderNodes(this.$slots.default ? this.$slots.default() : []);
 
     this.provider.update([...seoElements, ...headElements]);
+    return null;
   },
 };
 </script>

@@ -8,7 +8,7 @@
 :root {
     --color-primary: #214E34;
     --color-secondary: #FFC107;
-    --color-honey: #DFF8EB
+    --color-honey: #DFF8EB;
 }
 
 @theme {
@@ -36,4 +36,48 @@
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2.5rem;
+    padding: 2.5rem;
+    background-color: #111827;
+    color: #fff;
+}
+
+.feature-card .feature-glow {
+    position: absolute;
+    top: -4rem;
+    right: -4rem;
+    width: 16rem;
+    height: 16rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    filter: blur(48px);
+}
+
+.feature-card .feature-icon {
+    color: var(--color-secondary);
+}
+
+.light-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2.5rem;
+    padding: 2.5rem;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.light-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 1rem;
+    background-color: var(--color-honey);
+    color: var(--color-primary);
 }

@@ -10,7 +10,7 @@ import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-vue-next
     <PageHeader 
       badge="Kontakt"
       title="Spojte se s námi"
-      subtitle="Jsme tu pro vás. Neváhejte se na nás obrátit s jakýmkoliv dotazem."
+      subtitle="Jsme vám k dispozici. Napište nebo zavolejte, rádi poradíme."
       image="/img/hero2.jpg"
     />
 
@@ -20,23 +20,23 @@ import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-vue-next
           <!-- Contact Info Cards -->
           <div class="space-y-6">
             <!-- Phone Card -->
-            <div class="glassmorphism rounded-[2.5rem] p-8">
+            <div class="light-card">
               <div class="flex items-start gap-4">
                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-honey text-primary">
                   <Phone class="h-6 w-6" />
                 </div>
                 <div>
                   <h3 class="text-lg font-semibold text-gray-900">Telefon</h3>
-                  <p class="mt-1 text-gray-600">Po-Ne 8:00 - 20:00</p>
-                  <a href="tel:+420777123456" class="mt-1 block text-lg font-medium text-primary hover:underline">
-                    +420 777 123 456
+                  <p class="mt-1 text-gray-600">Po–Ne 8:00–20:00</p>
+                  <a href="tel:+420731492286" class="mt-1 block text-lg font-medium text-primary hover:underline">
+                    +420 731 492 286
                   </a>
                 </div>
               </div>
             </div>
 
             <!-- Email Card -->
-            <div class="glassmorphism rounded-[2.5rem] p-8">
+            <div class="light-card">
               <div class="flex items-start gap-4">
                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-honey text-primary">
                   <Mail class="h-6 w-6" />
@@ -52,7 +52,7 @@ import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-vue-next
             </div>
 
             <!-- Address Card -->
-            <div class="glassmorphism rounded-[2.5rem] p-8">
+            <div class="light-card">
               <div class="flex items-start gap-4">
                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-honey text-primary">
                   <MapPin class="h-6 w-6" />
@@ -61,23 +61,23 @@ import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-vue-next
                   <h3 class="text-lg font-semibold text-gray-900">Adresa</h3>
                   <p class="mt-1 text-gray-600">
                     Chata Jana<br />
-                    Ostružná 123<br />
+                    Ostružná 165<br />
                     788 25 Ostružná
                   </p>
                   <a 
                     href="https://maps.google.com" 
                     target="_blank" 
-                    class="mt-2 inline-flex items-center text-sm font-medium text-primary hover:underline"
+                  class="mt-2 inline-flex items-center text-sm font-medium text-primary hover:underline"
                   >
-                    Zobrazit na mapě
+                    Otevřít v Mapách
                   </a>
                 </div>
               </div>
             </div>
 
             <!-- Social Media -->
-            <div class="glassmorphism rounded-[2.5rem] p-8">
-              <h3 class="mb-4 text-lg font-semibold text-gray-900">Sledujte nás</h3>
+            <div class="light-card">
+              <h3 class="mb-4 text-lg font-semibold text-gray-900">Sledujte nás na sítích</h3>
               <div class="flex gap-4">
                 <a href="#" class="flex h-12 w-12 items-center justify-center rounded-2xl bg-honey text-primary transition-colors hover:bg-primary hover:text-white">
                   <Facebook class="h-5 w-5" />
