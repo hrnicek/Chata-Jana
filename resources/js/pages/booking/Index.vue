@@ -170,8 +170,34 @@
                   >
                     <ChevronLeft class="h-5 w-5" />
                   </button>
-                  <div class="min-w-[140px] text-center font-medium text-gray-900">
-                    {{ monthLabel }} {{ year }}
+                  <div class="relative" ref="monthPickerEl">
+                    <button
+                      type="button"
+                      @click="monthPickerOpen = !monthPickerOpen"
+                      :aria-expanded="monthPickerOpen ? 'true' : 'false'"
+                      aria-haspopup="listbox"
+                      class="inline-flex items-center gap-1 rounded-lg px-3 py-2 font-medium text-gray-900 hover:bg-gray-50"
+                    >
+                      <span>{{ monthLabel }} {{ year }}</span>
+                      <ChevronDown class="h-4 w-4 text-gray-400" />
+                    </button>
+                    <div
+                      v-if="monthPickerOpen"
+                      class="absolute left-1/2 z-10 mt-2 w-56 -translate-x-1/2 rounded-md border border-gray-200 bg-white p-1 shadow-lg"
+                    >
+                      <ul role="listbox" class="max-h-80 space-y-1 overflow-auto">
+                        <li v-for="opt in monthOptions" :key="`${opt.year}-${opt.month}`">
+                          <button
+                            type="button"
+                            @click="selectMonthOption(opt.year, opt.month)"
+                            class="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          >
+                            <span>{{ opt.label }} {{ opt.year }}</span>
+                            <ChevronRight class="h-4 w-4 text-gray-300" />
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                   <button 
                     @click="nextMonth"
@@ -724,13 +750,14 @@
 
 <script setup>
 import axios from "axios";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { toast } from "vue-sonner";
 import { useBookingStore } from "../../stores/booking";
 import { Link, usePage } from "@inertiajs/vue3";
 import {
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   CheckCircle,
   Calendar,
   User,
@@ -750,6 +777,8 @@ const todayDay = now.getDate();
 const daysData = ref([]);
 const loading = ref(false);
 const error = ref("");
+const monthPickerOpen = ref(false);
+const monthPickerEl = ref(null);
 const startDate = computed({
   get: () => booking.startDate,
   set: (val) => booking.setStartDate(val),
@@ -856,6 +885,41 @@ const monthLabel = computed(() =>
 );
 const weekDays = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"];
 
+function monthName(y, m) {
+  return new Date(y, m - 1, 1).toLocaleString("cs-CZ", { month: "long" });
+}
+
+const monthOptions = computed(() => {
+  const opts = [];
+  let y = todayYear;
+  let m = todayMonth;
+  for (let i = 0; i < 12; i++) {
+    opts.push({ year: y, month: m, label: monthName(y, m) });
+    m++;
+    if (m > 12) {
+      m = 1;
+      y += 1;
+    }
+  }
+  return opts;
+});
+
+function onDocClick(e) {
+  if (!monthPickerOpen.value) return;
+  const el = monthPickerEl.value;
+  if (el && !el.contains(e.target)) {
+    monthPickerOpen.value = false;
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', onDocClick);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onDocClick);
+});
+
 const stepItems = [
   { id: 1, label: "Termín", desc: "Krok 1", icon: Calendar },
   { id: 2, label: "Údaje", desc: "Krok 2", icon: User },
@@ -946,6 +1010,13 @@ function prevMonth() {
   } else {
     month.value -= 1;
   }
+  fetchCalendar();
+}
+
+function selectMonthOption(y, m) {
+  year.value = y;
+  month.value = m;
+  monthPickerOpen.value = false;
   fetchCalendar();
 }
 
