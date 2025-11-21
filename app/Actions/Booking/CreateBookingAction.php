@@ -32,19 +32,19 @@ class CreateBookingAction
     public function execute(array $data): Booking
     {
         return DB::transaction(function () use ($data) {
-            // 1. Find or create customer
-            $customer = Customer::query()->create(
-                [
-                    'email' => $data['customer']['email'],
-                    'first_name' => $data['customer']['first_name'],
-                    'last_name' => $data['customer']['last_name'],
-                    'phone' => $data['customer']['phone'],
-                ]
-            );
+            // 1. Always create a new customer (no deduplication)
+            $customer = Customer::query()->create([
+                'email' => $data['customer']['email'],
+                'first_name' => $data['customer']['first_name'],
+                'last_name' => $data['customer']['last_name'],
+                'phone' => $data['customer']['phone'],
+            ]);
 
-            //2. Parse dates
-            $startDate = Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
-            $endDate = Carbon::createFromFormat('Y-m-d', $data['end_date'])->startOfDay();
+            //2. Parse dates (with default check-in / check-out times)
+            $checkin = config('booking.checkin_time', '14:00');
+            $checkout = config('booking.checkout_time', '10:00');
+            $startDate = Carbon::createFromFormat('Y-m-d H:i', $data['start_date'] . ' ' . $checkin);
+            $endDate = Carbon::createFromFormat('Y-m-d H:i', $data['end_date'] . ' ' . $checkout);
 
             // 3. Validate availability
             $availability = $this->availabilityValidator->execute($startDate, $endDate);
@@ -71,6 +71,8 @@ class CreateBookingAction
                 'season_id' => $season?->id,
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'],
+                'date_start' => $startDate,
+                'date_end' => $endDate,
                 'total_price' => $priceBreakdown->total,
                 'status' => Pending::class,
             ]);
@@ -84,7 +86,7 @@ class CreateBookingAction
                     continue;
                 }
 
-                $nights = max(1, $startDate->diffInDays($endDate));
+                $nights = max(1, $startDate->copy()->startOfDay()->diffInDays($endDate->copy()->startOfDay()));
                 $lineTotal = $service->price_type === 'per_day'
                     ? $quantity * $nights * (float) $service->price
                     : $quantity * (float) $service->price;

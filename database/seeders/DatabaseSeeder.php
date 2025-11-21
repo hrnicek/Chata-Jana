@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(SeasonSeeder::class);
-        $this->call(ExtraSeeder::class);
+        $this->call(ServiceSeeder::class);
         $this->call(BookingSeeder::class);
         $this->call(BlackoutDateSeeder::class);
     }

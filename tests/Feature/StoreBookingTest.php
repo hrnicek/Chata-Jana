@@ -48,7 +48,7 @@ class StoreBookingTest extends TestCase
         $this->assertDatabaseHas('bookings', ['total_price' => 11000]);
     }
 
-    public function test_deduplicates_existing_customer()
+    public function test_creates_new_customer_even_if_email_exists()
     {
         $this->travelTo(now()->year . '-06-01');
 
@@ -74,7 +74,7 @@ class StoreBookingTest extends TestCase
 
         $this->postJson(route('api.bookings.store'), $data)->assertCreated();
 
-        $this->assertEquals(1, Customer::where('email', 'jane@example.com')->count());
+        $this->assertEquals(2, Customer::where('email', 'jane@example.com')->count());
     }
 
     public function test_calculates_nights_correctly()

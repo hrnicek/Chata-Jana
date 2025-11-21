@@ -27,8 +27,8 @@ class CalendarController extends Controller
 
         $bookings = Booking::query()
             ->where('status', '!=', 'cancelled')
-            ->where('start_date', '<=', $periodEnd->toDateString())
-            ->where('end_date', '>=', $periodStart->toDateString())
+            ->where('date_start', '<', $periodEnd->copy()->endOfDay())
+            ->where('date_end', '>', $periodStart->copy()->startOfDay())
             ->get();
 
         $blackouts = BlackoutDate::query()
@@ -58,7 +58,9 @@ class CalendarController extends Controller
             });
 
             $isBooked = $bookings->contains(function (Booking $b) use ($date) {
-                return $date->between($b->start_date, $b->end_date);
+                $bookingStart = \Illuminate\Support\Carbon::parse($b->date_start)->startOfDay();
+                $bookingEndExclusive = \Illuminate\Support\Carbon::parse($b->date_end)->subDay()->startOfDay();
+                return $date->between($bookingStart, $bookingEndExclusive);
             });
 
             $days[] = [

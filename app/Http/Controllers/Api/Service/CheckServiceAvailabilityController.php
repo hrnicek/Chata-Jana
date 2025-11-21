@@ -15,13 +15,15 @@ class CheckServiceAvailabilityController extends Controller
     {
         $data = $request->validated();
 
-        $start = Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
-        $end = Carbon::createFromFormat('Y-m-d', $data['end_date'])->endOfDay();
+        $checkin = config('booking.checkin_time', '14:00');
+        $checkout = config('booking.checkout_time', '10:00');
+        $start = Carbon::createFromFormat('Y-m-d H:i', $data['start_date'] . ' ' . $checkin);
+        $end = Carbon::createFromFormat('Y-m-d H:i', $data['end_date'] . ' ' . $checkout);
 
         $overlappingBookings = Booking::query()
             ->where('status', '!=', 'cancelled')
-            ->where('start_date', '<=', $end->toDateString())
-            ->where('end_date', '>=', $start->toDateString())
+            ->where('date_start', '<', $end)
+            ->where('date_end', '>', $start)
             ->with(['services'])
             ->get();
 

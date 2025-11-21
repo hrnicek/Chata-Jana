@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Extra;
+use App\Models\Service;
 use Illuminate\Database\Seeder;
 
-class ExtraSeeder extends Seeder
+class ServiceSeeder extends Seeder
 {
     public function run(): void
     {
@@ -27,7 +28,7 @@ class ExtraSeeder extends Seeder
         ];
 
         foreach ($items as $data) {
-            Extra::query()->updateOrCreate(
+            Service::query()->updateOrCreate(
                 ['name' => $data['name']],
                 $data,
             );

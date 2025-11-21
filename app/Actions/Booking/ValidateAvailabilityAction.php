@@ -10,12 +10,12 @@ class ValidateAvailabilityAction
 {
     public function execute(Carbon $startDate, Carbon $endDate): array
     {
-        // Check for overlapping bookings
+        // Check for overlapping bookings using datetime boundaries
         $overlapping = Booking::where('status', '!=', 'cancelled')
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->where(function ($q) use ($startDate, $endDate) {
-                    $q->where('start_date', '<', $endDate->toDateString())
-                        ->where('end_date', '>', $startDate->toDateString());
+                    $q->where('date_start', '<', $endDate)
+                        ->where('date_end', '>', $startDate);
                 });
             })
             ->exists();
@@ -23,7 +23,7 @@ class ValidateAvailabilityAction
         // Check for blackout dates
         $blackouts = BlackoutDate::where(function ($query) use ($startDate, $endDate) {
             $query->where(function ($q) use ($startDate, $endDate) {
-                $q->where('start_date', '<', $endDate->toDateString())
+                    $q->where('start_date', '<', $endDate->toDateString())
                     ->where('end_date', '>', $startDate->toDateString());
             });
         })->exists();

@@ -31,6 +31,8 @@ class Booking extends Model
         'code',
         'start_date',
         'end_date',
+        'date_start',
+        'date_end',
         'total_price',
         'status',
         'customer_id',
@@ -40,6 +42,8 @@ class Booking extends Model
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'date_start' => 'datetime',
+        'date_end' => 'datetime',
         'total_price' => 'decimal:2',
         'status' => BookingState::class,
     ];

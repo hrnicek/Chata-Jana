@@ -107,6 +107,9 @@
                   </div>
                 </div>
               </div>
+              <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+                K ceně se na místě připočítává: vratná kauce 5 000 Kč, elektřina dle skutečné spotřeby (VT 9,00 Kč/kWh, NT 8,00 Kč/kWh), rekreační poplatek 20 Kč/osoba/den, pes 350 Kč/den. U pobytu na 1 noc se účtuje jednorázový úklid 3 000 Kč.
+              </div>
             </div>
           </div>
         </aside>
@@ -139,11 +142,32 @@
                   >
                     <ChevronRight class="h-5 w-5" />
                   </button>
-                </div>
+              </div>
               </header>
+
+              <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                <div class="flex items-center gap-1">
+                  <CheckCircle class="h-4 w-4 text-green-600" />
+                  <span>Volné</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <XCircle class="h-4 w-4 text-red-600" />
+                  <span>Obsazené</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <Ban class="h-4 w-4 text-orange-600" />
+                  <span>Nedostupné</span>
+                </div>
+              </div>
 
               <!-- Calendar Grid -->
               <div class="relative">
+                 <div v-if="error" class="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert" aria-live="polite">
+                   <div class="flex items-center justify-between gap-3">
+                     <span>{{ error }}</span>
+                     <button @click="fetchCalendar" class="rounded-md bg-red-600 px-3 py-1.5 text-white hover:bg-red-700">Zkusit znovu</button>
+                   </div>
+                 </div>
                  <!-- Skeleton Loading -->
                  <div v-if="loading" class="grid grid-cols-7 gap-2">
                     <!-- Weekday Skeletons -->
@@ -233,8 +257,9 @@
                       <Loader2 v-if="verifying" class="h-4 w-4 animate-spin" />
                       <span>{{ verifying ? 'Ověřuji...' : 'Pokračovat' }}</span>
                       <ChevronRight v-if="!verifying" class="h-4 w-4" />
-                    </button>
-                 </div>
+                     </button>
+                  </div>
+                 <div v-if="verifyError" class="text-sm text-red-700" role="alert" aria-live="polite">{{ verifyError }}</div>
               </div>
             </div>
 
@@ -255,6 +280,7 @@
                       @blur="validateField('firstName')"
                       @focus="clearFieldError('firstName')"
                       type="text"
+                      autocomplete="given-name"
                       class="w-full rounded-lg border-2 px-4 py-2.5 pr-10 text-gray-900 placeholder-gray-400 transition-colors focus:outline-none"
                       :class="fieldErrors.firstName ? 'border-red-400' : validFields.firstName ? 'border-emerald-400' : 'border-gray-200 focus:border-primary'"
                       placeholder="Jan"
@@ -273,6 +299,7 @@
                       @blur="validateField('lastName')"
                       @focus="clearFieldError('lastName')"
                       type="text"
+                      autocomplete="family-name"
                       class="w-full rounded-lg border-2 px-4 py-2.5 pr-10 text-gray-900 placeholder-gray-400 transition-colors focus:outline-none"
                       :class="fieldErrors.lastName ? 'border-red-400' : validFields.lastName ? 'border-emerald-400' : 'border-gray-200 focus:border-primary'"
                       placeholder="Novák"
@@ -291,6 +318,7 @@
                       @blur="validateField('email')"
                       @focus="clearFieldError('email')"
                       type="email"
+                      autocomplete="email"
                       class="w-full rounded-lg border-2 px-4 py-2.5 pr-10 text-gray-900 placeholder-gray-400 transition-colors focus:outline-none"
                       :class="fieldErrors.email ? 'border-red-400' : validFields.email ? 'border-emerald-400' : 'border-gray-200 focus:border-primary'"
                       placeholder="jan.novak@example.com"
@@ -309,6 +337,8 @@
                       @blur="validateField('phone')"
                       @focus="clearFieldError('phone')"
                       type="tel"
+                      autocomplete="tel"
+                      inputmode="tel"
                       class="w-full rounded-lg border-2 px-4 py-2.5 pr-10 text-gray-900 placeholder-gray-400 transition-colors focus:outline-none"
                       :class="fieldErrors.phone ? 'border-red-400' : validFields.phone ? 'border-emerald-400' : 'border-gray-200 focus:border-primary'"
                       placeholder="+420 777 123 456"
@@ -339,7 +369,7 @@
                   Zpět
                 </button>
                 <button
-                  @click="step = 3"
+                  @click="verifyCustomerAndProceed"
                   :disabled="!formReady"
                   class="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -347,6 +377,7 @@
                   <ChevronRight class="h-4 w-4" />
                 </button>
               </div>
+              <div v-if="customerVerifyError" class="text-sm text-red-700" role="alert" aria-live="polite">{{ customerVerifyError }}</div>
             </div>
 
             <!-- Step 3: Extras -->
@@ -409,11 +440,22 @@
                       @click="booking.setExtraQuantity(ex.id, Math.min(ex.max_quantity, (extraSelection[ex.id] || 0) + 1))"
                       class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
                       :disabled="(extraSelection[ex.id] || 0) >= ex.max_quantity"
+                      :title="(extraSelection[ex.id] || 0) >= ex.max_quantity ? 'Max. ' + ex.max_quantity : ''"
                     >
                       +
                     </button>
+                    <span v-if="ex.max_quantity" class="text-xs text-gray-500">Max. {{ ex.max_quantity }}</span>
                   </div>
                 </div>
+              </div>
+
+              <div v-if="extrasAvailabilityError" class="rounded-lg bg-red-50 p-4 text-sm text-red-700 space-y-2" role="alert" aria-live="polite">
+                <div>{{ extrasAvailabilityError }}</div>
+                <ul v-if="extrasAvailabilityDetails.length" class="list-disc pl-5 text-red-800">
+                  <li v-for="d in extrasAvailabilityDetails" :key="d.name">
+                    {{ d.name }}: požadováno {{ d.requested }}, dostupné {{ d.available }}
+                  </li>
+                </ul>
               </div>
 
               <div class="flex justify-between border-t border-gray-100 pt-6">
@@ -465,6 +507,9 @@
                     </div>
                   </dl>
                 </div>
+                <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                  K celkové ceně se na místě připočítává: vratná kauce 5 000 Kč, elektřina dle skutečné spotřeby (VT 9,00 Kč/kWh, NT 8,00 Kč/kWh), rekreační poplatek 20 Kč/osoba/den, pes 350 Kč/den. U pobytu na 1 noc se účtuje jednorázový úklid 3 000 Kč.
+                </div>
 
                 <!-- Personal Info Block -->
                 <div class="rounded-xl border border-gray-200 p-6">
@@ -512,7 +557,10 @@
               </div>
 
               <div v-if="submitError" class="rounded-lg bg-red-50 p-4 text-sm text-red-700">
-                {{ submitError }}
+                <div class="flex items-center justify-between gap-3">
+                  <span>{{ submitError }}</span>
+                  <Link :href="route('contact')" class="rounded-md bg-red-600 px-3 py-1.5 text-white hover:bg-red-700">Kontaktovat nás</Link>
+                </div>
               </div>
 
               <div class="flex justify-between border-t border-gray-100 pt-6">
@@ -529,7 +577,7 @@
                   class="flex items-center gap-2 rounded-lg bg-gray-900 px-8 py-3 text-sm font-medium text-white shadow-lg transition-all hover:bg-black hover:shadow-xl disabled:opacity-50 disabled:shadow-none"
                 >
                   <Loader2 v-if="submitting" class="h-4 w-4 animate-spin" />
-                  <span v-else>Odeslat závaznou rezervaci</span>
+                  <span v-else>Odeslat rezervaci</span>
                   <Send v-if="!submitting" class="h-4 w-4" />
                 </button>
               </div>
@@ -570,8 +618,7 @@
     <!-- Sticky Mobile Summary Bar -->
     <div 
       v-if="step < 5" 
-      class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-gray-200 px-4 py-3 shadow-2xl lg:hidden transition-transform duration-300"
-      :class="step === 1 && !startDate ? 'translate-y-full' : 'translate-y-0'"
+      class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-gray-200 px-4 py-3 shadow-2xl lg:hidden"
     >
       <div class="flex items-center justify-between gap-4">
         <div class="flex flex-col">
@@ -585,12 +632,12 @@
           class="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Loader2 v-if="verifying" class="h-4 w-4 animate-spin" />
-          <span>{{ verifying ? 'Ověřuji...' : 'Pokračovat' }}</span>
+          <span>{{ verifying ? 'Ověřuji...' : (!canProceed ? 'Vyberte termín' : 'Pokračovat') }}</span>
           <ChevronRight v-if="!verifying" class="h-4 w-4" />
         </button>
         <button
           v-else-if="step === 2"
-          @click="step = 3"
+          @click="verifyCustomerAndProceed"
           :disabled="!formReady"
           class="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -626,6 +673,7 @@ import axios from "axios";
 import { ref, computed, onMounted } from "vue";
 import { toast } from "vue-sonner";
 import { useBookingStore } from "../../stores/booking";
+import { Link } from "@inertiajs/vue3";
 import {
   ChevronLeft,
   ChevronRight,
@@ -633,13 +681,7 @@ import {
   Ban,
   XCircle,
   Calendar,
-  Moon,
-  Home,
-  BarChart3,
-  CreditCard,
   User,
-  Mail,
-  Phone,
   StickyNote,
   Send,
   PawPrint,
@@ -681,8 +723,12 @@ const submitting = ref(false);
 const submitError = ref("");
 const verifying = ref(false);
 const verifyError = ref("");
+const verifyingCustomer = ref(false);
+const customerVerifyError = ref("");
+const extrasAvailabilityDetails = ref([]);
 const extrasLoading = ref(false);
 const extrasError = ref("");
+const extrasAvailabilityError = ref("");
 
 // Form validation
 const fieldErrors = ref({
@@ -750,11 +796,11 @@ const monthLabel = computed(() =>
 const weekDays = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"];
 
 const stepItems = [
-  { id: 1, label: "Krok 1", desc: "Termín pobytu", icon: Calendar },
-  { id: 2, label: "Krok 2", desc: "Vaše údaje", icon: User },
-  { id: 3, label: "Krok 3", desc: "Doplňkové služby", icon: PawPrint },
-  { id: 4, label: "Krok 4", desc: "Kontrola", icon: CreditCard },
-  { id: 5, label: "Krok 5", desc: "Potvrzení", icon: CheckCircle },
+  { id: 1, label: "Termín", desc: "Krok 1", icon: Calendar },
+  { id: 2, label: "Údaje", desc: "Krok 2", icon: User },
+  { id: 3, label: "Služby", desc: "Krok 3", icon: PawPrint },
+  { id: 4, label: "Kontrola", desc: "Krok 4", icon: StickyNote },
+  { id: 5, label: "Hotovo", desc: "Krok 5", icon: CheckCircle },
 ];
 
 const progressPercent = computed(() => Math.round((Math.min(step.value, 5) / 5) * 100));
@@ -784,14 +830,7 @@ function pad(n) {
   return String(n).padStart(2, "0");
 }
 
-function dayKey(d) {
-  return `${year.value}-${String(month.value).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-}
 
-function dayInfo(d) {
-  const k = dayKey(d);
-  return daysData.value.find((x) => x.date === k);
-}
 
 function infoByDate(date) {
   return daysData.value.find((x) => x.date === date);
@@ -965,7 +1004,12 @@ function clearSelection() {
 }
 
 const selectedNights = computed(() => {
-  return rangeDates.value.length;
+  return Math.max(0, (rangeDates.value.length > 0 ? rangeDates.value.length - 1 : 0));
+});
+
+const nightDates = computed(() => {
+  if (rangeDates.value.length <= 1) return [];
+  return rangeDates.value.slice(0, -1);
 });
 
 function addDays(date, days) {
@@ -1002,8 +1046,9 @@ const monthsForRange = computed(() => {
 });
 
 const selectedTotalPrice = computed(() => {
-  if (rangeDates.value.length === 0) return 0;
-  return rangeDates.value.reduce((sum, iso) => {
+  if (rangeDates.value.length <= 1) return 0;
+  const nights = rangeDates.value.slice(0, -1);
+  return nights.reduce((sum, iso) => {
     const info = infoByDate(iso);
     const price = info?.price ? Number(info.price) : 0;
     return sum + price;
@@ -1011,15 +1056,15 @@ const selectedTotalPrice = computed(() => {
 });
 
 const rangeHasUnavailable = computed(() => {
-  if (rangeDates.value.length === 0) return false;
-  return rangeDates.value.some((iso) => {
+  if (nightDates.value.length === 0) return false;
+  return nightDates.value.some((iso) => {
     const info = infoByDate(iso);
     return info && info.available === false;
   });
 });
 
 const canProceed = computed(() => {
-  return !!(startDate.value && endDate.value) && !rangeHasUnavailable.value;
+  return !!(startDate.value && endDate.value) && selectedNights.value >= 1 && !rangeHasUnavailable.value;
 });
 
 const formReady = computed(() => {
@@ -1084,6 +1129,7 @@ async function verifyAndProceed() {
     });
     if (!res.data.available) {
       toast.error("Vybraný termín je mezitím obsazen. Vyberte prosím jiné datum.");
+      verifyError.value = "Vybraný termín je mezitím obsazen. Vyberte prosím jiné datum.";
       return;
     }
     const requests = monthsForRange.value.map(({ month, year }) =>
@@ -1097,8 +1143,37 @@ async function verifyAndProceed() {
     step.value = 2;
   } catch (e) {
     toast.error("Ověření dostupnosti se nezdařilo. Zkuste to prosím znovu.");
+    verifyError.value = "Ověření dostupnosti se nezdařilo. Zkuste to prosím znovu.";
   } finally {
     verifying.value = false;
+  }
+}
+
+async function verifyCustomerAndProceed() {
+  if (!formReady.value || verifyingCustomer.value) return;
+  verifyingCustomer.value = true;
+  customerVerifyError.value = "";
+  try {
+    const res = await axios.post('/api/bookings/verify-customer', {
+      customer: {
+        first_name: customer.value.firstName,
+        last_name: customer.value.lastName,
+        email: customer.value.email,
+        phone: customer.value.phone,
+        note: customer.value.note || '',
+      },
+    });
+    if (res.data && res.data.valid) {
+      step.value = 3;
+      return;
+    }
+    customerVerifyError.value = 'Ověření kontaktních údajů se nezdařilo. Zkontrolujte prosím zadání.';
+    toast.error('Ověření kontaktních údajů se nezdařilo.');
+  } catch (e) {
+    customerVerifyError.value = 'Ověření kontaktních údajů se nezdařilo. Zkuste to prosím znovu.';
+    toast.error('Ověření kontaktních údajů se nezdařilo.');
+  } finally {
+    verifyingCustomer.value = false;
   }
 }
 
@@ -1110,7 +1185,6 @@ async function loadExtras() {
     const res = await axios.get("/api/services");
     booking.setExtras(res.data.services || []);
   } catch (e) {
-    console.error(e);
     extrasError.value = "Příplatkové služby se nepodařilo načíst.";
   } finally {
     extrasLoading.value = false;
@@ -1125,22 +1199,37 @@ async function checkExtrasAvailability() {
 
   try {
     const selections = selectedExtras.value.map((ex) => ({
-      service_id: ex.id, // Changed from extra_id
+      service_id: ex.id,
       quantity: Number(extraSelection.value[ex.id] || 0),
     }));
 
     const res = await axios.post("/api/services/availability", {
-      start_date: booking.dateRange.start,
-      end_date: booking.dateRange.end,
-      items: selections,
+      start_date: startDate.value,
+      end_date: endDate.value,
+      selections: selections,
     });
     if (!res.data.available) {
+      const unavailable = (res.data.items || []).filter((i) => i.is_available === false);
+      extrasAvailabilityDetails.value = unavailable.map((i) => {
+        const id = i.service_id ?? i.extra_id;
+        const svc = validExtras.value.find((s) => s.id === id);
+        return {
+          name: svc?.name || `Služba #${id}`,
+          available: i.available_quantity ?? 0,
+          requested: i.requested_quantity ?? 0,
+        };
+      });
       toast.error("Některé služby nejsou v požadovaném množství dostupné.");
+      extrasAvailabilityError.value = "Některé služby nejsou v požadovaném množství dostupné.";
       return;
     }
+    extrasAvailabilityError.value = "";
+    extrasAvailabilityDetails.value = [];
     step.value = 4;
   } catch (e) {
     toast.error("Ověření dostupnosti služeb se nezdařilo.");
+    extrasAvailabilityError.value = "Ověření dostupnosti služeb se nezdařilo. Zkuste to prosím znovu.";
+    extrasAvailabilityDetails.value = [];
   }
 }
 

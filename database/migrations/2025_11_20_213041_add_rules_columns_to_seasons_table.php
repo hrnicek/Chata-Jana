@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('seasons', function (Blueprint $table) {
-            $table->integer('min_stay')->default(2);
+            $table->integer('min_stay')->default(1);
             $table->json('check_in_days')->nullable();
         });
     }

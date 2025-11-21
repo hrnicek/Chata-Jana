@@ -25,13 +25,13 @@ class BookingsTable
                 TextColumn::make('customer.name')
                     ->label('Zákazník')
                     ->searchable(),
-                TextColumn::make('start_date')
+                TextColumn::make('date_start')
                     ->label('Příjezd')
-                    ->date()
+                    ->dateTime()
                     ->sortable(),
-                TextColumn::make('end_date')
+                TextColumn::make('date_end')
                     ->label('Odjezd')
-                    ->date()
+                    ->dateTime()
                     ->sortable(),
                 TextColumn::make('status')
                     ->label('Stav')

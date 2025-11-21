@@ -14,7 +14,7 @@ class BookingPriceCalculator
         Carbon $endDate,
         array $serviceSelections = []
     ): PriceBreakdown {
-        $nights = max(1, $startDate->diffInDays($endDate));
+        $nights = max(1, $startDate->copy()->startOfDay()->diffInDays($endDate->copy()->startOfDay()));
 
         // Calculate accommodation price from seasons
         $accommodationPrice = $this->calculateAccommodationPrice($startDate, $endDate, $nights);

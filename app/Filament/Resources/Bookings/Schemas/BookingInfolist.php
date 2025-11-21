@@ -17,10 +17,10 @@ class BookingInfolist
                 TextEntry::make('customer.id')
                     ->label('Customer')
                     ->placeholder('-'),
-                TextEntry::make('start_date')
-                    ->date(),
-                TextEntry::make('end_date')
-                    ->date(),
+                TextEntry::make('date_start')
+                    ->dateTime(),
+                TextEntry::make('date_end')
+                    ->dateTime(),
                 TextEntry::make('total_price')
                     ->money(),
                 TextEntry::make('status')

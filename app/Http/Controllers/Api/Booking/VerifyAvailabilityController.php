@@ -18,14 +18,17 @@ class VerifyAvailabilityController extends Controller
     {
         $data = $request->validated();
 
-        $start = Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
-        $end = Carbon::createFromFormat('Y-m-d', $data['end_date'])->endOfDay();
+        $checkin = config('booking.checkin_time', '14:00');
+        $checkout = config('booking.checkout_time', '10:00');
+        $start = Carbon::createFromFormat('Y-m-d H:i', $data['start_date'] . ' ' . $checkin);
+        $end = Carbon::createFromFormat('Y-m-d H:i', $data['end_date'] . ' ' . $checkout);
 
         $bookings = Booking::query()
             ->where('status', '!=', 'cancelled')
-            ->where('start_date', '<=', $end->toDateString())
-            ->where('end_date', '>=', $start->toDateString())
+            ->where('date_start', '<', $end)
+            ->where('date_end', '>', $start)
             ->get();
+        $hasOverlap = $bookings->isNotEmpty();
 
         $blackouts = BlackoutDate::query()
             ->where('start_date', '<=', $end->toDateString())
@@ -33,15 +36,18 @@ class VerifyAvailabilityController extends Controller
             ->get();
 
         $unavailableDates = [];
-        $cursor = $start->copy();
+        $cursor = $start->copy()->startOfDay();
+        $cursorEnd = $end->copy()->startOfDay();
 
-        while ($cursor->lte($end)) {
+        while ($cursor->lte($cursorEnd)) {
             $isBlackout = $blackouts->contains(function (BlackoutDate $b) use ($cursor) {
                 return $cursor->between($b->start_date, $b->end_date);
             });
 
             $isBooked = $bookings->contains(function (Booking $b) use ($cursor) {
-                return $cursor->between($b->start_date, $b->end_date);
+                $bookingStart = \Illuminate\Support\Carbon::parse($b->date_start)->startOfDay();
+                $bookingEndExclusive = \Illuminate\Support\Carbon::parse($b->date_end)->subDay()->startOfDay();
+                return $cursor->between($bookingStart, $bookingEndExclusive);
             });
 
             if ($isBlackout || $isBooked) {
@@ -51,7 +57,7 @@ class VerifyAvailabilityController extends Controller
             $cursor = $cursor->addDay();
         }
 
-        $available = count($unavailableDates) === 0;
+        $available = (! $hasOverlap) && count($unavailableDates) === 0;
 
         return response()->json([
             'available' => $available,

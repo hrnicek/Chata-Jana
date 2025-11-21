@@ -9,8 +9,8 @@ class MinStayRule implements BookingRule
 {
     public function validate(Carbon $start, Carbon $end, ?Season $season): void
     {
-        $nights = $start->diffInDays($end);
-        $minStay = $season?->min_stay ?? 1; // Default to 1 night if no season or season has no min_stay
+        $nights = $start->copy()->startOfDay()->diffInDays($end->copy()->startOfDay());
+        $minStay = $season?->min_stay ?? (int) config('booking.min_stay_default', 1);
 
         if ($nights < $minStay) {
             throw new \Exception("Minimum stay for this period is {$minStay} nights.");

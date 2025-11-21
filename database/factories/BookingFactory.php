@@ -40,7 +40,7 @@ class BookingFactory extends Factory
             'start_date' => $start->toDateString(),
             'end_date' => $end->toDateString(),
             'total_price' => $price * $nights,
-            'status' => BookingStatus::Confirmed,
+            'status' => 'confirmed',
         ];
     }
 }

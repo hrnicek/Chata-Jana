@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Bookings\Schemas;
 
-use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
@@ -19,11 +19,13 @@ class BookingForm
                     ->schema([
                         Grid::make(2)
                             ->schema([
-                                DatePicker::make('start_date')
+                                DateTimePicker::make('date_start')
                                     ->label('Příjezd')
+                                    ->seconds(false)
                                     ->required(),
-                                DatePicker::make('end_date')
+                                DateTimePicker::make('date_end')
                                     ->label('Odjezd')
+                                    ->seconds(false)
                                     ->required(),
                                 Select::make('status')
                                     ->label('Stav')
