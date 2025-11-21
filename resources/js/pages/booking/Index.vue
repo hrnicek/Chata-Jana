@@ -55,7 +55,7 @@
                       <div class="text-sm font-medium" :class="step === item.id ? 'text-gray-900' : 'text-gray-600'">
                         {{ item.label }}
                       </div>
-                      <div class="text-xs text-gray-500">{{ item.desc }}</div>
+                      <div class="text-xs" :class="step > item.id ? 'text-primary' : 'text-gray-500'">{{ step > item.id ? 'Upravit' : item.desc }}</div>
                     </div>
                   </button>
                 </li>
@@ -181,17 +181,27 @@
                     </div>
                  </div>
 
-                 <div class="grid grid-cols-7 gap-2">
+                 <div class="grid grid-cols-7 gap-2" role="grid">
                     <!-- Weekdays -->
                     <div v-for="d in weekDays" :key="d" class="text-center font-medium text-gray-700">
                       {{ d }}
                     </div>
                     
                     <!-- Days -->
-                    <div
-                      v-for="cell in cells"
+                    <button
+                      v-for="(cell, idx) in cells"
                       :key="cell.date"
+                      type="button"
+                      :disabled="!isAvailable(cell.date)"
                       @click="selectDate(cell)"
+                      @keydown.left.prevent="focusAdjacentCell(idx, -1)"
+                      @keydown.right.prevent="focusAdjacentCell(idx, 1)"
+                      @keydown.up.prevent="focusAdjacentCell(idx, -7)"
+                      @keydown.down.prevent="focusAdjacentCell(idx, 7)"
+                      @keydown.enter.prevent="selectDate(cell)"
+                      @keydown.space.prevent="selectDate(cell)"
+                      :aria-label="ariaLabelForCell(cell)"
+                      :ref="el => dayRefs[idx] = el"
                       class="cursor-pointer rounded border p-2 transition-colors"
                       :class="[
                         cell.inCurrent ? '' : 'opacity-60',
@@ -200,9 +210,9 @@
                             ? 'border-orange-400 bg-orange-50'
                             : 'border-red-400 bg-red-50'
                           : '',
-                        !isAvailable(cell.date) ? 'pointer-events-none cursor-not-allowed' : '',
-                        isInRange(cell.date) ? 'border-emerald-400 bg-emerald-50' : '',
+                        isInRange(cell.date) && isAvailable(cell.date) ? 'border-emerald-400 bg-emerald-50' : '',
                         isStart(cell.date) || isEnd(cell.date) ? 'ring-2 ring-emerald-500' : '',
+                        !isAvailable(cell.date) ? 'cursor-not-allowed' : ''
                       ]"
                     >
                       <div class="flex justify-between items-center">
@@ -213,6 +223,7 @@
                           v-if="infoByDate(cell.date)?.season && !infoByDate(cell.date)?.season_is_default"
                           class="rounded px-1.5 py-0.5 text-[10px] font-medium"
                           :class="infoByDate(cell.date)?.season_is_default ? 'bg-gray-100 text-gray-700' : 'bg-amber-100 text-amber-700'"
+                          :aria-label="'Sezóna: ' + (infoByDate(cell.date)?.season || '')"
                         >
                           {{ infoByDate(cell.date)?.season }}
                         </span>
@@ -220,17 +231,23 @@
 
                       <!-- Status/Price -->
                       <div class="mt-1 flex items-center gap-1 text-sm" :class="statusClass(cell.date)">
-                         <CheckCircle v-if="infoByDate(cell.date)?.available" class="h-4 w-4" />
-                         <Ban v-else-if="isBlackout(cell.date)" class="h-4 w-4" />
-                         <XCircle v-else class="h-4 w-4" />
-                         {{ statusText(cell.date) }}
+                         <CheckCircle v-if="infoByDate(cell.date)?.available" class="h-4 w-4" aria-hidden="true" />
+                         <Ban v-else-if="isBlackout(cell.date)" class="h-4 w-4" aria-hidden="true" />
+                         <XCircle v-else class="h-4 w-4" aria-hidden="true" />
                       </div>
                       
                       <div v-if="infoByDate(cell.date)?.price" class="mt-1 text-sm text-gray-800">
                         {{ currency(infoByDate(cell.date)?.price) }}
                       </div>
-                    </div>
+                    </button>
                  </div>
+              </div>
+
+              <div v-if="rangeHasUnavailable" class="rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-900 mt-4">
+                Vybraný termín zahrnuje obsazené dny:
+                <ul class="list-disc pl-4">
+                  <li v-for="d in unavailableDates" :key="d">{{ formatDate(d) }}</li>
+                </ul>
               </div>
 
               <!-- Step 1 Footer -->
@@ -278,6 +295,7 @@
                     <input
                       v-model="customer.firstName"
                       @blur="validateField('firstName')"
+                      @input="validateField('firstName')"
                       @focus="clearFieldError('firstName')"
                       type="text"
                       autocomplete="given-name"
@@ -297,6 +315,7 @@
                     <input
                       v-model="customer.lastName"
                       @blur="validateField('lastName')"
+                      @input="validateField('lastName')"
                       @focus="clearFieldError('lastName')"
                       type="text"
                       autocomplete="family-name"
@@ -316,6 +335,7 @@
                     <input
                       v-model="customer.email"
                       @blur="validateField('email')"
+                      @input="validateField('email')"
                       @focus="clearFieldError('email')"
                       type="email"
                       autocomplete="email"
@@ -335,6 +355,7 @@
                     <input
                       v-model="customer.phone"
                       @blur="validateField('phone')"
+                      @input="validateField('phone')"
                       @focus="clearFieldError('phone')"
                       type="tel"
                       autocomplete="tel"
@@ -444,7 +465,8 @@
                     >
                       +
                     </button>
-                    <span v-if="ex.max_quantity" class="text-xs text-gray-500">Max. {{ ex.max_quantity }}</span>
+                    <span v-if="ex.max_quantity" class="text-xs font-medium text-gray-700">Max. {{ ex.max_quantity }}</span>
+                    <span v-if="(extraSelection[ex.id] || 0) >= ex.max_quantity" class="text-xs font-medium text-amber-700">Dosaženo maxima</span>
                   </div>
                 </div>
               </div>
@@ -729,6 +751,7 @@ const extrasAvailabilityDetails = ref([]);
 const extrasLoading = ref(false);
 const extrasError = ref("");
 const extrasAvailabilityError = ref("");
+const dayRefs = ref([]);
 
 // Form validation
 const fieldErrors = ref({
@@ -1044,6 +1067,21 @@ const monthsForRange = computed(() => {
   }
   return Array.from(m.values());
 });
+function focusAdjacentCell(idx, delta) {
+  const target = idx + delta;
+  if (target < 0 || target >= cells.value.length) return;
+  const el = dayRefs.value[target];
+  if (el) {
+    el.focus();
+  }
+}
+
+function ariaLabelForCell(cell) {
+  const d = formatDate(cell.date);
+  const s = statusText(cell.date) || "";
+  const priceInfo = infoByDate(cell.date)?.price ? currency(infoByDate(cell.date)?.price) : "";
+  return priceInfo ? `${d}, ${s}, ${priceInfo}` : `${d}, ${s}`;
+}
 
 const selectedTotalPrice = computed(() => {
   if (rangeDates.value.length <= 1) return 0;
@@ -1062,13 +1100,24 @@ const rangeHasUnavailable = computed(() => {
     return info && info.available === false;
   });
 });
+const unavailableDates = computed(() => {
+  if (nightDates.value.length === 0) return [];
+  return nightDates.value.filter((iso) => {
+    const info = infoByDate(iso);
+    return info && info.available === false;
+  });
+});
 
 const canProceed = computed(() => {
   return !!(startDate.value && endDate.value) && selectedNights.value >= 1 && !rangeHasUnavailable.value;
 });
 
+const allFieldsValid = computed(() => {
+  return Object.values(validFields.value).every(Boolean);
+});
+
 const formReady = computed(() => {
-  return canProceed.value && booking.isFormFilled;
+  return canProceed.value && allFieldsValid.value;
 });
 
 const addonsTotalPrice = computed(() => {
