@@ -233,6 +233,8 @@
                       type="button"
                       :disabled="!isAvailable(cell.date)"
                       @click="selectDate(cell)"
+                      @mouseenter="onEnterCell(cell)"
+                      @mouseleave="onLeaveCell"
                       @keydown.left.prevent="focusAdjacentCell(idx, -1)"
                       @keydown.right.prevent="focusAdjacentCell(idx, 1)"
                       @keydown.up.prevent="focusAdjacentCell(idx, -7)"
@@ -250,8 +252,11 @@
                             ? 'border-orange-400 bg-orange-50'
                             : 'border-red-400 bg-red-50'
                           : '',
+                        isWeekend(cell.date) && isAvailable(cell.date) ? 'bg-gray-50' : '',
+                        isInPreviewRange(cell.date) && isAvailable(cell.date) ? 'ring-1 ring-green-300 border-green-300 bg-green-50' : '',
                         isInRange(cell.date) && isAvailable(cell.date) ? 'ring-1 ring-green-500 border-green-400 bg-green-50' : '',
                         isStart(cell.date) || isEnd(cell.date) ? 'ring-1 ring-green-600' : '',
+                        isToday(cell.date) && isAvailable(cell.date) ? 'ring-1 ring-gray-300' : '',
                         !isAvailable(cell.date) ? 'cursor-not-allowed' : ''
                       ]"
                     >
@@ -744,6 +749,7 @@ const month = ref(now.getMonth() + 1);
 const year = ref(now.getFullYear());
 const todayMonth = now.getMonth() + 1;
 const todayYear = now.getFullYear();
+const todayDay = now.getDate();
 const daysData = ref([]);
 const loading = ref(false);
 const error = ref("");
@@ -781,6 +787,7 @@ const extrasLoading = ref(false);
 const extrasError = ref("");
 const extrasAvailabilityError = ref("");
 const dayRefs = ref([]);
+const hoverDate = ref(null);
 
 // Form validation
 const fieldErrors = ref({
@@ -981,6 +988,18 @@ function isSameDate(a, b) {
   );
 }
 
+function isToday(dateStr) {
+  const d = parseISO(dateStr);
+  const t = new Date(todayYear, todayMonth - 1, todayDay);
+  return isSameDate(d, t);
+}
+
+function isWeekend(dateStr) {
+  const d = parseISO(dateStr);
+  const idx = d.getDay();
+  return idx === 0 || idx === 6;
+}
+
 function isInRange(dateStr) {
   if (!rangeStart.value) return false;
   const d = parseISO(dateStr);
@@ -1001,6 +1020,15 @@ function isStart(dateStr) {
 
 function isEnd(dateStr) {
   return !!(rangeEnd.value && isSameDate(parseISO(dateStr), rangeEnd.value));
+}
+
+function isInPreviewRange(dateStr) {
+  if (!rangeStart.value || rangeEnd.value || !hoverDate.value) return false;
+  const d = parseISO(dateStr);
+  const h = parseISO(hoverDate.value);
+  const a = rangeStart.value <= h ? rangeStart.value : h;
+  const b = rangeStart.value <= h ? h : rangeStart.value;
+  return d >= a && d <= b;
 }
 
 function isAvailable(dateStr) {
@@ -1050,6 +1078,18 @@ function selectDate(cell) {
       endDate.value = date;
     }
   }
+}
+
+function onEnterCell(cell) {
+  if (startDate.value && !endDate.value && isAvailable(cell.date)) {
+    hoverDate.value = cell.date;
+  } else {
+    hoverDate.value = null;
+  }
+}
+
+function onLeaveCell() {
+  hoverDate.value = null;
 }
 
 function clearSelection() {
