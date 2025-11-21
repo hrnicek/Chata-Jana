@@ -240,8 +240,9 @@
                       @keydown.enter.prevent="selectDate(cell)"
                       @keydown.space.prevent="selectDate(cell)"
                       :aria-label="ariaLabelForCell(cell)"
+                      :title="ariaLabelForCell(cell)"
                       :ref="el => dayRefs[idx] = el"
-                      class="cursor-pointer rounded border p-2 transition-colors"
+                      class="cursor-pointer rounded border p-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 hover:border-green-400 hover:bg-green-50"
                       :class="[
                         cell.inCurrent ? '' : 'opacity-60',
                         !isAvailable(cell.date)
@@ -249,34 +250,23 @@
                             ? 'border-orange-400 bg-orange-50'
                             : 'border-red-400 bg-red-50'
                           : '',
-                        isInRange(cell.date) && isAvailable(cell.date) ? 'border-emerald-400 bg-emerald-50' : '',
-                        isStart(cell.date) || isEnd(cell.date) ? 'ring-2 ring-emerald-500' : '',
+                        isInRange(cell.date) && isAvailable(cell.date) ? 'ring-1 ring-green-500 border-green-400 bg-green-50' : '',
+                        isStart(cell.date) || isEnd(cell.date) ? 'ring-1 ring-green-600' : '',
                         !isAvailable(cell.date) ? 'cursor-not-allowed' : ''
                       ]"
                     >
                       <div class="flex justify-between items-center">
                         <span class="font-semibold">{{ cell.day }}</span>
-                        
-                        <!-- Season Badge -->
                         <span 
-                          v-if="infoByDate(cell.date)?.season && !infoByDate(cell.date)?.season_is_default"
-                          class="rounded px-1.5 py-0.5 text-[10px] font-medium"
-                          :class="infoByDate(cell.date)?.season_is_default ? 'bg-gray-100 text-gray-700' : 'bg-amber-100 text-amber-700'"
-                          :aria-label="'Sezóna: ' + (infoByDate(cell.date)?.season || '')"
-                        >
-                          {{ infoByDate(cell.date)?.season }}
-                        </span>
+                          class="inline-block h-2 w-2 rounded-full"
+                          :class="statusBgClass(cell.date)"
+                          :aria-label="statusText(cell.date)"
+                        ></span>
                       </div>
-
-                      <!-- Status/Price -->
-                      <div class="mt-1 flex items-center gap-1 text-sm" :class="statusClass(cell.date)">
-                         <CheckCircle v-if="infoByDate(cell.date)?.available" class="h-4 w-4" aria-hidden="true" />
-                         <Ban v-else-if="isBlackout(cell.date)" class="h-4 w-4" aria-hidden="true" />
-                         <XCircle v-else class="h-4 w-4" aria-hidden="true" />
-                      </div>
-                      
-                      <div v-if="infoByDate(cell.date)?.price" class="mt-1 text-sm text-gray-800">
-                        {{ currency(infoByDate(cell.date)?.price) }}
+                      <div class="mt-1 flex items-center justify-start">
+                        <div v-if="infoByDate(cell.date)?.price" class="text-xs font-medium text-gray-800">
+                          {{ currency(infoByDate(cell.date)?.price) }}
+                        </div>
                       </div>
                     </button>
                  </div>
@@ -1033,13 +1023,14 @@ function statusText(dateStr) {
   return "Obsazené";
 }
 
-function statusClass(dateStr) {
+function statusBgClass(dateStr) {
   const info = infoByDate(dateStr);
-  if (!info) return "";
-  if (info.available) return "text-green-700";
-  if (info.blackout) return "text-orange-700";
-  return "text-red-700";
+  if (!info) return "bg-gray-200";
+  if (info.available) return "bg-green-500";
+  if (info.blackout) return "bg-orange-500";
+  return "bg-red-500";
 }
+
 
 function selectDate(cell) {
   if (!isAvailable(cell.date)) return;
