@@ -39,6 +39,11 @@ class CalendarController extends Controller
         $days = [];
         $date = $periodStart->copy();
 
+        $minLeadDays = (int) config('booking.min_lead_days', 1);
+        $earliest = now()->timezone(config('booking.timezone', 'Europe/Prague'))
+            ->startOfDay()
+            ->addDays($minLeadDays);
+
         while ($date->lte($periodEnd)) {
             $customSeason = $seasons->first(function (Season $s) use ($date) {
                 $md = $date->format('m-d');
@@ -63,9 +68,11 @@ class CalendarController extends Controller
                 return $date->between($bookingStart, $bookingEndExclusive);
             });
 
+            $meetsLead = $date->gte($earliest);
+
             $days[] = [
                 'date' => $date->toDateString(),
-                'available' => ! ($isBlackout || $isBooked),
+                'available' => $meetsLead && ! ($isBlackout || $isBooked),
                 'blackout' => $isBlackout,
                 'season' => $season?->name,
                 'season_is_default' => (bool) ($season?->is_default ?? false),

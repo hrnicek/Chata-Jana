@@ -53,28 +53,26 @@
                   </div>
                 </div>
               </div>
-              <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
-                K ceně se na místě připočítává: vratná kauce 5 000 Kč, elektřina dle skutečné spotřeby (VT 9,00 Kč/kWh, NT 8,00 Kč/kWh), rekreační poplatek 20 Kč/osoba/den, pes 350 Kč/den. U pobytu na 1 noc se účtuje jednorázový úklid 3 000 Kč.
-              </div>
+              
             </div>
-            <div class="hidden lg:flex items-center gap-3 text-sm text-gray-600">
+            <div class="hidden lg:flex items-center gap-3 text-[11px] text-gray-600">
               <div class="flex items-center gap-1">
-                <CheckCircle class="h-4 w-4 text-green-600" />
+                <span class="inline-block h-2 w-2 rounded-full bg-green-500"></span>
                 <span>Volné</span>
               </div>
               <div class="flex items-center gap-1">
-                <XCircle class="h-4 w-4 text-red-600" />
+                <span class="inline-block h-2 w-2 rounded-full bg-red-500"></span>
                 <span>Obsazené</span>
               </div>
               <div class="flex items-center gap-1">
-                <Ban class="h-4 w-4 text-orange-600" />
+                <span class="inline-block h-2 w-2 rounded-full bg-orange-500"></span>
                 <span>Nedostupné</span>
               </div>
             </div>
             <div class="hidden lg:block">
               <div class="mt-4">
-                <div class="mb-2 text-xs font-medium text-gray-500">Dokumenty</div>
-                <div class="flex flex-col gap-1 text-sm">
+                <div class="mb-2 text-[11px] font-medium text-gray-500">Dokumenty</div>
+                <div class="flex flex-col gap-1 text-[11px]">
                   <Link href="/vseobecne-obchodni-podminky" class="flex items-center justify-between gap-2 text-gray-600 hover:text-gray-900">
                     <span>Všeobecné obchodní podmínky</span>
                     <ChevronRight class="h-4 w-4 text-gray-400" />
@@ -138,8 +136,8 @@
                 </div>
               </div>
               <div class="block lg:hidden">
-                <div class="mb-2 text-xs font-medium text-gray-500">Dokumenty</div>
-                <div class="flex flex-col gap-1 text-sm">
+                <div class="mb-2 text-[11px] font-medium text-gray-500">Dokumenty</div>
+                <div class="flex flex-col gap-1 text-[11px]">
                   <Link href="/vseobecne-obchodni-podminky" class="flex items-center justify-between gap-2 text-gray-600 hover:text-gray-900">
                     <span>Všeobecné obchodní podmínky</span>
                     <ChevronRight class="h-4 w-4 text-gray-400" />
@@ -184,17 +182,17 @@
               </div>
               </header>
 
-              <div class="mt-1 flex flex-wrap items-center gap-3 text-sm text-gray-600 lg:hidden">
+              <div class="mt-1 flex flex-wrap items-center gap-3 text-xs text-gray-600 lg:hidden">
                 <div class="flex items-center gap-1">
-                  <CheckCircle class="h-4 w-4 text-green-600" />
+                  <span class="inline-block h-2 w-2 rounded-full bg-green-500"></span>
                   <span>Volné</span>
                 </div>
                 <div class="flex items-center gap-1">
-                  <XCircle class="h-4 w-4 text-red-600" />
+                  <span class="inline-block h-2 w-2 rounded-full bg-red-500"></span>
                   <span>Obsazené</span>
                 </div>
                 <div class="flex items-center gap-1">
-                  <Ban class="h-4 w-4 text-orange-600" />
+                  <span class="inline-block h-2 w-2 rounded-full bg-orange-500"></span>
                   <span>Nedostupné</span>
                 </div>
               </div>
@@ -231,7 +229,7 @@
                       v-for="(cell, idx) in cells"
                       :key="cell.date"
                       type="button"
-                      :disabled="!isAvailable(cell.date)"
+                      :disabled="!isSelectable(cell.date)"
                       @click="selectDate(cell)"
                       @mouseenter="onEnterCell(cell)"
                       @mouseleave="onLeaveCell"
@@ -247,17 +245,17 @@
                       class="cursor-pointer rounded border p-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 hover:border-green-400 hover:bg-green-50"
                       :class="[
                         cell.inCurrent ? '' : 'opacity-60',
-                        !isAvailable(cell.date)
+                        !isSelectable(cell.date)
                           ? isBlackout(cell.date)
                             ? 'border-orange-400 bg-orange-50'
                             : 'border-red-400 bg-red-50'
                           : '',
-                        isWeekend(cell.date) && isAvailable(cell.date) ? 'bg-gray-50' : '',
-                        isInPreviewRange(cell.date) && isAvailable(cell.date) ? 'ring-1 ring-green-300 border-green-300 bg-green-50' : '',
-                        isInRange(cell.date) && isAvailable(cell.date) ? 'ring-1 ring-green-500 border-green-400 bg-green-50' : '',
+                        isWeekend(cell.date) && isSelectable(cell.date) ? 'bg-gray-50' : '',
+                        isInPreviewRange(cell.date) && isSelectable(cell.date) ? 'ring-1 ring-green-300 border-green-300 bg-green-50' : '',
+                        isInRange(cell.date) && isSelectable(cell.date) ? 'ring-1 ring-green-500 border-green-400 bg-green-50' : '',
                         isStart(cell.date) || isEnd(cell.date) ? 'ring-1 ring-green-600' : '',
-                        isToday(cell.date) && isAvailable(cell.date) ? 'ring-1 ring-gray-300' : '',
-                        !isAvailable(cell.date) ? 'cursor-not-allowed' : ''
+                        isToday(cell.date) && isSelectable(cell.date) ? 'ring-1 ring-gray-300' : '',
+                        !isSelectable(cell.date) ? 'cursor-not-allowed' : ''
                       ]"
                     >
                       <div class="flex justify-between items-center">
@@ -729,13 +727,11 @@ import axios from "axios";
 import { ref, computed, onMounted } from "vue";
 import { toast } from "vue-sonner";
 import { useBookingStore } from "../../stores/booking";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import {
   ChevronLeft,
   ChevronRight,
   CheckCircle,
-  Ban,
-  XCircle,
   Calendar,
   User,
   StickyNote,
@@ -744,6 +740,7 @@ import {
   Loader2,
 } from "lucide-vue-next";
 
+const page = usePage();
 const now = new Date();
 const month = ref(now.getMonth() + 1);
 const year = ref(now.getFullYear());
@@ -788,6 +785,11 @@ const extrasError = ref("");
 const extrasAvailabilityError = ref("");
 const dayRefs = ref([]);
 const hoverDate = ref(null);
+
+const minLeadDays = computed(() => {
+  const v = page?.props?.bookingConfig?.minLeadDays ?? 0;
+  return Number(v) || 0;
+});
 
 // Form validation
 const fieldErrors = ref({
@@ -1022,6 +1024,19 @@ function isEnd(dateStr) {
   return !!(rangeEnd.value && isSameDate(parseISO(dateStr), rangeEnd.value));
 }
 
+function meetsLead(dateStr) {
+  const d = parseISO(dateStr);
+  const base = new Date(todayYear, todayMonth - 1, todayDay);
+  const earliest = addDays(base, minLeadDays.value);
+  earliest.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return d >= earliest;
+}
+
+function isSelectable(dateStr) {
+  return isAvailable(dateStr) && meetsLead(dateStr);
+}
+
 function isInPreviewRange(dateStr) {
   if (!rangeStart.value || rangeEnd.value || !hoverDate.value) return false;
   const d = parseISO(dateStr);
@@ -1061,7 +1076,7 @@ function statusBgClass(dateStr) {
 
 
 function selectDate(cell) {
-  if (!isAvailable(cell.date)) return;
+  if (!isSelectable(cell.date)) return;
   const date = cell.date;
   if (!startDate.value || (startDate.value && endDate.value)) {
     startDate.value = date;
@@ -1081,7 +1096,7 @@ function selectDate(cell) {
 }
 
 function onEnterCell(cell) {
-  if (startDate.value && !endDate.value && isAvailable(cell.date)) {
+  if (startDate.value && !endDate.value && isSelectable(cell.date)) {
     hoverDate.value = cell.date;
   } else {
     hoverDate.value = null;

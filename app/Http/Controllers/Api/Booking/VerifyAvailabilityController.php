@@ -23,6 +23,18 @@ class VerifyAvailabilityController extends Controller
         $start = Carbon::createFromFormat('Y-m-d H:i', $data['start_date'] . ' ' . $checkin);
         $end = Carbon::createFromFormat('Y-m-d H:i', $data['end_date'] . ' ' . $checkout);
 
+        $minLeadDays = (int) config('booking.min_lead_days', 1);
+        $earliest = now()->timezone(config('booking.timezone', 'Europe/Prague'))
+            ->startOfDay()
+            ->addDays($minLeadDays)
+            ->setTimeFromTimeString($checkin);
+        if ($start->lt($earliest)) {
+            return response()->json([
+                'available' => false,
+                'unavailable_dates' => [],
+            ]);
+        }
+
         $bookings = Booking::query()
             ->where('status', '!=', 'cancelled')
             ->where('date_start', '<', $end)
