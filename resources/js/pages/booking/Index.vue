@@ -4,63 +4,9 @@
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
         
         <!-- SIDEBAR: Progress & Summary -->
-        <aside class="lg:col-span-4 xl:col-span-3">
+        <aside class="lg:col-span-3 xl:col-span-3">
           <div class="sticky top-8 space-y-8">
             
-            <!-- Progress Steps -->
-            <nav aria-label="Průběh rezervace">
-              <div class="mb-4 flex items-center gap-2 text-primary">
-                <Calendar class="h-5 w-5" />
-                <h2 class="text-lg font-medium">Vaše cesta</h2>
-              </div>
-              
-              <!-- Mobile Progress Bar -->
-              <div class="mb-6 block lg:hidden">
-                <div class="h-2 w-full overflow-hidden rounded-full bg-gray-200">
-                  <div class="h-full bg-primary transition-all duration-500" :style="{ width: progressPercent + '%' }"></div>
-                </div>
-                <div class="mt-2 flex justify-between text-xs text-gray-500">
-                  <span>Start</span>
-                  <span>Dokončení</span>
-                </div>
-              </div>
-
-              <!-- Desktop Steps -->
-              <ul class="space-y-1">
-                <li v-for="item in stepItems" :key="item.id">
-                  <button
-                    @click="navigateTo(item.id)"
-                    :disabled="!canNavigateTo(item.id)"
-                    class="group flex w-full items-center gap-3 rounded-lg border border-transparent px-3 py-2.5 text-left transition-colors"
-                    :class="[
-                      step === item.id 
-                        ? 'bg-white border-gray-200 shadow-sm' 
-                        : canNavigateTo(item.id) 
-                          ? 'hover:bg-gray-100' 
-                          : 'opacity-50 cursor-not-allowed'
-                    ]"
-                  >
-                    <div 
-                      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border transition-colors"
-                      :class="[
-                        step === item.id ? 'border-primary bg-primary/5 text-primary' :
-                        step > item.id ? 'border-primary bg-primary/5 text-primary' :
-                        'border-gray-200 bg-gray-50 text-gray-400'
-                      ]"
-                    >
-                      <CheckCircle v-if="step > item.id" class="h-5 w-5" />
-                      <component v-else :is="item.icon" class="h-4 w-4" />
-                    </div>
-                    <div>
-                      <div class="text-sm font-medium" :class="step === item.id ? 'text-gray-900' : 'text-gray-600'">
-                        {{ item.label }}
-                      </div>
-                      <div class="text-xs" :class="step > item.id ? 'text-primary' : 'text-gray-500'">{{ step > item.id ? 'Upravit' : item.desc }}</div>
-                    </div>
-                  </button>
-                </li>
-              </ul>
-            </nav>
 
             <!-- Live Summary (Desktop Sticky) -->
             <div class="hidden rounded-xl border border-gray-200 bg-white p-5 lg:block">
@@ -111,15 +57,108 @@
                 K ceně se na místě připočítává: vratná kauce 5 000 Kč, elektřina dle skutečné spotřeby (VT 9,00 Kč/kWh, NT 8,00 Kč/kWh), rekreační poplatek 20 Kč/osoba/den, pes 350 Kč/den. U pobytu na 1 noc se účtuje jednorázový úklid 3 000 Kč.
               </div>
             </div>
+            <div class="hidden lg:flex items-center gap-3 text-sm text-gray-600">
+              <div class="flex items-center gap-1">
+                <CheckCircle class="h-4 w-4 text-green-600" />
+                <span>Volné</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <XCircle class="h-4 w-4 text-red-600" />
+                <span>Obsazené</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <Ban class="h-4 w-4 text-orange-600" />
+                <span>Nedostupné</span>
+              </div>
+            </div>
+            <div class="hidden lg:block">
+              <div class="mt-4">
+                <div class="mb-2 text-xs font-medium text-gray-500">Dokumenty</div>
+                <div class="flex flex-col gap-1 text-sm">
+                  <Link href="/vseobecne-obchodni-podminky" class="flex items-center justify-between gap-2 text-gray-600 hover:text-gray-900">
+                    <span>Všeobecné obchodní podmínky</span>
+                    <ChevronRight class="h-4 w-4 text-gray-400" />
+                  </Link>
+                  <Link href="/zasady-zpracovani-osobnich-udaju" class="flex items-center justify-between gap-2 text-gray-600 hover:text-gray-900">
+                    <span>Zásady zpracování osobních údajů</span>
+                    <ChevronRight class="h-4 w-4 text-gray-400" />
+                  </Link>
+                  <Link href="/ubytovaci-rad" class="flex items-center justify-between gap-2 text-gray-600 hover:text-gray-900">
+                    <span>Ubytovací řád</span>
+                    <ChevronRight class="h-4 w-4 text-gray-400" />
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </aside>
 
         <!-- MAIN CONTENT -->
-        <main class="lg:col-span-8 xl:col-span-9">
+        <main class="lg:col-span-9 xl:col-span-9">
+          <div class="mb-3 hidden lg:block">
+            <ol class="flex items-center gap-2">
+              <li v-for="item in stepItems" :key="item.id">
+                <button
+                  @click="navigateTo(item.id)"
+                  :disabled="!canNavigateTo(item.id)"
+                  class="group flex items-center gap-2 rounded-md border border-transparent px-3 py-1 text-sm"
+                  :class="[
+                    step === item.id 
+                      ? 'bg-white border-gray-200 shadow-sm' 
+                      : canNavigateTo(item.id) 
+                        ? 'hover:bg-gray-100' 
+                        : 'opacity-50 cursor-not-allowed'
+                  ]"
+                >
+                  <div 
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border"
+                    :class="[
+                      step === item.id ? 'border-primary bg-primary/5 text-primary' :
+                      step > item.id ? 'border-primary bg-primary/5 text-primary' :
+                      'border-gray-200 bg-gray-50 text-gray-400'
+                    ]"
+                  >
+                    <CheckCircle v-if="step > item.id" class="h-4 w-4" />
+                    <component v-else :is="item.icon" class="h-3.5 w-3.5" />
+                  </div>
+                  <span :class="step === item.id ? 'text-gray-900' : 'text-gray-600'">{{ item.label }}</span>
+                </button>
+              </li>
+            </ol>
+          </div>
           <div class="min-h-[600px] rounded-xl border border-gray-200 bg-white p-4 sm:p-6 lg:p-8">
+            <div class="mb-3">
+              <div class="mb-4 block lg:hidden">
+                <div class="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                  <div class="h-full bg-primary transition-all duration-500" :style="{ width: progressPercent + '%' }"></div>
+                </div>
+                <div class="mt-2 flex justify-between text-xs text-gray-500">
+                  <span>Start</span>
+                  <span>Dokončení</span>
+                </div>
+              </div>
+              <div class="block lg:hidden">
+                <div class="mb-2 text-xs font-medium text-gray-500">Dokumenty</div>
+                <div class="flex flex-col gap-1 text-sm">
+                  <Link href="/vseobecne-obchodni-podminky" class="flex items-center justify-between gap-2 text-gray-600 hover:text-gray-900">
+                    <span>Všeobecné obchodní podmínky</span>
+                    <ChevronRight class="h-4 w-4 text-gray-400" />
+                  </Link>
+                  <Link href="/zasady-zpracovani-osobnich-udaju" class="flex items-center justify-between gap-2 text-gray-600 hover:text-gray-900">
+                    <span>Zásady zpracování osobních údajů</span>
+                    <ChevronRight class="h-4 w-4 text-gray-400" />
+                  </Link>
+                  <Link href="/ubytovaci-rad" class="flex items-center justify-between gap-2 text-gray-600 hover:text-gray-900">
+                    <span>Ubytovací řád</span>
+                    <ChevronRight class="h-4 w-4 text-gray-400" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+            
             
             <!-- Step 1: Calendar -->
-            <div v-if="step === 1" class="space-y-6">
+            <div v-if="step === 1" class="space-y-4">
               <header class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h1 class="text-2xl font-medium text-gray-900">Vyberte termín</h1>
@@ -145,7 +184,7 @@
               </div>
               </header>
 
-              <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+              <div class="mt-1 flex flex-wrap items-center gap-3 text-sm text-gray-600 lg:hidden">
                 <div class="flex items-center gap-1">
                   <CheckCircle class="h-4 w-4 text-green-600" />
                   <span>Volné</span>
