@@ -282,6 +282,120 @@ const stats = [
       </div>
     </section>
 
+    <!-- Wellness Showcase Section -->
+    <section class="relative overflow-hidden bg-white py-32">
+      <div class="container mx-auto px-6">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <!-- Left: Main Wellness Photo with Overlay -->
+          <div class="relative order-2 lg:order-1">
+            <div class="relative aspect-[4/3] overflow-hidden rounded-[3rem]">
+              <img
+                src="/img/photos/vyrivka/0Q9A0765-HDR.webp"
+                alt="Soukromá vířivka"
+                class="h-full w-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+              
+              <!-- Overlay Badge -->
+              <div class="absolute bottom-8 left-8 right-8">
+                <div class="inline-flex items-center gap-2 rounded-full bg-white/90 backdrop-blur-sm px-4 py-2 text-sm font-bold text-primary">
+                  <Bath class="h-4 w-4" />
+                  <span>Soukromé wellness</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Small Photos Grid -->
+            <div class="mt-6 grid grid-cols-2 gap-6">
+              <div class="aspect-[4/3] overflow-hidden rounded-2xl">
+                <img
+                  src="/img/photos/vyrivka/IMG_67.jpg"
+                  alt="Relaxace ve vířivce"
+                  class="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              <div class="aspect-[4/3] overflow-hidden rounded-2xl">
+                <img
+                  src="/img/photos/vyrivka/IMG_69.jpg"
+                  alt="Večerní wellness"
+                  class="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Content -->
+          <div class="order-1 lg:order-2 lg:pl-12">
+            <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-honey px-4 py-1.5 text-sm font-medium text-primary">
+              <Bath class="h-4 w-4" />
+              <span>Wellness & Relax</span>
+            </div>
+            
+            <h2 class="text-4xl font-bold tracking-tight text-primary lg:text-5xl">
+              Odpočinek, který si <span class="text-gold">zasloužíte</span>
+            </h2>
+            
+            <p class="mt-6 text-lg leading-relaxed text-gray-600">
+              Soukromá wellness zóna s vířivkou pro 6 osob je srdcem naší chaty. 
+              Relaxujte pod hvězdami, užijte si klid a nechte starosti za sebou.
+            </p>
+
+            <div class="mt-8 space-y-4">
+              <div class="flex items-start gap-4">
+                <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-honey text-primary">
+                  <Bath class="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-900">Vířivka pro 6 osob</h4>
+                  <p class="text-sm text-gray-600">Prostorná vířivka s výhledem do přírody</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-4">
+                <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-honey text-primary">
+                  <Users class="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-900">100% soukromí</h4>
+                  <p class="text-sm text-gray-600">Wellness jen pro vás a vaše blízké</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-honey text-primary">
+                  <CloudSun class="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-900">Celoroční provoz</h4>
+                  <p class="text-sm text-gray-600">Užijte si relax v každém ročním období</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-10 flex flex-wrap gap-4">
+              <Button
+                :as="Link"
+                :href="route('home')"
+                variant="default"
+                class="group px-8 py-6 text-lg"
+              >
+                Rezervovat pobyt
+                <ArrowRight class="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+              <Button 
+                :as="Link"
+                :href="route('gallery')" 
+                variant="outline"
+                class="px-8 py-6 text-lg"
+              >
+                Zobrazit fotky
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Features Section -->
     <section class="py-24">
       <div class="container mx-auto px-6">
