@@ -1,5 +1,5 @@
 <script setup>
-import { CalendarDays, FileText, Mail, Phone, MapPin, Wallet, Globe, Hash, User } from "lucide-vue-next";
+import { CalendarDays, FileText, Mail, Phone, MapPin, Wallet, Globe, Hash, User, Heart } from "lucide-vue-next";
 import { Link } from "@inertiajs/vue3";
 </script>
 
@@ -18,6 +18,12 @@ import { Link } from "@inertiajs/vue3";
                 Váš horský úkryt v srdci Jeseníků. Soukromé wellness, 
                 designový interiér a nekonečné výhledy.
               </p>
+              
+              <!-- Dog Friendly Badge -->
+              <div class="mt-6 inline-flex items-center gap-2 rounded-full bg-gold px-4 py-2 text-white">
+                <Heart class="h-5 w-5 fill-current" />
+                <span class="font-bold text-sm">Dog Friendly</span>
+              </div>
             </div>
             <div class="flex items-start gap-3 text-gray-700">
               <MapPin class="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
