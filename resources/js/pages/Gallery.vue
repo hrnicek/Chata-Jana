@@ -133,13 +133,13 @@ const closeLightbox = () => {
         <TransitionGroup
           name="gallery"
           tag="div"
-          class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          class="grid gap-4  sm:grid-cols-2 lg:grid-cols-3"
         >
           <div
             v-for="(photo, index) in filteredPhotos"
             :key="photo.src"
             @click="openLightbox(index)"
-            class="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-3xl bg-gray-100"
+            class="group mt-16 relative aspect-[4/3] cursor-pointer overflow-hidden rounded-3xl bg-gray-100"
           >
             <img
               :src="photo.src"

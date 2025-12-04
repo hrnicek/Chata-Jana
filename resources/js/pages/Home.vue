@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import Hero from "../components/Hero.vue";
 import WebLayout from "../layouts/WebLayout.vue";
 import Button from "../components/ui/button.vue";
@@ -28,6 +29,11 @@ import {
   Wind,
   MountainSnow,
 } from "lucide-vue-next";
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const amenities = [
   { icon: Wifi, label: "Wifi zdarma" },
@@ -130,6 +136,80 @@ const stats = [
   { value: "100%", label: "Soukromí a klid", icon: ShieldCheck },
   { value: "800m", label: "Nadmořská výška", icon: CloudSun },
 ];
+
+const virtualTourRooms = [
+  {
+    id: 'living',
+    name: 'Společenská místnost',
+    description: 'Prostorný obývací prostor',
+    fullDescription: 'Stylový obývací pokoj s krbem a panoramatickými okny s výhledem do přírody.',
+    images: [
+      '/img/photos/spolecenska-mistnost/0Q9A0170-HDR.webp',
+      '/img/photos/spolecenska-mistnost/0Q9A0212-HDR.webp',
+      '/img/photos/spolecenska-mistnost/0Q9A0226-HDR.webp',
+      '/img/photos/spolecenska-mistnost/0Q9A0289-HDR.webp',
+      '/img/photos/spolecenska-mistnost/0Q9A0317-HDR.webp'
+    ],
+    icon: Users
+  },
+  {
+    id: 'bedrooms',
+    name: 'Pokoje',
+    description: 'Útulné ložnice pro odpočinek',
+    fullDescription: 'Elegantně zařízené pokoje s kvalitními matracemi a luxusním ložním prádlem.',
+    images: [
+      '/img/photos/pokoje/IMG_42.jpg',
+      '/img/photos/pokoje/IMG_46.jpg',
+      '/img/photos/pokoje/IMG_51.jpg',
+      '/img/photos/pokoje/IMG_52.jpg',
+      '/img/photos/pokoje/IMG_57.jpg',
+      '/img/photos/pokoje/IMG_59.jpg',
+      '/img/photos/pokoje/IMG_61.jpg'
+    ],
+    icon: Key
+  },
+  {
+    id: 'kitchen',
+    name: 'Kuchyně',
+    description: 'Plně vybavená kuchyň',
+    fullDescription: 'Moderní kuchyně se špičkovými spotřebiči a vším potřebným vybavením.',
+    images: [
+      '/img/photos/kuchyn/0Q9A0261-HDR.webp',
+      '/img/photos/kuchyn/IMG_22.jpg',
+      '/img/photos/kuchyn/IMG_34.jpg',
+      '/img/photos/kuchyn/IMG_39.jpg'
+    ],
+    icon: Utensils
+  },
+  {
+    id: 'wellness',
+    name: 'Wellness',
+    description: 'Soukromá relaxační zóna',
+    fullDescription: 'Vířivka pro 6 osob s atmosférickým osvětlením a výhledem do přírody.',
+    images: [
+      '/img/photos/vyrivka/0Q9A0765-HDR.webp',
+      '/img/photos/vyrivka/IMG_67.jpg',
+      '/img/photos/vyrivka/IMG_69.jpg'
+    ],
+    icon: Bath
+  },
+  {
+    id: 'other',
+    name: 'Ostatní prostory',
+    description: 'Chodby, šatna a další detaily',
+    fullDescription: 'Každý detail chaty je navržen s důrazem na kvalitu a estetiku.',
+    images: [
+      '/img/photos/chodby/0Q9A0303-HDR.webp',
+      '/img/photos/satna/0Q9A0813-HDR.webp',
+      '/img/photos/koupelny-wc/IMG_31.jpg',
+      '/img/photos/koupelny-wc/IMG_65.jpg'
+    ],
+    icon: Camera
+  }
+];
+
+const activeRoom = ref('living');
+const swiperModules = [Navigation, Pagination, Autoplay];
 </script>
 
 <template>
@@ -474,6 +554,117 @@ const stats = [
       </div>
     </section>
 
+    <!-- Virtual Tour Section -->
+    <section class="bg-white py-32">
+      <div class="container mx-auto px-6">
+        <div class="mb-16 text-center">
+          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-honey px-4 py-1.5 text-sm font-medium text-primary">
+            <Camera class="h-4 w-4" />
+            <span>Virtuální prohlídka</span>
+          </div>
+          <h2 class="text-4xl font-bold text-primary md:text-5xl">Luxusní interiér</h2>
+          <p class="mt-4 text-lg text-gray-600">Prohlédněte si každý kout naší chaty</p>
+        </div>
+
+        <div class="grid gap-8 lg:grid-cols-12">
+          <!-- Room Selector (Left) -->
+          <div class="lg:col-span-4">
+            <div class="space-y-3">
+              <button
+                v-for="(room, index) in virtualTourRooms"
+                :key="room.id"
+                @click="activeRoom = room.id"
+                :class="[
+                  'group w-full text-left rounded-2xl border-2 p-6 transition-all',
+                  activeRoom === room.id
+                    ? 'border-gold bg-gold text-white shadow-lg'
+                    : 'border-gray-200 bg-white hover:border-gold/50 hover:shadow-md'
+                ]"
+              >
+                <div class="flex items-start gap-4">
+                  <div :class="[
+                    'flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl transition-colors',
+                    activeRoom === room.id
+                      ? 'bg-white/20 text-white'
+                      : 'bg-honey text-primary group-hover:bg-gold group-hover:text-white'
+                  ]">
+                    <component :is="room.icon" class="h-6 w-6" />
+                  </div>
+                  <div class="flex-1">
+                    <h3 :class="[
+                      'text-lg font-bold mb-1',
+                      activeRoom === room.id ? 'text-white' : 'text-gray-900'
+                    ]">
+                      {{ room.name }}
+                    </h3>
+                    <p :class="[
+                      'text-sm',
+                      activeRoom === room.id ? 'text-white/80' : 'text-gray-600'
+                    ]">
+                      {{ room.description }}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Photo Display (Right) -->
+          <div class="lg:col-span-8">
+            <div class="relative aspect-[16/10] overflow-hidden rounded-[3rem] bg-gray-100">
+              <TransitionGroup name="fade">
+                <div
+                  v-for="room in virtualTourRooms"
+                  v-show="activeRoom === room.id"
+                  :key="room.id"
+                  class="absolute inset-0"
+                >
+                  <!-- Swiper for multiple photos -->
+                  <Swiper
+                    :modules="swiperModules"
+                    :navigation="true"
+                    :pagination="{ clickable: true }"
+                    :autoplay="{ delay: 4000, disableOnInteraction: false }"
+                    loop
+                    class="h-full w-full"
+                  >
+                    <SwiperSlide v-for="(image, index) in room.images" :key="index">
+                      <img
+                        :src="image"
+                        :alt="`${room.name} - foto ${index + 1}`"
+                        class="h-full w-full object-cover"
+                      />
+                    </SwiperSlide>
+                  </Swiper>
+                  
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                  
+                  <!-- Photo Label -->
+                  <div class="absolute bottom-8 left-8 right-8 pointer-events-none">
+                    <div class="rounded-2xl bg-white/95 backdrop-blur-sm p-6">
+                      <h4 class="text-2xl font-bold text-primary mb-2">{{ room.name }}</h4>
+                      <p class="text-gray-700">{{ room.fullDescription }}</p>
+                    </div>
+                  </div>
+                </div>
+              </TransitionGroup>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <Button 
+            :as="Link"
+            :href="route('gallery')" 
+            variant="default"
+            class="px-8 py-6 text-lg"
+          >
+            Zobrazit celou galerii
+          </Button>
+        </div>
+      </div>
+    </section>
+
     <!-- Features Section -->
     <section class="py-24">
       <div class="container mx-auto px-6">
@@ -493,79 +684,6 @@ const stats = [
       </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section id="galerie" class="bg-white py-32">
-      <div class="container mx-auto px-6">
-        <div class="mb-20 flex flex-col items-center text-center">
-          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-honey px-4 py-1.5 text-sm font-medium text-primary">
-            <Camera class="h-4 w-4" />
-            <span>Fotogalerie</span>
-          </div>
-          <h2 class="text-4xl font-bold text-primary md:text-5xl">Okna do ticha</h2>
-          <p class="mt-6 max-w-2xl text-lg text-gray-600">
-            Každý kout naší chaty je navržen pro vaše pohodlí. 
-            Prohlédněte si místa, kde budete trávit společné chvíle.
-          </p>
-        </div>
-
-        <div class="grid gap-8 md:grid-cols-12">
-          <!-- Item 1: Large (Wellness) -->
-          <div class="group md:col-span-8">
-            <div class="relative aspect-[16/10] overflow-hidden rounded-[2.5rem]">
-              <img src="/img/photos/vyrivka/0Q9A0765-HDR.webp" alt="Wellness zóna" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            </div>
-            <div class="mt-4 flex items-center justify-between px-2">
-              <h3 class="text-xl font-semibold text-primary">Wellness zóna</h3>
-              <span class="text-sm text-secondary">Vířivka & Relax</span>
-            </div>
-          </div>
-
-          <!-- Item 2: Tall (Interior) -->
-          <div class="group md:col-span-4">
-            <div class="relative aspect-[4/5] overflow-hidden rounded-[2.5rem]">
-              <img src="/img/photos/spolecenska-mistnost/0Q9A0212-HDR.webp" alt="Obývací prostor" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            </div>
-            <div class="mt-4 flex items-center justify-between px-2">
-              <h3 class="text-xl font-semibold text-primary">Obývací prostor</h3>
-              <span class="text-sm text-secondary">Společné chvíle</span>
-            </div>
-          </div>
-
-          <!-- Item 3: Wide (Exterior) -->
-          <div class="group md:col-span-6">
-            <div class="relative aspect-[16/9] overflow-hidden rounded-[2.5rem]">
-              <img src="/img/photos/exterier/0Q9A0146.webp" alt="Exteriér chaty" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            </div>
-            <div class="mt-4 flex items-center justify-between px-2">
-              <h3 class="text-xl font-semibold text-primary">Exteriér chaty</h3>
-              <span class="text-sm text-secondary">V srdci přírody</span>
-            </div>
-          </div>
-
-          <!-- Item 4: Wide (Surroundings) -->
-          <div class="group md:col-span-6">
-            <div class="relative aspect-[16/9] overflow-hidden rounded-[2.5rem]">
-              <img src="/img/photos/terasa/0Q9A0352-HDR.webp" alt="Terasa s výhledem" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            </div>
-            <div class="mt-4 flex items-center justify-between px-2">
-              <h3 class="text-xl font-semibold text-primary">Zimní atmosféra</h3>
-              <span class="text-sm text-secondary">Kouzlo hor</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="mt-16 text-center">
-           <Button 
-            :as="Link"
-            :href="route('gallery')" 
-            variant="outline"
-            class="px-8 py-6 text-lg"
-          >
-            Zobrazit celou galerii
-          </Button>
-        </div>
-      </div>
-    </section>
 
     <!-- Stats Section -->
     <section class="border-y border-gray-100 bg-white py-20">
@@ -684,3 +802,60 @@ const stats = [
     </section>
   </WebLayout>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Swiper Navigation Arrows */
+:deep(.swiper-button-next),
+:deep(.swiper-button-prev) {
+  color: #C5A059; /* gold */
+  background: rgba(255, 255, 255, 0.9);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  padding: 12px;
+}
+
+:deep(.swiper-button-next:after),
+:deep(.swiper-button-prev:after) {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+:deep(.swiper-button-next:hover),
+:deep(.swiper-button-prev:hover) {
+  background: #C5A059; /* gold */
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Swiper Pagination Bullets */
+:deep(.swiper-pagination-bullet) {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background: #C5A059; /* gold */
+  width: 32px;
+  border-radius: 6px;
+}
+
+:deep(.swiper-pagination) {
+  bottom: 24px !important;
+}
+</style>
