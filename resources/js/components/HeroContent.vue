@@ -1,5 +1,10 @@
 <script setup>
-import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight } from "lucide-vue-next";
+import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucide-vue-next";
+
+const props = defineProps({
+  season: String,
+});
+
 </script>
 
 <template>
@@ -77,13 +82,13 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles, ArrowRight }
                 </div>
               </a>
 
-              <a href="mailto:info@chatajanao.cz" class="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50">
+              <a href="mailto:info@chata-jana.cz" class="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50">
                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-honey text-primary transition-colors group-hover:bg-primary group-hover:text-white">
                   <Mail class="h-5 w-5" />
                 </div>
                 <div>
                   <div class="text-xs text-gray-500">Napište nám</div>
-                  <div class="font-medium text-gray-900">info@chatajanao.cz</div>
+                  <div class="font-medium text-gray-900">info@chata-jana.cz</div>
                 </div>
               </a>
             </div>

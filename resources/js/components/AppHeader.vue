@@ -20,7 +20,7 @@ import { Link } from "@inertiajs/vue3";
       </div>
       <Button
         :as="Link"
-        :href="route('bookings.calendar')"
+        :href="'#'"
         variant="reserve"
       >
         Rezervace
