@@ -844,6 +844,172 @@ const toggleFaq = (index: number) => {
       </div>
     </section>
 
+    <!-- Activities & Attractions Section -->
+    <section class="bg-honey py-24">
+      <div class="container mx-auto px-6">
+        <div class="mb-16 text-center">
+          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-white px-4 py-1.5 text-sm font-medium text-primary">
+            <MapPin class="h-4 w-4" />
+            <span>Okolí & Aktivity</span>
+          </div>
+          <h2 class="text-4xl font-bold text-primary md:text-5xl">Co dělat v Ostružné a okolí?</h2>
+          <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+            Jeseníky nabízejí nespočet aktivit pro celou rodinu - od lyžování a turistiky 
+            až po termální lázně a unikátní technické památky
+          </p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <!-- Ski areál Jonas Park -->
+          <div class="group rounded-3xl bg-white p-8 transition-all hover:shadow-xl">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
+                <MountainSnow class="h-7 w-7" />
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-500">1 km</div>
+                <div class="text-xs text-gold font-bold">5 min</div>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Ski areál Jonas Park</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              Lyžařský park s možností snowboardingu a lyžování pro celou rodinu
+            </p>
+          </div>
+
+          <!-- Minikáry Ramzová -->
+          <div class="group rounded-3xl bg-white p-8 transition-all hover:shadow-xl">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
+                <Car class="h-7 w-7" />
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-500">2 km</div>
+                <div class="text-xs text-gold font-bold">5 min</div>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Minikáry Ramzová</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              Rychlost a adrenalin na horské sjezdovce - zábava pro děti i dospělé
+            </p>
+          </div>
+
+          <!-- Zatopené lomy -->
+          <div class="group rounded-3xl bg-white p-8 transition-all hover:shadow-xl">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
+                <Camera class="h-7 w-7" />
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-500">12 km</div>
+                <div class="text-xs text-gold font-bold">18 min</div>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Zatopené lomy</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              Nádherné lomy s křišťálově čistou vodou - Arcibiskupský, Barčák, Vycpálek
+            </p>
+          </div>
+
+          <!-- Šerák, Praděd -->
+          <div class="group rounded-3xl bg-white p-8 transition-all hover:shadow-xl">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
+                <Mountain class="h-7 w-7" />
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-500">18 km</div>
+                <div class="text-xs text-gold font-bold">28 min</div>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Šerák, Praděd</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              Horské túry s výhledy na Krkonoše, Beskydy i Alpy - milovníci hor ocení
+            </p>
+          </div>
+
+          <!-- Dlouhé stráně -->
+          <div class="group rounded-3xl bg-white p-8 transition-all hover:shadow-xl">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
+                <Wind class="h-7 w-7" />
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-500">25 km</div>
+                <div class="text-xs text-gold font-bold">35 min</div>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Dlouhé stráně</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              Přečerpávací vodní elektrárna - technický zázrak s úchvatným výhledem
+            </p>
+          </div>
+
+          <!-- Termální lázně V. Losiny -->
+          <div class="group rounded-3xl bg-white p-8 transition-all hover:shadow-xl">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
+                <Bath class="h-7 w-7" />
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-500">25 km</div>
+                <div class="text-xs text-gold font-bold">30 min</div>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Termální lázně V. Losiny</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              Relaxace v termálních bazénech, saunách a wellness - dokonalý odpočinek
+            </p>
+          </div>
+
+          <!-- Paprsek a Smrk -->
+          <div class="group rounded-3xl bg-white p-8 transition-all hover:shadow-xl">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
+                <Bike class="h-7 w-7" />
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-500">15 km</div>
+                <div class="text-xs text-gold font-bold">20 min</div>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Paprsek a Smrk</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              Cyklotrasy a turistické stezky s rodinnými penziony - ideální pro výlety
+            </p>
+          </div>
+
+          <!-- ZOO Faunapark -->
+          <div class="group rounded-3xl bg-white p-8 transition-all hover:shadow-xl">
+            <div class="mb-4 flex items-start justify-between">
+              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
+                <Trees class="h-7 w-7" />
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-500">35 km</div>
+                <div class="text-xs text-gold font-bold">40 min</div>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">ZOO Faunapark</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              Exotická zvířata v Lázních Lipová - zábava pro celou rodinu
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <Button 
+            :as="Link"
+            :href="route('activities')" 
+            variant="default"
+            class="px-8 py-6 text-lg"
+          >
+            Zobrazit všechny aktivity
+          </Button>
+        </div>
+      </div>
+    </section>
+
     <!-- FAQ Section -->
     <section class="bg-white py-24">
       <div class="container mx-auto px-6">
