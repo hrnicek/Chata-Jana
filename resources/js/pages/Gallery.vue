@@ -113,13 +113,13 @@ const closeLightbox = () => {
     <section class="relative -mt-20 pb-32">
       <div class="container mx-auto px-6">
         <!-- Category Filters -->
-        <div class="mb-12 flex flex-wrap justify-center gap-3">
+        <div class="mb-12 flex flex-wrap justify-center gap-2">
           <button
             v-for="category in categories"
             :key="category.id"
             @click="activeCategory = category.id"
             :class="[
-              'rounded-full px-6 py-3 text-sm font-medium transition-all',
+              'rounded-full px-4 py-2 text-xs font-medium transition-all',
               activeCategory === category.id
                 ? 'bg-primary text-white shadow-lg'
                 : 'bg-white text-gray-700 hover:bg-honey hover:text-primary'
