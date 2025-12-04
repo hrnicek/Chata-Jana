@@ -8,4 +8,4 @@ Route::get('/kontakt', [\App\Http\Controllers\ContactsController::class, 'index'
 Route::get('/o-nas', [\App\Http\Controllers\AboutController::class, 'index'])->name('about');
 Route::get('/aktivity', [\App\Http\Controllers\ActivitiesController::class, 'index'])->name('activities');
 Route::get('/cenik', [\App\Http\Controllers\PricingController::class, 'index'])->name('pricing');
-Route::get('/fotogalerie', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery');
+Route::get('/fotogalerie', \App\Http\Controllers\GalleryController::class)->name('gallery');

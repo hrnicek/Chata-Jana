@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-
 class GalleryController extends Controller
 {
-    public function index()
+    public function __invoke()
     {
-        return Inertia::render('Gallery');
+        seo()->title('Fotogalerie');
+
+        return inertia('Gallery');
     }
 }

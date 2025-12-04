@@ -168,7 +168,7 @@ const stats = [
             <!-- Main Image -->
             <div class="relative z-10 aspect-[4/3] w-5/6 overflow-hidden rounded-[3rem]">
               <img
-                src="/img/hero2.webp"
+                src="/img/photos/exterier/0Q9A0146.webp"
                 alt="Chata Jana exteriér"
                 class="h-full w-full object-cover"
               />
@@ -179,7 +179,7 @@ const stats = [
             <div class="absolute -bottom-12 -right-4 z-20 w-1/2 overflow-hidden rounded-[2.5rem] border-8 border-white shadow-none lg:-right-8 lg:bottom-12">
                <div class="aspect-square relative">
                  <img
-                  src="/img/hero3.webp"
+                  src="/img/photos/spolecenska-mistnost/0Q9A0170-HDR.webp"
                   alt="Interiér detail"
                   class="h-full w-full object-cover"
                 />
@@ -216,7 +216,7 @@ const stats = [
               </Button>
               <Button 
                 :as="Link"
-                href="#galerie" 
+                :href="route('gallery')" 
                 variant="outline"
                 class="px-8 py-6 text-lg"
               >
@@ -233,8 +233,8 @@ const stats = [
       <!-- Background Texture -->
       <div class="absolute inset-0">
         <img 
-          src="/img/hero4.webp"
-          alt="Hory v mlze" 
+          src="/img/photos/exterier/0Q9A0157.webp"
+          alt="Zimní atmosféra" 
           class="h-full w-full object-cover opacity-40 mix-blend-overlay"
         />
         <div class="absolute inset-0 bg-primary/40"></div>
@@ -320,7 +320,7 @@ const stats = [
           <!-- Item 1: Large (Wellness) -->
           <div class="group md:col-span-8">
             <div class="relative aspect-[16/10] overflow-hidden rounded-[2.5rem]">
-              <img src="/img/hero.webp" alt="Wellness zóna" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src="/img/photos/vyrivka/0Q9A0765-HDR.webp" alt="Wellness zóna" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
             </div>
             <div class="mt-4 flex items-center justify-between px-2">
               <h3 class="text-xl font-semibold text-primary">Wellness zóna</h3>
@@ -331,7 +331,7 @@ const stats = [
           <!-- Item 2: Tall (Interior) -->
           <div class="group md:col-span-4">
             <div class="relative aspect-[4/5] overflow-hidden rounded-[2.5rem]">
-              <img src="/img/hero3.webp" alt="Obývací prostor" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src="/img/photos/spolecenska-mistnost/0Q9A0212-HDR.webp" alt="Obývací prostor" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
             </div>
             <div class="mt-4 flex items-center justify-between px-2">
               <h3 class="text-xl font-semibold text-primary">Obývací prostor</h3>
@@ -342,7 +342,7 @@ const stats = [
           <!-- Item 3: Wide (Exterior) -->
           <div class="group md:col-span-6">
             <div class="relative aspect-[16/9] overflow-hidden rounded-[2.5rem]">
-              <img src="/img/hero2.webp" alt="Exteriér chaty" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src="/img/photos/exterier/0Q9A0146.webp" alt="Exteriér chaty" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
             </div>
             <div class="mt-4 flex items-center justify-between px-2">
               <h3 class="text-xl font-semibold text-primary">Exteriér chaty</h3>
@@ -353,7 +353,7 @@ const stats = [
           <!-- Item 4: Wide (Surroundings) -->
           <div class="group md:col-span-6">
             <div class="relative aspect-[16/9] overflow-hidden rounded-[2.5rem]">
-              <img src="/img/hero4.webp" alt="Zimní atmosféra" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src="/img/photos/terasa/0Q9A0352-HDR.webp" alt="Terasa s výhledem" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
             </div>
             <div class="mt-4 flex items-center justify-between px-2">
               <h3 class="text-xl font-semibold text-primary">Zimní atmosféra</h3>
@@ -365,7 +365,7 @@ const stats = [
         <div class="mt-16 text-center">
            <Button 
             :as="Link"
-            href="#" 
+            :href="route('gallery')" 
             variant="outline"
             class="px-8 py-6 text-lg"
           >
@@ -432,8 +432,8 @@ const stats = [
           <!-- Background Image -->
           <div class="absolute inset-0">
             <img 
-              src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop" 
-              alt="Hory v mlze" 
+              src="/img/photos/exterier/0Q9A0157.webp" 
+              alt="Zimní atmosféra" 
               class="h-full w-full object-cover opacity-40 mix-blend-overlay"
             />
             <div class="absolute inset-0 bg-primary/60"></div>
