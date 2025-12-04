@@ -210,11 +210,74 @@ const virtualTourRooms = [
 
 const activeRoom = ref('living');
 const swiperModules = [Navigation, Pagination, Autoplay];
+
+const openFaqIndex = ref<number | null>(null);
+const toggleFaq = (index: number) => {
+  openFaqIndex.value = openFaqIndex.value === index ? null : index;
+};
 </script>
 
 <template>
   <WebLayout>
     <Hero />
+
+    <!-- Ski Resorts Proximity Section -->
+    <section class="bg-primary py-16">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col items-center gap-8 lg:flex-row lg:justify-between">
+          <!-- Main Message -->
+          <div class="text-center lg:text-left">
+            <div class="mb-3 inline-flex items-center gap-2 rounded-full bg-gold px-4 py-1.5 text-sm font-bold text-white">
+              <MountainSnow class="h-4 w-4" />
+              <span>Ideální poloha pro lyžování</span>
+            </div>
+            <h2 class="text-3xl font-bold text-white lg:text-4xl">
+              V srdci lyžařského ráje
+            </h2>
+            <p class="mt-3 text-lg text-white/80">
+              Perfektní výchozí bod pro zimní radovánky v Jeseníkách
+            </p>
+          </div>
+
+          <!-- Ski Resorts -->
+          <div class="flex flex-col gap-4 sm:flex-row lg:gap-6">
+            <!-- Jonas Park -->
+            <div class="group rounded-2xl bg-white/10 backdrop-blur-sm p-6 transition-all hover:bg-white/20 hover:scale-105">
+              <div class="flex items-start gap-4">
+                <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gold text-white">
+                  <MountainSnow class="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-white">Jonas Park Ostružná</h3>
+                  <p class="mt-1 text-sm text-white/70">Lyžařský park</p>
+                  <div class="mt-2 flex items-center gap-2 text-gold">
+                    <MapPin class="h-4 w-4" />
+                    <span class="text-sm font-bold">1 km</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ramzová -->
+            <div class="group rounded-2xl bg-white/10 backdrop-blur-sm p-6 transition-all hover:bg-white/20 hover:scale-105">
+              <div class="flex items-start gap-4">
+                <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gold text-white">
+                  <MountainSnow class="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-white">Ski areál Ramzová</h3>
+                  <p class="mt-1 text-sm text-white/70">Sjezdovky pro celou rodinu</p>
+                  <div class="mt-2 flex items-center gap-2 text-gold">
+                    <MapPin class="h-4 w-4" />
+                    <span class="text-sm font-bold">1,5 km</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
             <!-- Amenities Marquee/Grid -->
     <section class="bg-honey py-32">
@@ -792,9 +855,25 @@ const swiperModules = [Navigation, Pagination, Autoplay];
         </div>
         <div class="mx-auto max-w-3xl rounded-[2.5rem] border border-gray-200 bg-white">
           <ul class="divide-y divide-gray-200">
-            <li v-for="(item, i) in faqs" :key="i" class="p-6">
-              <div class="text-lg font-semibold text-gray-900">{{ item.q }}</div>
-              <div class="mt-2 text-gray-700">{{ item.a }}</div>
+            <li v-for="(item, i) in faqs" :key="i" class="transition-colors hover:bg-honey/20">
+              <button
+                @click="toggleFaq(i)"
+                class="w-full p-6 text-left transition-all"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div class="text-lg font-semibold text-gray-900">{{ item.q }}</div>
+                  <div class="flex-shrink-0 transition-transform duration-300" :class="{ 'rotate-180': openFaqIndex === i }">
+                    <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+                <Transition name="faq">
+                  <div v-show="openFaqIndex === i" class="mt-4 text-gray-700 leading-relaxed">
+                    {{ item.a }}
+                  </div>
+                </Transition>
+              </button>
             </li>
           </ul>
         </div>
@@ -857,5 +936,19 @@ const swiperModules = [Navigation, Pagination, Autoplay];
 
 :deep(.swiper-pagination) {
   bottom: 24px !important;
+}
+
+/* FAQ Accordion Transition */
+.faq-enter-active,
+.faq-leave-active {
+  transition: all 0.3s ease;
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.faq-enter-from,
+.faq-leave-to {
+  max-height: 0;
+  opacity: 0;
 }
 </style>
