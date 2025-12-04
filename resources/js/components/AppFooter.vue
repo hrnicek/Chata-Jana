@@ -4,7 +4,7 @@ import { CalendarDays, FileText, Mail, Phone, MapPin, Wallet, Globe, Hash, User 
 
 <template>
     <!-- Footer -->
-    <footer class="border-t border-primary bg-honey py-20">
+    <footer class="border-t border-primary bg-honey-light py-20">
       <div class="container mx-auto px-6">
         <div class="grid gap-16 sm:grid-cols-2 lg:grid-cols-4">
           <div>
