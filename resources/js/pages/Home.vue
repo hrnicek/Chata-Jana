@@ -396,6 +396,84 @@ const stats = [
       </div>
     </section>
 
+    <!-- Pricing Overview Section -->
+    <section class="bg-honey py-24">
+      <div class="container mx-auto px-6">
+        <div class="mb-16 text-center">
+          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-white px-4 py-1.5 text-sm font-medium text-primary">
+            <CreditCard class="h-4 w-4" />
+            <span>Ceník</span>
+          </div>
+          <h2 class="text-4xl font-bold text-primary md:text-5xl">Ceník</h2>
+          <p class="mt-4 text-lg text-gray-600">Jednoduché a přehledné ceníky pro každé roční období</p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <!-- Léto -->
+          <div class="group rounded-3xl border-2 border-white bg-white p-8 transition-all hover:border-gold hover:shadow-xl">
+            <div class="mb-6">
+              <h3 class="mb-2 text-sm font-bold uppercase tracking-wider text-primary">Léto</h3>
+              <div class="text-4xl font-bold text-gray-900">5 500 Kč</div>
+              <div class="text-sm text-gray-500">/ noc</div>
+            </div>
+            <div class="text-xs font-medium uppercase tracking-wide text-gray-400">
+              Týdenní pobyt 38 500 Kč
+            </div>
+          </div>
+
+          <!-- Zima -->
+          <div class="group rounded-3xl border-2 border-primary bg-primary p-8 text-white transition-all hover:shadow-xl">
+            <div class="mb-6">
+              <h3 class="mb-2 text-sm font-bold uppercase tracking-wider text-gold">Zima</h3>
+              <div class="text-4xl font-bold">6 000 Kč</div>
+              <div class="text-sm text-white/70">/ noc</div>
+            </div>
+            <div class="text-xs font-medium uppercase tracking-wide text-white/60">
+              Týdenní pobyt 42 000 Kč
+            </div>
+          </div>
+
+          <!-- Mimosezona -->
+          <div class="group rounded-3xl border-2 border-white bg-white p-8 transition-all hover:border-gold hover:shadow-xl">
+            <div class="mb-6">
+              <h3 class="mb-2 text-sm font-bold uppercase tracking-wider text-primary">Mimosezona</h3>
+              <div class="text-4xl font-bold text-gray-900">5 000 Kč</div>
+              <div class="text-sm text-gray-500">/ noc</div>
+            </div>
+            <div class="text-xs font-medium uppercase tracking-wide text-gray-400">
+              Týdenní pobyt 35 000 Kč
+            </div>
+          </div>
+
+          <!-- Silvestr -->
+          <div class="group rounded-3xl border-2 border-white bg-white p-8 transition-all hover:border-gold hover:shadow-xl">
+            <div class="mb-6">
+              <h3 class="mb-2 text-sm font-bold uppercase tracking-wider text-primary">Silvestr</h3>
+              <div class="text-4xl font-bold text-gray-900">85 000 Kč</div>
+              <div class="text-sm text-gray-500">/ 28.12-2.1.</div>
+            </div>
+            <div class="text-xs font-medium uppercase tracking-wide text-gray-400">
+              Fixní cena
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <Button 
+            :as="Link"
+            :href="route('pricing')" 
+            variant="default"
+            class="px-8 py-6 text-lg"
+          >
+            Zobrazit kompletní ceník
+          </Button>
+          <p class="mt-4 text-sm text-gray-600">
+            Záloha 30 % • Doplatek 14 dní před příjezdem • Elektřina dle spotřeby
+          </p>
+        </div>
+      </div>
+    </section>
+
     <!-- Features Section -->
     <section class="py-24">
       <div class="container mx-auto px-6">
