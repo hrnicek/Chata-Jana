@@ -15,9 +15,13 @@ const categories = [
   { id: 'all', label: 'Vše' },
   { id: 'exterier', label: 'Exteriér' },
   { id: 'spolecenska-mistnost', label: 'Společenská místnost' },
-  { id: 'wellness', label: 'Wellness' },
+  { id: 'pokoje', label: 'Pokoje' },
   { id: 'kuchyn', label: 'Kuchyně' },
+  { id: 'wellness', label: 'Wellness' },
+  { id: 'koupelny', label: 'Koupelny & WC' },
   { id: 'terasa', label: 'Terasa' },
+  { id: 'chodby', label: 'Chodby' },
+  { id: 'satna', label: 'Šatna' },
   { id: 'ostatni', label: 'Ostatní' },
 ];
 
@@ -25,6 +29,7 @@ const photos: Photo[] = [
   // Exteriér
   { src: '/img/photos/exterier/0Q9A0146.webp', alt: 'Chata Jana - pohled zepředu', category: 'exterier' },
   { src: '/img/photos/exterier/0Q9A0157.webp', alt: 'Chata Jana - zimní atmosféra', category: 'exterier' },
+  { src: '/img/photos/exterier/IMG_2.jpg', alt: 'Exteriér chaty', category: 'exterier' },
   
   // Společenská místnost
   { src: '/img/photos/spolecenska-mistnost/0Q9A0170-HDR.webp', alt: 'Společenská místnost - obývací prostor', category: 'spolecenska-mistnost' },
@@ -33,14 +38,46 @@ const photos: Photo[] = [
   { src: '/img/photos/spolecenska-mistnost/0Q9A0289-HDR.webp', alt: 'Společenská místnost - celkový pohled', category: 'spolecenska-mistnost' },
   { src: '/img/photos/spolecenska-mistnost/0Q9A0317-HDR.webp', alt: 'Společenská místnost - relaxační zóna', category: 'spolecenska-mistnost' },
   
-  // Wellness
-  { src: '/img/photos/vyrivka/0Q9A0765-HDR.webp', alt: 'Vířivka - wellness zóna', category: 'wellness' },
-  
+  // Pokoje
+  { src: '/img/photos/pokoje/IMG_42.jpg', alt: 'Ložnice', category: 'pokoje' },
+  { src: '/img/photos/pokoje/IMG_46.jpg', alt: 'Pokoj pro hosty', category: 'pokoje' },
+  { src: '/img/photos/pokoje/IMG_51.jpg', alt: 'Detail pokoje', category: 'pokoje' },
+  { src: '/img/photos/pokoje/IMG_52.jpg', alt: 'Interiér pokoje', category: 'pokoje' },
+  { src: '/img/photos/pokoje/IMG_57.jpg', alt: 'Útulná ložnice', category: 'pokoje' },
+  { src: '/img/photos/pokoje/IMG_59.jpg', alt: 'Podkrovní pokoj', category: 'pokoje' },
+  { src: '/img/photos/pokoje/IMG_61.jpg', alt: 'Světlý pokoj', category: 'pokoje' },
+
   // Kuchyně
   { src: '/img/photos/kuchyn/0Q9A0261-HDR.webp', alt: 'Plně vybavená kuchyně', category: 'kuchyn' },
-  
+  { src: '/img/photos/kuchyn/IMG_22.jpg', alt: 'Kuchyňská linka', category: 'kuchyn' },
+  { src: '/img/photos/kuchyn/IMG_34.jpg', alt: 'Jídelní kout', category: 'kuchyn' },
+  { src: '/img/photos/kuchyn/IMG_39.jpg', alt: 'Detail kuchyně', category: 'kuchyn' },
+
+  // Wellness (Vířivka)
+  { src: '/img/photos/vyrivka/0Q9A0765-HDR.webp', alt: 'Vířivka - wellness zóna', category: 'wellness' },
+  { src: '/img/photos/vyrivka/IMG_67.jpg', alt: 'Relaxace ve vířivce', category: 'wellness' },
+  { src: '/img/photos/vyrivka/IMG_69.jpg', alt: 'Večerní wellness', category: 'wellness' },
+
+  // Koupelny & WC
+  { src: '/img/photos/koupelny-wc/IMG_31.jpg', alt: 'Moderní koupelna', category: 'koupelny' },
+  { src: '/img/photos/koupelny-wc/IMG_65.jpg', alt: 'Sprchový kout', category: 'koupelny' },
+
   // Terasa
   { src: '/img/photos/terasa/0Q9A0352-HDR.webp', alt: 'Terasa s výhledem', category: 'terasa' },
+  { src: '/img/photos/terasa/IMG_10.jpg', alt: 'Posezení na terase', category: 'terasa' },
+
+  // Chodby
+  { src: '/img/photos/chodby/0Q9A0303-HDR.webp', alt: 'Chodba a schodiště', category: 'chodby' },
+
+  // Šatna
+  { src: '/img/photos/satna/0Q9A0813-HDR.webp', alt: 'Prostorná šatna', category: 'satna' },
+
+  // Ostatní
+  { src: '/img/photos/ostatni/IMG_30.jpg', alt: 'Detail interiéru', category: 'ostatni' },
+  { src: '/img/photos/ostatni/IMG_36.jpg', alt: 'Dekorace', category: 'ostatni' },
+  { src: '/img/photos/ostatni/IMG_37.jpg', alt: 'Atmosféra chaty', category: 'ostatni' },
+  { src: '/img/photos/ostatni/IMG_56.jpg', alt: 'Pohled z okna', category: 'ostatni' },
+  { src: '/img/photos/ostatni/IMG_72.jpg', alt: 'Zimní nálada', category: 'ostatni' },
 ];
 
 const activeCategory = ref('all');
