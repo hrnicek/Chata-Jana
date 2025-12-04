@@ -207,7 +207,7 @@ const stats = [
             <div class="mt-12 flex flex-wrap items-center gap-6">
               <Button
                 :as="Link"
-                :href="route('bookings.calendar')"
+                :href="route('home')"
                 variant="default"
                 class="group px-8 py-6 text-lg"
               >
@@ -451,7 +451,7 @@ const stats = [
             <div class="mt-12 flex flex-col items-center justify-center gap-6 sm:flex-row">
               <Button
                 :as="Link"
-                :href="route('bookings.calendar')"
+                :href="route('home')"
                 variant="cta-primary"
                 class="w-full min-w-[200px] py-6 text-lg sm:w-auto"
               >

@@ -1,10 +1,5 @@
 <script setup>
 import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucide-vue-next";
-
-const props = defineProps({
-  season: String,
-});
-
 </script>
 
 <template>

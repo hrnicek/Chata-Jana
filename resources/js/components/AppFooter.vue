@@ -28,7 +28,7 @@ import { CalendarDays, FileText, Mail, Phone, MapPin, Wallet, Globe, Hash, User 
             <ul class="mt-4 space-y-3 text-sm text-gray-800">
               <li class="flex items-center gap-2">
                 <CalendarDays class="h-4 w-4 text-primary" />
-                <Link :href="route('bookings.calendar')" class="hover:text-primary">Rezervace</Link>
+                <Link :href="route('home')" class="hover:text-primary">Rezervace</Link>
               </li>
               <li class="flex items-center gap-2">
                 <FileText class="h-4 w-4 text-primary" />

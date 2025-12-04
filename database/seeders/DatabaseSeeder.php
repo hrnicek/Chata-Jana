@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,9 +21,6 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        $this->call(SeasonSeeder::class);
-        $this->call(ServiceSeeder::class);
-        $this->call(BookingSeeder::class);
-        $this->call(BlackoutDateSeeder::class);
+        // Seeders for booking system will be added separately
     }
 }

@@ -119,7 +119,7 @@ const additionalPricing = [
               <!-- CTA Button -->
               <Button
                 :as="Link"
-                :href="route('bookings.calendar')"
+                :href="route('home')"
                 :variant="season.highlighted ? 'pricing-highlighted' : 'pricing-primary'"
               >
                 {{ season.name === 'SILVESTR' ? 'Rezervovat Silvestr' : 'Rezervovat termín' }}
@@ -230,7 +230,7 @@ const additionalPricing = [
             <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button
                 :as="Link"
-                :href="route('bookings.calendar')"
+                :href="route('home')"
                 variant="cta-primary"
                 class="group w-full sm:w-auto"
               >
