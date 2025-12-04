@@ -16,7 +16,7 @@ const highlights = [
       badge="O nás"
       title="Poznejte Chatu Jana"
       subtitle="Rodinné ubytování v srdci Jeseníků. Dbáme na pohodlí, klid a poctivou péči o hosty."
-      image="/img/hero2.jpg"
+      image="/img/hero2.webp"
     />
 
     <section class="relative -mt-20 pb-24">

@@ -14,7 +14,7 @@ const props = defineProps({
   },
   image: {
     type: String,
-    default: '/img/hero.jpg'
+    default: '/img/hero.webp'
   }
 });
 </script>

@@ -64,7 +64,7 @@ const additionalPricing = [
       badge="Ceník"
       title="Transparentní ceník"
       subtitle="U nás se můžete ubytovat kdykoliv během celého roku. Vyberte si termín, který vám vyhovuje."
-      image="/img/hero.jpg"
+      image="/img/hero.webp"
     />
 
     <!-- Pricing Cards Section -->

@@ -4,12 +4,12 @@ import PageHeader from "../components/PageHeader.vue";
 import { Camera } from "lucide-vue-next";
 
 const images = [
-  { src: "/img/hero.jpg", label: "Wellness zóna" },
-  { src: "/img/hero2.jpg", label: "Exteriér chaty" },
-  { src: "/img/hero3.jpg", label: "Interiér" },
-  { src: "/img/hero4.png", label: "Zimní atmosféra" },
-  { src: "/img/hero.jpg", label: "Relax u krbu" },
-  { src: "/img/hero2.jpg", label: "Terasa" },
+  { src: "/img/hero.webp", label: "Wellness zóna" },
+  { src: "/img/hero2.webp", label: "Exteriér chaty" },
+  { src: "/img/hero3.webp", label: "Interiér" },
+  { src: "/img/hero4.webp", label: "Zimní atmosféra" },
+  { src: "/img/hero.webp", label: "Relax u krbu" },
+  { src: "/img/hero2.webp", label: "Terasa" },
 ];
 </script>
 
@@ -19,7 +19,7 @@ const images = [
       badge="Fotogalerie"
       title="Nahlédněte dovnitř"
       subtitle="Prohlédněte si interiér, wellness i okolní přírodu."
-      image="/img/hero3.jpg"
+      image="/img/hero3.webp"
     />
 
     <section class="relative -mt-20 pb-24">

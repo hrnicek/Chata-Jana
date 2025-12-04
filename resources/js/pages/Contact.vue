@@ -11,7 +11,7 @@ import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-vue-next
       badge="Kontakt"
       title="Spojte se s námi"
       subtitle="Jsme vám k dispozici. Napište nebo zavolejte, rádi poradíme."
-      image="/img/hero2.jpg"
+      image="/img/hero2.webp"
     />
 
     <section class="relative -mt-20 pb-24">

@@ -19,7 +19,7 @@ const activities = [
       badge="Aktivity & okolí"
       title="Co dělat v Ostružné"
       subtitle="Vydejte se objevovat Jeseníky – sport, příroda, kultura i lokální zážitky."
-      image="/img/hero.jpg"
+      image="/img/hero.webp"
     />
 
     <section class="relative -mt-20 pb-24">

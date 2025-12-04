@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
-const images = ['/img/hero.jpg', '/img/hero2.jpg', '/img/hero3.jpg', '/img/hero4.png'];
+const images = ['/img/hero.webp', '/img/hero2.webp', '/img/hero3.webp', '/img/hero4.webp'];
 </script>
 
 <template>
