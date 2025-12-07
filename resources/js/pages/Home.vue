@@ -159,8 +159,6 @@ const virtualTourRooms = [
     fullDescription: 'Elegantně zařízené pokoje s kvalitními matracemi a luxusním ložním prádlem.',
     images: [
       '/img/photos/pokoje/IMG_42.jpg',
-      '/img/photos/pokoje/IMG_46.jpg',
-      '/img/photos/pokoje/IMG_51.jpg',
       '/img/photos/pokoje/IMG_52.jpg',
       '/img/photos/pokoje/IMG_57.jpg',
       '/img/photos/pokoje/IMG_59.jpg',
@@ -202,6 +200,8 @@ const virtualTourRooms = [
       '/img/photos/chodby/0Q9A0303-HDR.webp',
       '/img/photos/satna/0Q9A0813-HDR.webp',
       '/img/photos/koupelny-wc/IMG_31.jpg',
+      '/img/photos/koupelny-wc/IMG_46.jpg',
+      '/img/photos/koupelny-wc/IMG_51.jpg',
       '/img/photos/koupelny-wc/IMG_65.jpg'
     ],
     icon: Camera
