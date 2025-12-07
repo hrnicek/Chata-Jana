@@ -23,7 +23,7 @@ onMounted(() => {
           alt="Luxusní horská chata s wellness za západu slunce"
           class="h-full w-full object-cover"
         />
-        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70"></div>
       </div>
 
       <div class="relative z-10 flex min-h-screen flex-col pt-24">

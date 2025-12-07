@@ -8,49 +8,52 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucid
       <!-- Left Content -->
       <div class="text-left text-white">
         <div class="max-w-2xl">
-          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm backdrop-blur-sm">
-            <Star class="h-4 w-4 text-gold" fill="currentColor" />
-            <span class="font-medium text-white">Nejlépe hodnocená chata v okolí</span>
+          <div class="mb-8 inline-flex items-center gap-3 rounded-full border border-gold/30 bg-black/40 px-5 py-2.5 backdrop-blur-xl shadow-2xl ring-1 ring-white/10">
+            <Star class="h-4 w-4 text-gold drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]" fill="currentColor" />
+            <span class="text-sm font-bold tracking-wide text-white drop-shadow-md">Nejlépe hodnocená chata v okolí</span>
           </div>
           
-          <h1 class="mb-6 text-4xl font-heading font-bold leading-normal tracking-tight text-white md:text-7xl lg:text-6xl drop-shadow-lg">
-            Horský <span class="text-gold">luxus</span>
+          <h1 class="mb-6 text-4xl font-heading font-bold leading-tight tracking-tight text-white md:text-7xl lg:text-6xl" style="text-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 8px 40px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.9);">
+            Horský <span class="text-gold" style="text-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 8px 40px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.9), 0 0 30px rgba(212,175,55,0.3);">luxus</span>
             <br />v srdci přírody
           </h1>
           
-          <p class="mb-8 max-w-lg text-lg leading-relaxed text-gray-100 md:text-xl">
+          <p class="mb-10 max-w-xl text-lg leading-relaxed text-gray-100 md:text-xl font-medium drop-shadow-lg" style="text-shadow: 0 2px 10px rgba(0,0,0,0.8);">
             Objevte dokonalé útočiště pro vaši dovolenou. Soukromé wellness, 
             designový interiér a nekonečné výhledy na Jeseníky.
           </p>
 
-          <div class="flex flex-wrap gap-4">
-            <div class="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/5 p-4 transition-colors hover:bg-white/10 hover:border-gold/30 group">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-gold group-hover:bg-gold group-hover:text-white transition-colors">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <!-- Capacity Card -->
+            <div class="group flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-300 hover:border-gold/30 hover:bg-black/60">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-gold shadow-inner ring-1 ring-white/10 transition-colors group-hover:bg-gold group-hover:text-black">
                 <Users class="h-5 w-5" />
               </div>
-              <div>
-                <div class="text-xs text-gray-300 uppercase tracking-wider font-bold mb-0.5">Kapacita</div>
-                <div class="font-heading font-bold text-lg">Až 12 osob</div>
+              <div class="flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 group-hover:text-gray-300">Kapacita</span>
+                <span class="font-heading text-base font-bold text-white shadow-black drop-shadow-md">Až 12 osob</span>
               </div>
             </div>
             
-            <div class="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/5 p-4 transition-colors hover:bg-white/10 hover:border-gold/30 group">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-gold group-hover:bg-gold group-hover:text-white transition-colors">
+            <!-- Wellness Card -->
+            <div class="group flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-300 hover:border-gold/30 hover:bg-black/60">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-gold shadow-inner ring-1 ring-white/10 transition-colors group-hover:bg-gold group-hover:text-black">
                 <Sparkles class="h-5 w-5" />
               </div>
-              <div>
-                <div class="text-xs text-gray-300 uppercase tracking-wider font-bold mb-0.5">Relaxace</div>
-                <div class="font-heading font-bold text-lg">Wellness</div>
+              <div class="flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 group-hover:text-gray-300">Relaxace</span>
+                <span class="font-heading text-base font-bold text-white shadow-black drop-shadow-md">Wellness</span>
               </div>
             </div>
 
-            <div class="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/5 p-4 transition-colors hover:bg-white/10 hover:border-gold/30 group">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-gold group-hover:bg-gold group-hover:text-white transition-colors">
-                <MapPin class="h-5 w-5" />
+            <!-- Location Card -->
+            <div class="group flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-300 hover:border-gold/30 hover:bg-black/60">
+              <div class="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-white/20 shadow-inner">
+                 <img src="/img/gallery/IMG_3.jpg" alt="Chata Jana" class="h-full w-full object-cover" />
               </div>
-              <div>
-                <div class="text-xs text-gray-300 uppercase tracking-wider font-bold mb-0.5">Lokalita</div>
-                <div class="font-heading font-bold text-lg">Ostružná</div>
+              <div class="flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 group-hover:text-gray-300">Lokalita</span>
+                <span class="font-heading text-base font-bold text-white shadow-black drop-shadow-md">Ostružná</span>
               </div>
             </div>
           </div>
@@ -59,8 +62,8 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucid
 
       <!-- Right Content / Floating Card -->
       <div class="flex justify-center lg:justify-end">
-        <div class="relative w-full max-w-sm">
-          <div class="relative rounded-[2rem] border border-gray-200 bg-white p-8 shadow-xl">
+        <div class="relative w-full max-w-sm transform transition-all hover:-translate-y-1">
+          <div class="relative rounded-[2.5rem] bg-white p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] ring-1 ring-white/50 backdrop-blur-xl">
             <div class="mb-6 flex items-center justify-between">
               <h2 class="text-xl font-heading font-bold text-gray-900">Rychlý kontakt</h2>
               <div class="flex items-center gap-2">
@@ -115,7 +118,7 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucid
   </div>
   
   <!-- Bottom Info Bar -->
-  <div class="mt-auto w-full border-t border-white/10 bg-black/20 backdrop-blur-sm">
+  <div class="mt-auto w-full border-t border-white/10 bg-black/40 backdrop-blur-md shadow-[0_-1px_0_rgba(255,255,255,0.1)]">
     <div class="container mx-auto px-6 py-8">
       <div class="grid grid-cols-1 md:grid-cols-3 divide-white/10 divide-y md:divide-y-0 md:divide-x">
         <div class="py-4 md:py-0 md:px-6 text-center md:text-left">
