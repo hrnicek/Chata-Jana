@@ -85,7 +85,7 @@ const activities = [
       badge="Aktivity & okolí"
       title="Co dělat v Ostružné a okolí?"
       subtitle="Nádherné malebná krajina Jeseníků učarovala již mnoha generacím turistů. Důvodů proč navštívit Jeseníky, nebo zde strávit nezapomenutelnou dovolenou je mnoho."
-      image="/img/hero2.webp"
+      image="/img/hero.webp"
     />
 
     <!-- Introduction -->

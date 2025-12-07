@@ -35,7 +35,7 @@ const submit = () => {
       badge="Kontakt"
       title="Pojďme si popovídat"
       subtitle="Máte dotaz ohledně rezervace nebo chcete vědět víc? Rádi vám pomůžeme!"
-      image="/img/hero3.webp"
+      image="/img/hero.webp"
     />
 
     <!-- Contact Methods -->

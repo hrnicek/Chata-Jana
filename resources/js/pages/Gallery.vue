@@ -107,7 +107,7 @@ const closeLightbox = () => {
       badge="Fotogalerie"
       title="Prohlédněte si Chatu Jana"
       subtitle="Každý kout naší chaty je navržen pro vaše pohodlí. Prohlédněte si místa, kde budete trávit společné chvíle."
-      :image="photos[0].src"
+      image="/img/hero.webp"
     />
 
     <section class="relative -mt-20 pb-32">
