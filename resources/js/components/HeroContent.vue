@@ -1,5 +1,6 @@
 <script setup>
 import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucide-vue-next";
+import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
@@ -22,6 +23,26 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucid
             Objevte dokonalé útočiště pro vaši dovolenou. Soukromé wellness, 
             designový interiér a nekonečné výhledy na Jeseníky.
           </p>
+
+          <div class="mb-10 flex flex-wrap gap-6">
+            <Link :href="route('contact')" class="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-gold px-8 py-4 transition-all hover:bg-gold/90 hover:shadow-[0_0_40px_-10px_rgba(251,191,36,0.5)]">
+              <span class="relative z-10 font-bold text-primary">Rezervovat termín</span>
+              <div class="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 ease-in-out group-hover:translate-x-0"></div>
+            </Link>
+            
+            <Link :href="route('gallery')" class="group flex items-center gap-4 rounded-full border border-white/10 bg-black/40 pr-6 pl-2 py-2 backdrop-blur-md transition-all hover:bg-black/60 hover:border-gold/30">
+              <div class="relative h-12 w-12 overflow-hidden rounded-full ring-2 ring-white/20 transition-all group-hover:ring-gold">
+                <img src="/img/gallery/IMG_3.jpg" alt="Galerie" class="h-full w-full object-cover" />
+                <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
+                  <span class="h-2 w-2 rounded-full bg-white"></span>
+                </div>
+              </div>
+              <div class="text-left">
+                <div class="text-xs font-bold uppercase tracking-wider text-gold">Fotogalerie</div>
+                <div class="text-sm font-medium text-white group-hover:text-gold transition-colors">Prohlédnout chatu</div>
+              </div>
+            </Link>
+          </div>
 
           <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
             <!-- Capacity Card -->
@@ -48,8 +69,8 @@ import { Phone, Mail, LogIn, LogOut, Star, MapPin, Users, Sparkles } from "lucid
 
             <!-- Location Card -->
             <div class="group flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 p-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-300 hover:border-gold/30 hover:bg-black/60">
-              <div class="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-white/20 shadow-inner">
-                 <img src="/img/gallery/IMG_3.jpg" alt="Chata Jana" class="h-full w-full object-cover" />
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-gold shadow-inner ring-1 ring-white/10 transition-colors group-hover:bg-gold group-hover:text-black">
+                <MapPin class="h-5 w-5" />
               </div>
               <div class="flex flex-col">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 group-hover:text-gray-300">Lokalita</span>
