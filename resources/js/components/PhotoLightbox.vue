@@ -124,13 +124,7 @@ onUnmounted(() => {
           </Transition>
           
           <!-- Caption -->
-          <div
-            v-if="currentPhoto.alt"
-            class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6 text-center"
-          >
-            <p class="text-lg font-medium text-white">{{ currentPhoto.alt }}</p>
-            <p v-if="currentPhoto.category" class="mt-1 text-sm text-white/70">{{ currentPhoto.category }}</p>
-          </div>
+
         </div>
       </div>
     </Transition>

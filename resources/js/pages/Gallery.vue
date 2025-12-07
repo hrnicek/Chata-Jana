@@ -147,11 +147,7 @@ const closeLightbox = () => {
               class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              <div class="absolute bottom-0 left-0 right-0 p-6">
-                <p class="text-lg font-semibold text-white">{{ photo.alt }}</p>
-              </div>
-            </div>
+
             <div class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <Camera class="h-5 w-5 text-primary" />
             </div>
