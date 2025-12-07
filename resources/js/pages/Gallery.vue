@@ -40,8 +40,6 @@ const photos: Photo[] = [
   
   // Pokoje
   { src: '/img/photos/pokoje/IMG_42.jpg', alt: 'Ložnice', category: 'pokoje' },
-  { src: '/img/photos/pokoje/IMG_46.jpg', alt: 'Pokoj pro hosty', category: 'pokoje' },
-  { src: '/img/photos/pokoje/IMG_51.jpg', alt: 'Detail pokoje', category: 'pokoje' },
   { src: '/img/photos/pokoje/IMG_52.jpg', alt: 'Interiér pokoje', category: 'pokoje' },
   { src: '/img/photos/pokoje/IMG_57.jpg', alt: 'Útulná ložnice', category: 'pokoje' },
   { src: '/img/photos/pokoje/IMG_59.jpg', alt: 'Podkrovní pokoj', category: 'pokoje' },
@@ -60,6 +58,8 @@ const photos: Photo[] = [
 
   // Koupelny & WC
   { src: '/img/photos/koupelny-wc/IMG_31.jpg', alt: 'Moderní koupelna', category: 'koupelny' },
+  { src: '/img/photos/koupelny-wc/IMG_46.jpg', alt: 'Koupelna se sprchou', category: 'koupelny' },
+  { src: '/img/photos/koupelny-wc/IMG_51.jpg', alt: 'Detail koupelny', category: 'koupelny' },
   { src: '/img/photos/koupelny-wc/IMG_65.jpg', alt: 'Sprchový kout', category: 'koupelny' },
 
   // Terasa
