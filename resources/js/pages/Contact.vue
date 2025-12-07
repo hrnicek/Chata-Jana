@@ -3,7 +3,7 @@ import WebLayout from "../layouts/WebLayout.vue";
 import PageHeader from "../components/PageHeader.vue";
 import { Mail, Phone, MapPin, MessageCircle, Send, Clock, Calendar } from "lucide-vue-next";
 import { useForm, usePage } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { ref } from "vue";
 import { toast } from "vue-sonner";
 
 const form = useForm({
@@ -14,15 +14,16 @@ const form = useForm({
 });
 
 const page = usePage();
-const successMessage = computed(() => page.props.flash?.success);
+const formSubmitted = ref(false);
 
 const submit = () => {
   form.post(route("contact.store"), {
     preserveScroll: true,
     onSuccess: () => {
-      form.reset();
-      if (successMessage.value) {
-          toast.success(successMessage.value);
+      formSubmitted.value = true;
+      const flashMessage = page.props.flash?.success;
+      if (flashMessage) {
+        toast.success(flashMessage);
       }
     },
   });
@@ -96,74 +97,96 @@ const submit = () => {
         <div class="grid gap-12 lg:grid-cols-2">
           <!-- Contact Form -->
           <div class="rounded-[3rem] bg-white p-10">
-            <div class="mb-8">
-              <h2 class="text-3xl font-bold text-gray-900 mb-2">Napište nám</h2>
-              <p class="text-gray-600">Vyplňte formulář a my se vám ozveme do 24 hodin</p>
+            <!-- Success Message -->
+            <div v-if="formSubmitted" class="text-center py-12">
+              <div class="mb-6 flex justify-center">
+                <div class="flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+                  <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900 mb-3">Zpráva byla odeslána!</h3>
+              <p class="text-gray-600 mb-6">Děkujeme za váš zájem. Vaši zprávu jsme obdrželi a brzy se vám ozveme.</p>
+              <button 
+                @click="formSubmitted = false; form.reset()"
+                class="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-medium text-white transition-all hover:bg-primary/90"
+              >
+                Odeslat další zprávu
+              </button>
             </div>
 
-            <form @submit.prevent="submit" class="space-y-6">
-              <div>
-                <label class="mb-2 block text-sm font-medium text-gray-900" for="name">Jméno a příjmení</label>
-                <input 
-                  id="name"
-                  v-model="form.name"
-                  type="text" 
-                  class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
-                  :class="{ 'border-red-500': form.errors.name }"
-                  placeholder="Jan Novák"
-                />
-                <p v-if="form.errors.name" class="mt-1 text-sm text-red-500">{{ form.errors.name }}</p>
+            <!-- Contact Form -->
+            <div v-else>
+              <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Napište nám</h2>
+                <p class="text-gray-600">Vyplňte formulář a my se vám ozveme do 24 hodin</p>
               </div>
 
-              <div>
-                <label class="mb-2 block text-sm font-medium text-gray-900" for="email">E-mail</label>
-                <input 
-                  id="email"
-                  v-model="form.email"
-                  type="email" 
-                  class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
-                  :class="{ 'border-red-500': form.errors.email }"
-                  placeholder="jan@example.com"
-                />
-                 <p v-if="form.errors.email" class="mt-1 text-sm text-red-500">{{ form.errors.email }}</p>
-              </div>
+              <form @submit.prevent="submit" class="space-y-6">
+                <div>
+                  <label class="mb-2 block text-sm font-medium text-gray-900" for="name">Jméno a příjmení</label>
+                  <input 
+                    id="name"
+                    v-model="form.name"
+                    type="text" 
+                    class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
+                    :class="{ 'border-red-500': form.errors.name }"
+                    placeholder="Jan Novák"
+                  />
+                  <p v-if="form.errors.name" class="mt-1 text-sm text-red-500">{{ form.errors.name }}</p>
+                </div>
 
-              <div>
-                <label class="mb-2 block text-sm font-medium text-gray-900" for="phone">Telefon</label>
-                <input 
-                  id="phone"
-                  v-model="form.phone"
-                  type="tel" 
-                  class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
-                  :class="{ 'border-red-500': form.errors.phone }"
-                  placeholder="+420 123 456 789"
-                />
-                 <p v-if="form.errors.phone" class="mt-1 text-sm text-red-500">{{ form.errors.phone }}</p>
-              </div>
+                <div>
+                  <label class="mb-2 block text-sm font-medium text-gray-900" for="email">E-mail</label>
+                  <input 
+                    id="email"
+                    v-model="form.email"
+                    type="email" 
+                    class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
+                    :class="{ 'border-red-500': form.errors.email }"
+                    placeholder="jan@example.com"
+                  />
+                  <p v-if="form.errors.email" class="mt-1 text-sm text-red-500">{{ form.errors.email }}</p>
+                </div>
 
-              <div>
-                <label class="mb-2 block text-sm font-medium text-gray-900" for="message">Zpráva</label>
-                <textarea 
-                  id="message"
-                  v-model="form.message"
-                  rows="5"
-                  class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none resize-none"
-                  :class="{ 'border-red-500': form.errors.message }"
-                  placeholder="Napište nám vaši zprávu..."
-                ></textarea>
-                <p v-if="form.errors.message" class="mt-1 text-sm text-red-500">{{ form.errors.message }}</p>
-              </div>
+                <div>
+                  <label class="mb-2 block text-sm font-medium text-gray-900" for="phone">Telefon</label>
+                  <input 
+                    id="phone"
+                    v-model="form.phone"
+                    type="tel" 
+                    class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
+                    :class="{ 'border-red-500': form.errors.phone }"
+                    placeholder="+420 123 456 789"
+                  />
+                  <p v-if="form.errors.phone" class="mt-1 text-sm text-red-500">{{ form.errors.phone }}</p>
+                </div>
 
-              <button 
-                type="submit"
-                :disabled="form.processing"
-                class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-bold text-white transition-all hover:bg-primary/90 hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
-              >
-                <Send v-if="!form.processing" class="h-5 w-5" />
-                <div v-else class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                <span>{{ form.processing ? 'Odesílání...' : 'Odeslat zprávu' }}</span>
-              </button>
-            </form>
+                <div>
+                  <label class="mb-2 block text-sm font-medium text-gray-900" for="message">Zpráva</label>
+                  <textarea 
+                    id="message"
+                    v-model="form.message"
+                    rows="5"
+                    class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none resize-none"
+                    :class="{ 'border-red-500': form.errors.message }"
+                    placeholder="Napište nám vaši zprávu..."
+                  ></textarea>
+                  <p v-if="form.errors.message" class="mt-1 text-sm text-red-500">{{ form.errors.message }}</p>
+                </div>
+
+                <button 
+                  type="submit"
+                  :disabled="form.processing"
+                  class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-bold text-white transition-all hover:bg-primary/90 hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
+                >
+                  <Send v-if="!form.processing" class="h-5 w-5" />
+                  <div v-else class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                  <span>{{ form.processing ? 'Odesílání...' : 'Odeslat zprávu' }}</span>
+                </button>
+              </form>
+            </div>
           </div>
 
           <!-- Contact Info & Map -->
