@@ -2,6 +2,31 @@
 import WebLayout from "../layouts/WebLayout.vue";
 import PageHeader from "../components/PageHeader.vue";
 import { Mail, Phone, MapPin, MessageCircle, Send, Clock, Calendar } from "lucide-vue-next";
+import { useForm, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
+import { toast } from "vue-sonner";
+
+const form = useForm({
+  name: "",
+  email: "",
+  phone: "",
+  message: "",
+});
+
+const page = usePage();
+const successMessage = computed(() => page.props.flash?.success);
+
+const submit = () => {
+  form.post(route("contact.store"), {
+    preserveScroll: true,
+    onSuccess: () => {
+      form.reset();
+      if (successMessage.value) {
+          toast.success(successMessage.value);
+      }
+    },
+  });
+};
 </script>
 
 <template>
@@ -76,49 +101,67 @@ import { Mail, Phone, MapPin, MessageCircle, Send, Clock, Calendar } from "lucid
               <p class="text-gray-600">Vyplňte formulář a my se vám ozveme do 24 hodin</p>
             </div>
 
-            <form class="space-y-6">
+            <form @submit.prevent="submit" class="space-y-6">
               <div>
-                <label class="mb-2 block text-sm font-medium text-gray-900">Jméno a příjmení</label>
+                <label class="mb-2 block text-sm font-medium text-gray-900" for="name">Jméno a příjmení</label>
                 <input 
+                  id="name"
+                  v-model="form.name"
                   type="text" 
                   class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
+                  :class="{ 'border-red-500': form.errors.name }"
                   placeholder="Jan Novák"
                 />
+                <p v-if="form.errors.name" class="mt-1 text-sm text-red-500">{{ form.errors.name }}</p>
               </div>
 
               <div>
-                <label class="mb-2 block text-sm font-medium text-gray-900">E-mail</label>
+                <label class="mb-2 block text-sm font-medium text-gray-900" for="email">E-mail</label>
                 <input 
+                  id="email"
+                  v-model="form.email"
                   type="email" 
                   class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
+                  :class="{ 'border-red-500': form.errors.email }"
                   placeholder="jan@example.com"
                 />
+                 <p v-if="form.errors.email" class="mt-1 text-sm text-red-500">{{ form.errors.email }}</p>
               </div>
 
               <div>
-                <label class="mb-2 block text-sm font-medium text-gray-900">Telefon</label>
+                <label class="mb-2 block text-sm font-medium text-gray-900" for="phone">Telefon</label>
                 <input 
+                  id="phone"
+                  v-model="form.phone"
                   type="tel" 
                   class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none"
+                  :class="{ 'border-red-500': form.errors.phone }"
                   placeholder="+420 123 456 789"
                 />
+                 <p v-if="form.errors.phone" class="mt-1 text-sm text-red-500">{{ form.errors.phone }}</p>
               </div>
 
               <div>
-                <label class="mb-2 block text-sm font-medium text-gray-900">Zpráva</label>
+                <label class="mb-2 block text-sm font-medium text-gray-900" for="message">Zpráva</label>
                 <textarea 
+                  id="message"
+                  v-model="form.message"
                   rows="5"
                   class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 transition-colors focus:border-primary focus:outline-none resize-none"
+                  :class="{ 'border-red-500': form.errors.message }"
                   placeholder="Napište nám vaši zprávu..."
                 ></textarea>
+                <p v-if="form.errors.message" class="mt-1 text-sm text-red-500">{{ form.errors.message }}</p>
               </div>
 
               <button 
                 type="submit"
-                class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-bold text-white transition-all hover:bg-primary/90 hover:shadow-lg"
+                :disabled="form.processing"
+                class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-bold text-white transition-all hover:bg-primary/90 hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
               >
-                <Send class="h-5 w-5" />
-                <span>Odeslat zprávu</span>
+                <Send v-if="!form.processing" class="h-5 w-5" />
+                <div v-else class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                <span>{{ form.processing ? 'Odesílání...' : 'Odeslat zprávu' }}</span>
               </button>
             </form>
           </div>
