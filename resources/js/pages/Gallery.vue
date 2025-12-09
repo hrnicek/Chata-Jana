@@ -112,21 +112,36 @@ const closeLightbox = () => {
 
     <section class="relative -mt-20 pb-32">
       <div class="container mx-auto px-6">
-        <!-- Category Filters -->
-        <div class="mb-12 flex flex-wrap justify-center gap-2">
-          <button
-            v-for="category in categories"
-            :key="category.id"
-            @click="activeCategory = category.id"
-            :class="[
-              'rounded-full px-4 py-2 text-xs font-medium transition-all',
-              activeCategory === category.id
-                ? 'bg-primary text-white shadow-lg'
-                : 'bg-white text-gray-700 hover:bg-honey hover:text-primary'
-            ]"
-          >
-            {{ category.label }}
-          </button>
+        <div class="mb-12">
+          <div class="sm:hidden">
+            <select
+              v-model="activeCategory"
+              class="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900"
+            >
+              <option
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.id"
+              >
+                {{ category.label }}
+              </option>
+            </select>
+          </div>
+          <div class="hidden sm:flex flex-wrap justify-center gap-2">
+            <button
+              v-for="category in categories"
+              :key="category.id"
+              @click="activeCategory = category.id"
+              :class="[
+                'rounded-full px-4 py-2 text-xs font-medium transition-all',
+                activeCategory === category.id
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'bg-white text-gray-700 hover:bg-honey hover:text-primary'
+              ]"
+            >
+              {{ category.label }}
+            </button>
+          </div>
         </div>
 
         <!-- Photo Grid -->
